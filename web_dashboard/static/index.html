@@ -1088,6 +1088,7 @@
       <button class="tab-btn" onclick="switchTab('tab-docking')">🧬 3D Kenetlenme</button>
       <button class="tab-btn" onclick="switchTab('tab-trial')">📊 Sanal Klinik Deney</button>
       <button class="tab-btn" onclick="switchTab('tab-translational')">🌐 Translasyonel Köprü</button>
+      <button class="tab-btn" onclick="switchTab('tab-unity')">🎮 Unity / C# .NET</button>
       <button class="tab-btn" onclick="switchTab('tab-cocktails')">🧪 Sinerjik Kokteyller & Reçeteler</button>
       <button class="tab-btn" onclick="switchTab('tab-online')">🌐 Çevrimiçi Veri & PubChem</button>
       <button class="tab-btn" onclick="switchTab('tab-compounds')">📚 Molekül Veri Bankası</button>
@@ -2685,6 +2686,155 @@
       </div>
     </section>
 
+    <!-- SEKME: UNITY 3D / C# .NET ENTEGRASYON STÜDYOSU -->
+    <section id="tab-unity" class="tab-content">
+      <div style="padding:22px; max-width:1500px; margin:0 auto; width:100%;">
+
+        <!-- Üst Başlık & Kontrol Butonları -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:16px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg, #00f0ff 0%, #22c55e 50%, #3b82f6 100%); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 20px rgba(0,240,255,0.35);">🎮</div>
+            <div>
+              <h2 style="font-size:20px; font-weight:800; color:#fff; letter-spacing:0.5px;">Unity 3D / C# .NET Simülasyon Entegrasyonu</h2>
+              <p style="font-size:12px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;">
+                FlyWire Tam Beyin Konektomu & Ajan Tabanlı 3D Tümör Biyolojisinin Unity Game Engine'e Doğrudan Aktarımı
+              </p>
+            </div>
+          </div>
+
+          <!-- Aksiyon Butonları -->
+          <div style="display:flex; align-items:center; gap:10px;">
+            <a href="/api/unity/download_package" download="Drosophila_Twin_Unity_Package.zip" class="btn-action primary" style="text-decoration:none; padding:9px 18px; font-size:12px; font-weight:800; background:linear-gradient(135deg, #00f0ff 0%, #3b82f6 100%); color:#fff; box-shadow:0 0 16px rgba(0,240,255,0.35);">
+              <span>📦 Unity Paketini İndir (.ZIP)</span>
+            </a>
+            <a href="/api/unity/export_scene" target="_blank" class="btn-action secondary" style="text-decoration:none; padding:9px 16px; font-size:12px;">
+              <span>🌐 3D Sahne JSON'u</span>
+            </a>
+            <button class="btn-action secondary" onclick="testUnityTelemetryStream()" style="padding:9px 16px; font-size:12px;">
+              <span>📡 Canlı Telemetri Testi</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4'lü Metrik & Sistem Durumu Kartları -->
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; margin-bottom:20px;">
+          <div class="hud-card" style="padding:14px;">
+            <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Hedef Simülatör Motoru:</div>
+            <div style="font-size:16px; font-weight:800; color:#00f0ff; margin-top:4px;">Unity 2021.3+ / 2022 / 6</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">UPM Paketi & C# Native .NET Standalone</div>
+          </div>
+
+          <div class="hud-card" style="padding:14px;">
+            <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">C# Simülasyon Scriptleri:</div>
+            <div id="unity-scripts-count" style="font-size:16px; font-weight:800; color:#00ff9d; margin-top:4px;">5 C# Dosyası (Aktif)</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">Izhikevich, Gompertzian, Hill PK/PD, Bridge</div>
+          </div>
+
+          <div class="hud-card" style="padding:14px;">
+            <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Anatomik 3D Nöropil Koordinatı:</div>
+            <div style="font-size:16px; font-weight:800; color:#ffb703; margin-top:4px;">10 Bölge (FlyWire Kalibre)</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">Antennal Lobe, Mushroom Body, Optic, SEZ</div>
+          </div>
+
+          <div class="hud-card" style="padding:14px;">
+            <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Eşzamanlı Ajan Kapasitesi:</div>
+            <div style="font-size:16px; font-weight:800; color:#a855f7; margin-top:4px;">2,500+ Ajan (60 FPS)</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">GPU Instancing & DOTS / ECS Uyumlu</div>
+          </div>
+        </div>
+
+        <!-- Ana Çift Sütun: Sol C# Kod İnceleyici & Sağ Unity Entegrasyon Rehberi -->
+        <div style="display:grid; grid-template-columns:1fr 420px; gap:16px; margin-bottom:20px;">
+          
+          <!-- Sol Sütun: İnteraktif C# Kod Görüntüleyici -->
+          <div class="hud-card" style="padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:11px; font-weight:700; color:var(--cyan); font-family:var(--font-mono); text-transform:uppercase;">💻 C# Kaynak Kodu Gezgini:</span>
+                <span id="unity-current-script-name" style="font-size:12px; font-weight:800; color:#fff; font-family:var(--font-mono);">DrosophilaConnectomeSimulator.cs</span>
+              </div>
+              <button class="btn-action secondary" onclick="copyActiveCSharpCode()" style="padding:5px 12px; font-size:11px;">
+                📋 C# Kodunu Kopyala
+              </button>
+            </div>
+
+            <!-- Script Seçim Sekmeleri -->
+            <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;" id="unity-script-tabs">
+              <!-- JS ile dinamik butonlar doldurulacak -->
+            </div>
+
+            <!-- Kod Görüntüleme Alanı -->
+            <div style="background:rgba(4,7,16,0.95); border:1px solid rgba(0,240,255,0.25); border-radius:8px; padding:14px; max-height:480px; overflow-y:auto; overflow-x:auto;">
+              <pre id="unity-code-display" style="margin:0; font-family:var(--font-mono); font-size:11px; color:#e2e8f0; line-height:1.5; white-space:pre;">// C# Kodu yükleniyor...</pre>
+            </div>
+          </div>
+
+          <!-- Sağ Sütun: Unity Kurulum Rehberi & Nöropil Koordinat Listesi -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            
+            <!-- 1-Tık Kurulum Rehberi -->
+            <div class="hud-card" style="padding:16px;">
+              <div class="hud-title">
+                <span>🚀 Unity Projesine Entegrasyon</span>
+                <span class="tag-category tag-denovo" style="font-size:10px;">UPM Ready</span>
+              </div>
+              <div style="font-size:11px; color:#cbd5e1; line-height:1.5; margin-top:8px;">
+                <p><strong>Yöntem 1 (Unity Package Manager):</strong></p>
+                <code style="display:block; background:rgba(0,0,0,0.4); padding:6px 10px; border-radius:6px; font-family:var(--font-mono); font-size:10px; color:var(--cyan); margin:4px 0 10px 0; word-break:break-all;">
+                  https://github.com/muhammedemrealbayrak/CanserTwinForDrosophila.git?path=/unity_integration/package
+                </code>
+                <p><strong>Yöntem 2 (Doğrudan Script Kopyalama):</strong></p>
+                <div style="background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; font-size:11px; margin-top:4px;">
+                  Yukarıdaki <strong>"📦 Unity Paketini İndir"</strong> butonuna tıklayarak ZIP dosyasını projenizin <code>Assets/Scripts/</code> klasörüne açın.
+                </div>
+              </div>
+            </div>
+
+            <!-- Klavye Kısayolları -->
+            <div class="hud-card" style="padding:16px;">
+              <div class="hud-title">
+                <span>🎮 Unity Sahne İçi Kontrolleri</span>
+                <span style="font-size:10px; color:var(--amber); font-family:var(--font-mono);">MonoBehaviour</span>
+              </div>
+              <div style="display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:11px; margin-top:8px;">
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[Space]:</span>
+                <span style="color:#cbd5e1;">5 µM Bolus İlaç Dozu Ver</span>
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[1]:</span>
+                <span style="color:#cbd5e1;">DeNovo_Champion (Yüksek Potans)</span>
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[2]:</span>
+                <span style="color:#cbd5e1;">Sisplatin (Standart Kemo)</span>
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[3]:</span>
+                <span style="color:#cbd5e1;">Trametinib (MEK İnhibitörü)</span>
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[4]:</span>
+                <span style="color:#cbd5e1;">Multimodal Sinerji Kokteyli</span>
+                <span style="font-family:var(--font-mono); color:var(--cyan); font-weight:700;">[R]:</span>
+                <span style="color:#cbd5e1;">Simülasyonu Sıfırla (Reset)</span>
+              </div>
+            </div>
+
+            <!-- 10 Nöropil Referans Rozetleri -->
+            <div class="hud-card" style="padding:16px;">
+              <div class="hud-title">
+                <span>📍 10 Anatomik Beyin Nöropili</span>
+                <span style="font-size:10px; color:var(--emerald); font-family:var(--font-mono);">FlyWire 3D</span>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;" id="unity-neuropil-badges">
+                <span class="pill" style="font-size:10px; border-color:#ff007f;">Antennal Lobe L/R</span>
+                <span class="pill" style="font-size:10px; border-color:#00f0ff;">Mushroom Body L/R</span>
+                <span class="pill" style="font-size:10px; border-color:#ffb703;">Central Complex (FB/EB)</span>
+                <span class="pill" style="font-size:10px; border-color:#7000ff;">Optic Lobes (Medulla/Lobula)</span>
+                <span class="pill" style="font-size:10px; border-color:#00ff9d;">Subesophageal Zone</span>
+                <span class="pill" style="font-size:10px; border-color:#ff0055;">Pars Intercerebralis</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Molekül Detay & Tam SMILES İnceleme Modalı -->
@@ -2849,6 +2999,8 @@
       } else if (tabId === 'tab-translational') {
         loadTranslationalMetadata();
         if (!translationalLastResult) runTranslationalPrediction();
+      } else if (tabId === 'tab-unity') {
+        loadUnityIntegrationData();
       }
 
       setTimeout(() => { onWindowResize(); }, 60);
@@ -6243,6 +6395,90 @@
       });
     }
 
+    /* =========================================================================
+       UNITY 3D / C# .NET INTEGRATION
+       ========================================================================= */
+    let unityScriptsData = {};
+    let currentActiveCSharpFile = 'DrosophilaConnectomeSimulator.cs';
+
+    async function loadUnityIntegrationData() {
+      try {
+        const [statusRes, scriptsRes] = await Promise.all([
+          fetch('/api/unity/status').then(r => r.json()).catch(() => null),
+          fetch('/api/unity/csharp_scripts').then(r => r.json()).catch(() => null)
+        ]);
+
+        if (statusRes) {
+          const scriptsCountEl = document.getElementById('unity-scripts-count');
+          if (scriptsCountEl) {
+            scriptsCountEl.textContent = `${statusRes.total_scripts} C# Dosyası (Aktif)`;
+          }
+        }
+
+        if (scriptsRes && scriptsRes.scripts) {
+          unityScriptsData = scriptsRes.scripts;
+          renderUnityScriptTabs(Object.keys(unityScriptsData));
+          
+          if (!unityScriptsData[currentActiveCSharpFile]) {
+            currentActiveCSharpFile = Object.keys(unityScriptsData)[0] || 'DrosophilaConnectomeSimulator.cs';
+          }
+          selectCSharpScript(currentActiveCSharpFile);
+        }
+      } catch (err) {
+        console.warn('Unity integration load warning:', err);
+      }
+    }
+
+    function renderUnityScriptTabs(filenames) {
+      const container = document.getElementById('unity-script-tabs');
+      if (!container) return;
+
+      container.innerHTML = filenames.map(fn => `
+        <button class="btn-action ${fn === currentActiveCSharpFile ? 'primary' : 'secondary'}" 
+                onclick="selectCSharpScript('${fn}')" 
+                style="padding:5px 10px; font-size:11px; font-family:var(--font-mono); white-space:nowrap;">
+          📄 ${fn}
+        </button>
+      `).join('');
+    }
+
+    function selectCSharpScript(filename) {
+      currentActiveCSharpFile = filename;
+      const titleEl = document.getElementById('unity-current-script-name');
+      if (titleEl) titleEl.textContent = filename;
+
+      const codeEl = document.getElementById('unity-code-display');
+      if (codeEl) {
+        codeEl.textContent = unityScriptsData[filename] || '// C# kodu bulunamadı.';
+      }
+
+      // Re-render buttons to update active styling
+      renderUnityScriptTabs(Object.keys(unityScriptsData));
+    }
+
+    function copyActiveCSharpCode() {
+      const code = unityScriptsData[currentActiveCSharpFile];
+      if (!code) {
+        showToast('⚠️ Kopyalanacak C# kodu bulunamadı.');
+        return;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        showToast(`📋 ${currentActiveCSharpFile} panoya kopyalandı!`);
+      }).catch(err => {
+        showToast('❌ Kopyalama hatası: ' + err);
+      });
+    }
+
+    async function testUnityTelemetryStream() {
+      try {
+        const res = await fetch('/api/unity/export_scene');
+        const data = await res.json();
+        showToast(`✅ Unity Sahnesi Hazır! ${data.metadata.total_neurons} Nöron, ${data.metadata.total_tumor_cells} Tümör Hücresi`);
+      } catch (err) {
+        showToast('❌ Unity telemetri hatası: ' + err.message);
+      }
+    }
+
     function onWindowResize() {
       if (neuralCamera && neuralRenderer) {
         const c1 = document.getElementById('canvas-neural-3d');
@@ -6292,6 +6528,7 @@
       runVirtualClinicalTrial();
       loadTranslationalMetadata();
       runTranslationalPrediction();
+      loadUnityIntegrationData();
       drawOscilloscope('canvas-oscilloscope', vmHistory, -80.0, 30.0, '#00f0ff', 'Vm (Membrane mV)');
       drawOscilloscope('canvas-calcium-wave', calciumHistory, 80.0, 1200.0, '#ffb703', '[Ca2+]i Transient (nM)');
       stepSimulation();
