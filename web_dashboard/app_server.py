@@ -37,6 +37,7 @@ from pipeline.benchmark_engine import InSilicoBenchmarkEngine
 from denovo_ai.molecule_generator import DeNovoMoleculeGenerator, compute_lipinski_rules
 from denovo_ai.dose_optimizer import AutonomousDoseOptimizer
 from denovo_ai.cocktail_generator import cocktail_synthesizer
+from pipeline.docking_engine import docking_engine
 
 HOST = "127.0.0.1"
 PORT = 8060
@@ -231,6 +232,11 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             else:
                 circuit_data = generate_multi_neuron_circuit()
             self._send_json(circuit_data)
+
+        elif self.path == "/api/docking/receptors":
+            # 3D Moleküler Kenetlenme Reseptör Bağlanma Havuzları
+            receptors = docking_engine.get_available_receptors()
+            self._send_json(receptors)
 
         elif self.path.startswith("/api/export_dataset"):
             # Veri setini CSV veya JSON olarak dışa aktar
@@ -540,6 +546,16 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             try:
                 benchmark_engine.save_benchmark_record(rec)
                 self._send_json({"status": "success", "record": rec, "benchmarks": benchmark_engine.get_leaderboard(50)})
+            except Exception as ex:
+                self._send_json({"status": "error", "message": str(ex)}, status=500)
+
+        elif self.path == "/api/docking/run":
+            # 3D Moleküler Kenetlenme Simülasyonu
+            rec_key = payload.get("receptor", "nAChR_alpha7")
+            mol_input = payload.get("molecule", "CC1=NC=C(C=C1)CCN(C)C(=O)CF")
+            try:
+                result = docking_engine.run_docking(receptor_key=rec_key, molecule_or_smiles=mol_input)
+                self._send_json(result)
             except Exception as ex:
                 self._send_json({"status": "error", "message": str(ex)}, status=500)
 

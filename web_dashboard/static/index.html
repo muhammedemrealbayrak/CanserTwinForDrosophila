@@ -201,8 +201,29 @@
     }
 
     /* 3D Görünüm Pencereleri (Tam Ekran Tuval & Bağımsız Sidebar) */
-    #tab-neural, #tab-cellular, #tab-dual {
+    #tab-neural, #tab-cellular, #tab-dual, #tab-docking {
       overflow: hidden;
+    }
+
+    .docking-workspace {
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      position: relative;
+    }
+
+    .docking-sidebar {
+      background: rgba(8, 12, 22, 0.95);
+      border-right: 1px solid var(--border-glow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      padding: 16px;
+      gap: 14px;
+      z-index: 15;
     }
 
     /* SEKME 1: FLYWIRE KONEKTOM & BEYİN NÖRON AKTİVİTELERİ */
@@ -1064,6 +1085,7 @@
       <button class="tab-btn active" onclick="switchTab('tab-neural')">🧠 FlyWire Konektom</button>
       <button class="tab-btn" onclick="switchTab('tab-cellular')">🔬 3D Tümör Simülatörü</button>
       <button class="tab-btn" onclick="switchTab('tab-dual')">⚡ İkili Senkron Görünüm</button>
+      <button class="tab-btn" onclick="switchTab('tab-docking')">🧬 3D Kenetlenme</button>
       <button class="tab-btn" onclick="switchTab('tab-cocktails')">🧪 Sinerjik Kokteyller & Reçeteler</button>
       <button class="tab-btn" onclick="switchTab('tab-online')">🌐 Çevrimiçi Veri & PubChem</button>
       <button class="tab-btn" onclick="switchTab('tab-compounds')">📚 Molekül Veri Bankası</button>
@@ -2076,6 +2098,171 @@
       </div>
     </section>
 
+    <!-- SEKME: 3D MOLEKÜLER KENETLENME (DOCKING) STÜDYOSU -->
+    <section id="tab-docking" class="tab-content">
+      <div class="docking-workspace">
+        
+        <!-- Sol Kontrol ve Telemetri Paneli -->
+        <div class="docking-sidebar">
+          
+          <div style="display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border-glow); padding-bottom:12px;">
+            <div style="width:36px; height:36px; border-radius:8px; background:linear-gradient(135deg, #00f0ff 0%, #a855f7 100%); display:flex; align-items:center; justify-content:center; font-size:18px;">🧬</div>
+            <div>
+              <h2 style="font-size:15px; font-weight:800; color:#fff; letter-spacing:0.5px;">Moleküler Kenetlenme Stüdyosu</h2>
+              <p style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">RDKit ETKDGv3 • MMFF94 • ΔG_bind</p>
+            </div>
+          </div>
+
+          <!-- 1. Hedef Reseptör Seçimi -->
+          <div class="hud-card" style="padding:12px;">
+            <div class="hud-title">
+              <span>🎯 1. Hedef Reseptör Cebi</span>
+              <span id="docking-pdb-badge" class="tag-category tag-targeted" style="font-size:10px;">PDB: 7EKI</span>
+            </div>
+            <select id="docking-receptor-select" onchange="onDockingReceptorChange()" style="width:100%; background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-glow); border-radius:6px; padding:8px 10px; font-size:12px; font-family:var(--font-sans); cursor:pointer; margin-bottom:8px;">
+              <option value="nAChR_alpha7">nAChRα7 (Kenyon Hücresi Kolinerjik Reseptör)</option>
+              <option value="MEK1_kinase">MEK1 / Dsor1 (Ras/MAPK Proliferasyon Kinazı)</option>
+              <option value="Hexokinase_II">Hekzokinaz-II (Warburg Glikoliz Katalitik Cebi)</option>
+              <option value="HDAC_class1">HDAC Sınıf I/II (Histon Deasetilaz Çinko Kanalı)</option>
+              <option value="CD47_SIRPalpha">CD47 - SIRPα (Don't-Eat-Me İmmün Kaçış Arayüzü)</option>
+            </select>
+            <div id="docking-receptor-info" style="font-size:11px; color:var(--text-muted); line-height:1.4; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; border-left:3px solid var(--cyan);">
+              Mantar cisimciği KCg-m nöronlarında 185ms refleks dalgasını ve lenf bezi hemosit salınımını tetikler.
+            </div>
+          </div>
+
+          <!-- 2. Ligand / Molekül Seçimi -->
+          <div class="hud-card" style="padding:12px;">
+            <div class="hud-title">
+              <span>🧪 2. Kenetlenecek Ligand (İlaç)</span>
+              <span id="docking-ligand-mw-badge" style="font-size:10px; color:var(--emerald); font-family:var(--font-mono);">MW: 208.2</span>
+            </div>
+            <select id="docking-ligand-select" onchange="onDockingLigandSelectChange()" style="width:100%; background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-glow); border-radius:6px; padding:8px 10px; font-size:12px; font-family:var(--font-sans); cursor:pointer; margin-bottom:8px;">
+              <!-- Javascript ile dinamik doldurulacak -->
+            </select>
+            
+            <div style="margin-top:6px;">
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted); margin-bottom:4px; font-family:var(--font-mono);">
+                <span>Veya Özel SMILES Girin:</span>
+                <span id="docking-smiles-length" style="color:var(--cyan);"></span>
+              </div>
+              <input type="text" id="docking-custom-smiles" placeholder="Örn: CN1CCC[C@H]1c2cccnc2" style="width:100%; background:rgba(4,7,16,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:6px 10px; font-size:11px; font-family:var(--font-mono); margin-bottom:10px;" />
+            </div>
+
+            <button id="btn-trigger-docking" class="btn-action primary" onclick="triggerDockingRun()" style="width:100%; padding:10px; font-size:12px; font-weight:800; background:linear-gradient(135deg, #00f0ff 0%, #a855f7 100%); box-shadow:0 0 16px rgba(0,240,255,0.35);">
+              <span>⚡ 3D Kenetlenmeyi Başlat (Run Docking)</span>
+            </button>
+          </div>
+
+          <!-- 3. Kenetlenme Serbest Enerjisi (ΔG) ve Skor Telemetrisi -->
+          <div class="hud-card" style="padding:12px;">
+            <div class="hud-title">
+              <span>📊 3. Bağlanma Serbest Enerjisi & Telemetri</span>
+              <span id="docking-status-indicator" style="font-size:10px; color:var(--emerald);">● Hazır</span>
+            </div>
+            
+            <!-- Büyük Delta G Göstergesi -->
+            <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.4); border-radius:8px; padding:10px 14px; border:1px solid var(--border-subtle); margin-bottom:10px;">
+              <div>
+                <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Ampirik Serbest Enerji (ΔG_bind)</div>
+                <div id="docking-delta-g-val" style="font-size:26px; font-weight:800; color:#00ff9d; font-family:var(--font-mono);">-8.45 <span style="font-size:13px; font-weight:500; color:#94a3b8;">kcal/mol</span></div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono);">Afinite Derecesi</div>
+                <div id="docking-affinity-class" class="tag-category tag-denovo" style="font-size:10px; margin-top:2px;">Yüksek Afinite</div>
+              </div>
+            </div>
+
+            <!-- Metrik Tablosu -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+              <div class="modal-meta-card" style="padding:8px;">
+                <div class="lbl">Ayrışma Sabiti (Kd)</div>
+                <div class="val" id="docking-kd-val" style="font-size:13px; color:var(--cyan);">0.45 µM</div>
+              </div>
+              <div class="modal-meta-card" style="padding:8px;">
+                <div class="lbl">Ligand Verimliliği (LE)</div>
+                <div class="val" id="docking-le-val" style="font-size:13px; color:#ffb703;">0.38</div>
+              </div>
+              <div class="modal-meta-card" style="padding:8px;">
+                <div class="lbl">H-Bağı Sayısı</div>
+                <div class="val" id="docking-hbonds-count" style="font-size:13px; color:var(--emerald);">3 Adet</div>
+              </div>
+              <div class="modal-meta-card" style="padding:8px;">
+                <div class="lbl">Hidrofobik Temas</div>
+                <div class="val" id="docking-hydrophobic-count" style="font-size:13px; color:var(--amber);">8 Kontak</div>
+              </div>
+            </div>
+
+            <!-- Etkileşen Amino Asit Kalıntıları -->
+            <div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase; margin-bottom:6px;">Aktif Reseptör Temas Noktaları:</div>
+              <div id="docking-interactions-list" style="display:flex; flex-wrap:wrap; gap:5px; max-height:100px; overflow-y:auto;">
+                <!-- Dinamik Kalıntı Çipleri -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Aksiyonlar -->
+          <div style="display:flex; gap:8px;">
+            <button class="btn-action" onclick="transferDockedDrugToSimulator()" style="flex:1; padding:8px; font-size:11px; background:rgba(0,255,157,0.15); border-color:var(--emerald); color:var(--emerald); font-weight:700;">
+              🧪 Tümör Simülatörüne Aktar
+            </button>
+            <button class="btn-action secondary" onclick="copyDockingSummary()" style="padding:8px 12px; font-size:11px;">
+              📋 Raporu Kopyala
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Sağ 3D WebGL Tuvali -->
+        <div class="viewport-3d-wrap">
+          <canvas id="canvas-docking-3d"></canvas>
+
+          <!-- 3D HUD Üst Kontroller -->
+          <div class="hud-overlay" style="top:14px; left:14px;">
+            <div class="hud-card" style="padding:10px 14px; min-width:auto; display:flex; gap:8px; align-items:center;">
+              <button class="btn-action secondary" onclick="toggleDockingAutoRotate()" id="btn-docking-rotate" style="padding:5px 10px; font-size:11px;">
+                🔄 Otomatik Döndür
+              </button>
+              <button class="btn-action secondary" onclick="focusDockingLigand()" style="padding:5px 10px; font-size:11px;">
+                🎯 Liganda Odaklan
+              </button>
+              <button class="btn-action secondary" onclick="focusDockingPocket()" style="padding:5px 10px; font-size:11px;">
+                🔭 Cebe Odaklan
+              </button>
+              <button class="btn-action secondary" onclick="replayDockingAnimation()" style="padding:5px 10px; font-size:11px;">
+                ✨ Animasyonu Oynat
+              </button>
+            </div>
+          </div>
+
+          <!-- Sağ Üst: Renk ve Etkileşim Lejantı -->
+          <div style="position:absolute; top:14px; right:14px; background:rgba(9,14,26,0.85); backdrop-filter:blur(12px); border:1px solid var(--border-subtle); border-radius:10px; padding:10px 14px; font-size:11px; z-index:20; max-width:240px;">
+            <div style="font-weight:700; color:var(--cyan); margin-bottom:6px; font-family:var(--font-mono); font-size:10px; text-transform:uppercase;">3D Molekül Lejantı</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:10px; font-family:var(--font-mono);">
+              <div><span style="color:#00f0ff;">●</span> Karbon (C)</div>
+              <div><span style="color:#3b82f6;">●</span> Nitrojen (N)</div>
+              <div><span style="color:#ef4444;">●</span> Oksijen (O)</div>
+              <div><span style="color:#10b981;">●</span> Flor (F)</div>
+              <div><span style="color:#eab308;">●</span> Kükürt (S)</div>
+              <div><span style="color:#a855f7;">●</span> Reseptör Omurgası</div>
+            </div>
+            <div style="margin-top:6px; border-top:1px solid rgba(255,255,255,0.08); padding-top:5px; font-size:10px; color:#cbd5e1;">
+              <span style="color:#00ff9d;">- - -</span> Yeşil Kesikli Çizgi: H-Bağı<br>
+              <span style="color:#ffb703;">- - -</span> Sarı Kesikli Çizgi: Hidrofobik
+            </div>
+          </div>
+
+          <!-- Alt Bilgi Notu -->
+          <div style="position:absolute; bottom:14px; left:14px; background:rgba(6,9,17,0.8); backdrop-filter:blur(10px); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 12px; font-size:10px; font-family:var(--font-mono); color:var(--text-muted); z-index:20;">
+            🖱️ Sol Tık: 360° Döndür | Sağ Tık: Kaydır | Tekerlek: Yakınlaştır / Uzaklaştır
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Molekül Detay & Tam SMILES İnceleme Modalı -->
@@ -2089,9 +2276,14 @@
           <h2 id="modal-title" style="color:#fff; font-size:22px; font-weight:800; margin-top:6px;">DeNovo_Champion</h2>
           <p id="modal-database-id" style="font-family:var(--font-mono); font-size:11px; color:var(--cyan); margin-top:2px;">AI-GEN: 2026-CHAMPION-01</p>
         </div>
-        <button class="btn-action primary" id="modal-btn-test" style="min-width:140px; padding:8px 16px;">
-          <span>Test Et ▶</span>
-        </button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action" id="modal-btn-dock" onclick="openDockingFromModal()" style="min-width:120px; padding:8px 14px; background:linear-gradient(135deg, #00f0ff 0%, #a855f7 100%); color:#fff; font-weight:700;">
+            <span>🧬 3D Kenetle</span>
+          </button>
+          <button class="btn-action primary" id="modal-btn-test" style="min-width:120px; padding:8px 14px;">
+            <span>Test Et ▶</span>
+          </button>
+        </div>
       </div>
 
       <!-- 2D Kimyasal İskelet & Lipinski Kuralı Görünümü -->
@@ -2227,6 +2419,9 @@
         loadCocktails();
       } else if (tabId === 'tab-ml') {
         loadMLAnalytics();
+      } else if (tabId === 'tab-docking') {
+        populateDockingLigands();
+        if (!dockingScene) initDockingScene();
       }
 
       setTimeout(() => { onWindowResize(); }, 60);
@@ -4285,6 +4480,7 @@
                 </div>
                 <button class="btn-smiles-action" title="SMILES Panoya Kopyala" onclick="copySmiles('${item.Canonical_SMILES}', event)">📋 Kopyala</button>
                 <button class="btn-smiles-action" title="SMILES Formülünü ve Detayları Büyüt" onclick="openMoleculeModal('${item.Molecule_Name}', event)">🔍 İncele</button>
+                <button class="btn-smiles-action" title="3D Reseptör Kenetlenme Stüdyosunda Test Et" style="background:rgba(0,240,255,0.15); color:var(--cyan); border-color:rgba(0,240,255,0.4);" onclick="openDockingStudio('${item.Molecule_Name}', event)">🧬 3D Kenetle</button>
               </div>
             </td>
             <td style="font-family:var(--font-mono); font-weight:600;">${item.Molecular_Weight}</td>
@@ -4529,6 +4725,545 @@
       }
     }
 
+    // =========================================================================
+    // 3D MOLEKÜLER KENETLENME (DOCKING) STÜDYOSU MOTORU
+    // =========================================================================
+    let dockingScene, dockingCamera, dockingRenderer, dockingControls;
+    let dockingLigandGroup = null;
+    let dockingReceptorGroup = null;
+    let dockingHbondGroup = null;
+    let dockingAutoRotate = false;
+    let dockingLastResult = null;
+    let dockingReceptorsCache = null;
+
+    function initDockingScene() {
+      const container = document.getElementById('canvas-docking-3d');
+      if (!container) return;
+
+      dockingScene = new THREE.Scene();
+      dockingScene.background = new THREE.Color(0x03060d);
+      dockingScene.fog = new THREE.FogExp2(0x03060d, 0.005);
+
+      const width = container.clientWidth || 800;
+      const height = container.clientHeight || 600;
+
+      dockingCamera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+      dockingCamera.position.set(0, 8, 28);
+
+      dockingRenderer = new THREE.WebGLRenderer({ canvas: container, antialias: true, preserveDrawingBuffer: true });
+      dockingRenderer.setSize(width, height);
+      dockingRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      if (typeof THREE.OrbitControls !== 'undefined') {
+        dockingControls = new THREE.OrbitControls(dockingCamera, dockingRenderer.domElement);
+        dockingControls.enableDamping = true;
+        dockingControls.dampingFactor = 0.06;
+        dockingControls.maxDistance = 150;
+        dockingControls.minDistance = 3;
+      }
+
+      // Işıklandırma
+      const amb = new THREE.AmbientLight(0x223344, 1.4);
+      dockingScene.add(amb);
+
+      const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+      dirLight1.position.set(20, 30, 20);
+      dockingScene.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0x00f0ff, 1.2);
+      dirLight2.position.set(-20, -20, 10);
+      dockingScene.add(dirLight2);
+
+      const pointLight = new THREE.PointLight(0xa855f7, 2.0, 50);
+      pointLight.position.set(0, 0, 0);
+      dockingScene.add(pointLight);
+
+      // Zemin Izgarası
+      const grid = new THREE.GridHelper(60, 30, 0x00f0ff, 0x0a1426);
+      grid.position.y = -10;
+      dockingScene.add(grid);
+
+      dockingLigandGroup = new THREE.Group();
+      dockingReceptorGroup = new THREE.Group();
+      dockingHbondGroup = new THREE.Group();
+
+      dockingScene.add(dockingReceptorGroup);
+      dockingScene.add(dockingLigandGroup);
+      dockingScene.add(dockingHbondGroup);
+
+      function animateDocking() {
+        requestAnimationFrame(animateDocking);
+        if (dockingControls) {
+          dockingControls.autoRotate = dockingAutoRotate;
+          dockingControls.update();
+        }
+        if (dockingHbondGroup && dockingHbondGroup.children.length > 0) {
+          const time = Date.now() * 0.003;
+          dockingHbondGroup.children.forEach(c => {
+            if (c.material && c.material.opacity !== undefined) {
+              c.material.opacity = 0.5 + 0.45 * Math.sin(time + (c.id % 5));
+            }
+          });
+        }
+        dockingRenderer.render(dockingScene, dockingCamera);
+      }
+      animateDocking();
+    }
+
+    async function loadDockingReceptors() {
+      try {
+        const res = await fetch('/api/docking/receptors');
+        const list = await res.json();
+        dockingReceptorsCache = {};
+        const sel = document.getElementById('docking-receptor-select');
+        if (sel) sel.innerHTML = '';
+        list.forEach(rec => {
+          dockingReceptorsCache[rec.key] = rec;
+          if (sel) {
+            const opt = document.createElement('option');
+            opt.value = rec.key;
+            opt.innerText = `${rec.name} (${rec.pdb_template})`;
+            sel.appendChild(opt);
+          }
+        });
+        onDockingReceptorChange();
+      } catch (e) {
+        console.error('Docking reseptorleri alinamadi:', e);
+      }
+    }
+
+    function onDockingReceptorChange() {
+      const sel = document.getElementById('docking-receptor-select');
+      if (!sel || !dockingReceptorsCache) return;
+      const rec = dockingReceptorsCache[sel.value];
+      if (!rec) return;
+
+      const badge = document.getElementById('docking-pdb-badge');
+      if (badge) badge.innerText = `PDB: ${rec.pdb_template.split(' ')[0]}`;
+
+      const info = document.getElementById('docking-receptor-info');
+      if (info) {
+        info.innerHTML = `
+          <strong>${rec.target_gene}</strong> | <em>${rec.pocket_type}</em><br>
+          ${rec.clinical_significance}
+        `;
+      }
+    }
+
+    function populateDockingLigands() {
+      const sel = document.getElementById('docking-ligand-select');
+      if (!sel) return;
+      if (sel.options.length > 1) return;
+
+      sel.innerHTML = '';
+      const defOpt = document.createElement('option');
+      defOpt.value = 'DeNovo_Champion';
+      defOpt.innerText = '⭐ DeNovo_Champion (En Yüksek Afiniteli Kurşun Ajan)';
+      sel.appendChild(defOpt);
+
+      if (allCompoundsList && allCompoundsList.length > 0) {
+        allCompoundsList.forEach(c => {
+          if (c.Molecule_Name !== 'DeNovo_Champion') {
+            const opt = document.createElement('option');
+            opt.value = c.Molecule_Name;
+            opt.innerText = `${c.Molecule_Name} (${c.Pharmacological_Category})`;
+            sel.appendChild(opt);
+          }
+        });
+      }
+      onDockingLigandSelectChange();
+    }
+
+    function onDockingLigandSelectChange() {
+      const sel = document.getElementById('docking-ligand-select');
+      const smilesInput = document.getElementById('docking-custom-smiles');
+      const mwBadge = document.getElementById('docking-ligand-mw-badge');
+      if (!sel) return;
+
+      const molName = sel.value;
+      const comp = (allCompoundsList || []).find(c => c.Molecule_Name === molName);
+      if (comp) {
+        if (smilesInput) smilesInput.value = comp.Canonical_SMILES || '';
+        if (mwBadge) mwBadge.innerText = `MW: ${comp.Molecular_Weight || '—'}`;
+      } else if (molName === 'DeNovo_Champion') {
+        if (smilesInput) smilesInput.value = 'CC1=NC=C(C=C1)CCN(C)C(=O)CF';
+        if (mwBadge) mwBadge.innerText = 'MW: 208.2';
+      }
+    }
+
+    async function triggerDockingRun() {
+      const recSel = document.getElementById('docking-receptor-select');
+      const ligSel = document.getElementById('docking-ligand-select');
+      const customSmiles = document.getElementById('docking-custom-smiles');
+      const btn = document.getElementById('btn-trigger-docking');
+      const statusInd = document.getElementById('docking-status-indicator');
+
+      const receptorKey = recSel ? recSel.value : 'nAChR_alpha7';
+      const molNameOrSmiles = (customSmiles && customSmiles.value.trim()) ? customSmiles.value.trim() : (ligSel ? ligSel.value : 'DeNovo_Champion');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ RDKit 3D Konformasyon & Kenetlenme Hesaplanıyor...</span>';
+      }
+      if (statusInd) {
+        statusInd.style.color = '#ffb703';
+        statusInd.innerText = '● Hesaplanıyor...';
+      }
+
+      try {
+        const res = await fetch('/api/docking/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            receptor: receptorKey,
+            molecule: molNameOrSmiles
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          dockingLastResult = data;
+          renderDocking3D(data);
+          updateDockingTelemetryUI(data);
+          if (statusInd) {
+            statusInd.style.color = '#00ff9d';
+            statusInd.innerText = '● Kenetlendi (Optimize)';
+          }
+          showToast(`⚡ ${data.receptor.name.split('(')[0]} cebine kenetlenme tamamlandı! ΔG: ${data.telemetry.delta_g_kcal_mol} kcal/mol`);
+        } else {
+          showToast('❌ Kenetlenme hatası: ' + (data.message || 'Bilinmeyen hata'));
+        }
+      } catch (err) {
+        showToast('❌ Bağlantı hatası: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>⚡ 3D Kenetlenmeyi Başlat (Run Docking)</span>';
+        }
+      }
+    }
+
+    function createCylinderBetweenPoints(p1, p2, radius, colorHex) {
+      const dir = new THREE.Vector3().subVectors(p2, p1);
+      const len = dir.length();
+      const geom = new THREE.CylinderGeometry(radius, radius, Math.max(0.01, len), 8);
+      const mat = new THREE.MeshPhongMaterial({ color: colorHex, shininess: 50 });
+      const cyl = new THREE.Mesh(geom, mat);
+
+      cyl.position.copy(p1).addScaledVector(dir, 0.5);
+      cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+      return cyl;
+    }
+
+    function renderDocking3D(data) {
+      if (!dockingScene) initDockingScene();
+
+      while (dockingReceptorGroup.children.length > 0) {
+        const obj = dockingReceptorGroup.children.pop();
+        if (obj.geometry) obj.geometry.dispose();
+      }
+      while (dockingLigandGroup.children.length > 0) {
+        const obj = dockingLigandGroup.children.pop();
+        if (obj.geometry) obj.geometry.dispose();
+      }
+      while (dockingHbondGroup.children.length > 0) {
+        const obj = dockingHbondGroup.children.pop();
+        if (obj.geometry) obj.geometry.dispose();
+      }
+
+      const rec = data.receptor;
+      const lig = data.ligand;
+      const interactions = data.interactions || [];
+
+      // 1. Reseptör Omurgası Şerit (Ribbon Spline)
+      if (rec.spline_points && rec.spline_points.length >= 3) {
+        const pts = rec.spline_points.map(p => new THREE.Vector3(p[0], p[1], p[2]));
+        const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.5);
+        const tubeGeom = new THREE.TubeGeometry(curve, 64, 0.45, 10, false);
+        const tubeMat = new THREE.MeshPhongMaterial({
+          color: 0x8b5cf6,
+          emissive: 0x2e1065,
+          shininess: 60,
+          transparent: true,
+          opacity: 0.85
+        });
+        const tubeMesh = new THREE.Mesh(tubeGeom, tubeMat);
+        dockingReceptorGroup.add(tubeMesh);
+      }
+
+      // Reseptör Cepleri ve Yan Zincir Kalıntıları
+      if (rec.pocket_residues) {
+        rec.pocket_residues.forEach(r => {
+          const pos = new THREE.Vector3(r.pos[0], r.pos[1], r.pos[2]);
+
+          const sphereGeom = new THREE.SphereGeometry(0.7, 16, 16);
+          const sphereMat = new THREE.MeshPhongMaterial({
+            color: r.type === 'aromatic' ? 0xd946ef : (r.type === 'cationic' ? 0x3b82f6 : (r.type === 'anionic' ? 0xef4444 : 0x10b981)),
+            shininess: 70
+          });
+          const sphereMesh = new THREE.Mesh(sphereGeom, sphereMat);
+          sphereMesh.position.copy(pos);
+          dockingReceptorGroup.add(sphereMesh);
+
+          if (r.atoms && r.atoms.length > 1) {
+            r.atoms.slice(1).forEach(a => {
+              const aPos = new THREE.Vector3(a.pos[0], a.pos[1], a.pos[2]);
+              const stickGeom = createCylinderBetweenPoints(pos, aPos, 0.18, 0xa855f7);
+              dockingReceptorGroup.add(stickGeom);
+
+              const tipGeom = new THREE.SphereGeometry(a.radius || 0.5, 12, 12);
+              const tipMat = new THREE.MeshPhongMaterial({ color: a.color || 0xffffff });
+              const tipMesh = new THREE.Mesh(tipGeom, tipMat);
+              tipMesh.position.copy(aPos);
+              dockingReceptorGroup.add(tipMesh);
+            });
+          }
+        });
+      }
+
+      // 2. Kenetlenen Ligand: CPK Ball-and-Stick Modeli
+      const atomMeshes = [];
+      const targetPositions = [];
+      const startPositions = [];
+
+      lig.atoms.forEach(a => {
+        const radius = a.radius || 0.65;
+        const color = a.color || '#00f0ff';
+        const geom = new THREE.SphereGeometry(radius * 0.85, 20, 20);
+        const mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(color),
+          roughness: 0.2,
+          metalness: 0.15,
+          clearcoat: 0.8,
+          clearcoatRoughness: 0.1
+        });
+        const mesh = new THREE.Mesh(geom, mat);
+
+        const targetPos = new THREE.Vector3(a.pos[0], a.pos[1], a.pos[2]);
+        const startPos = targetPos.clone().add(new THREE.Vector3(0, 14, 10));
+
+        mesh.position.copy(startPos);
+        dockingLigandGroup.add(mesh);
+        atomMeshes.push(mesh);
+        targetPositions.push(targetPos);
+        startPositions.push(startPos);
+      });
+
+      // Bağlar (Bonds)
+      const bondMeshes = [];
+      if (lig.bonds) {
+        lig.bonds.forEach(b => {
+          const a1 = lig.atoms[b.source];
+          const a2 = lig.atoms[b.target];
+          if (a1 && a2) {
+            const p1 = new THREE.Vector3(a1.pos[0], a1.pos[1], a1.pos[2]);
+            const p2 = new THREE.Vector3(a2.pos[0], a2.pos[1], a2.pos[2]);
+            const bondCyl = createCylinderBetweenPoints(p1, p2, 0.15, 0x64748b);
+            dockingLigandGroup.add(bondCyl);
+            bondMeshes.push({ mesh: bondCyl, p1: p1, p2: p2 });
+          }
+        });
+      }
+
+      // 3. Etkileşimler (H-Bağları ve Hidrofobik Kesikli Çizgiler)
+      interactions.forEach(inter => {
+        if (inter.type === 'h_bond') {
+          const sp = new THREE.Vector3(inter.start_pos[0], inter.start_pos[1], inter.start_pos[2]);
+          const ep = new THREE.Vector3(inter.end_pos[0], inter.end_pos[1], inter.end_pos[2]);
+          const lineGeom = new THREE.BufferGeometry().setFromPoints([sp, ep]);
+          const lineMat = new THREE.LineDashedMaterial({
+            color: 0x00ff9d,
+            dashSize: 0.4,
+            gapSize: 0.25,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.9
+          });
+          const line = new THREE.Line(lineGeom, lineMat);
+          line.computeLineDistances();
+          dockingHbondGroup.add(line);
+        } else if (inter.type === 'hydrophobic') {
+          const sp = new THREE.Vector3(inter.start_pos[0], inter.start_pos[1], inter.start_pos[2]);
+          const ep = new THREE.Vector3(inter.end_pos[0], inter.end_pos[1], inter.end_pos[2]);
+          const lineGeom = new THREE.BufferGeometry().setFromPoints([sp, ep]);
+          const lineMat = new THREE.LineDashedMaterial({
+            color: 0xffb703,
+            dashSize: 0.6,
+            gapSize: 0.4,
+            linewidth: 1,
+            transparent: true,
+            opacity: 0.6
+          });
+          const line = new THREE.Line(lineGeom, lineMat);
+          line.computeLineDistances();
+          dockingHbondGroup.add(line);
+        }
+      });
+
+      // 4. Kenetlenme Kayma Animasyonu
+      animateDockingGlide(atomMeshes, startPositions, targetPositions, bondMeshes);
+    }
+
+    function animateDockingGlide(atomMeshes, startPositions, targetPositions, bondMeshes) {
+      let progress = 0.0;
+      const duration = 1200;
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        progress = Math.min(1.0, elapsed / duration);
+        const ease = 1 - Math.pow(1 - progress, 3);
+
+        for (let i = 0; i < atomMeshes.length; i++) {
+          atomMeshes[i].position.lerpVectors(startPositions[i], targetPositions[i], ease);
+        }
+
+        bondMeshes.forEach(b => {
+          const curP1 = b.p1.clone().add(new THREE.Vector3(0, 14 * (1 - ease), 10 * (1 - ease)));
+          const curP2 = b.p2.clone().add(new THREE.Vector3(0, 14 * (1 - ease), 10 * (1 - ease)));
+          const dir = new THREE.Vector3().subVectors(curP2, curP1);
+          b.mesh.position.copy(curP1).addScaledVector(dir, 0.5);
+          b.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+        });
+
+        if (progress < 1.0) {
+          requestAnimationFrame(step);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function updateDockingTelemetryUI(data) {
+      const t = data.telemetry;
+      const deltaGEl = document.getElementById('docking-delta-g-val');
+      const affClassEl = document.getElementById('docking-affinity-class');
+      const kdEl = document.getElementById('docking-kd-val');
+      const leEl = document.getElementById('docking-le-val');
+      const hbEl = document.getElementById('docking-hbonds-count');
+      const hydEl = document.getElementById('docking-hydrophobic-count');
+      const chipsEl = document.getElementById('docking-interactions-list');
+
+      if (deltaGEl) {
+        deltaGEl.innerHTML = `${t.delta_g_kcal_mol} <span style="font-size:13px; font-weight:500; color:#94a3b8;">kcal/mol</span>`;
+        deltaGEl.style.color = t.affinity_color || '#00ff9d';
+      }
+      if (affClassEl) {
+        affClassEl.innerText = t.affinity_class.split('(')[0].trim();
+        affClassEl.style.color = t.affinity_color || '#00ff9d';
+        affClassEl.style.borderColor = t.affinity_color || '#00ff9d';
+      }
+      if (kdEl) kdEl.innerText = t.estimated_kd;
+      if (leEl) leEl.innerText = t.ligand_efficiency;
+      if (hbEl) hbEl.innerText = `${t.hbond_count} Adet`;
+      if (hydEl) hydEl.innerText = `${t.hydrophobic_contacts} Kontak`;
+
+      if (chipsEl && data.interactions) {
+        chipsEl.innerHTML = '';
+        if (data.interactions.length === 0) {
+          chipsEl.innerHTML = '<span style="font-size:11px; color:#64748b;">Doğrudan temas saptanmadı.</span>';
+        } else {
+          data.interactions.forEach(inter => {
+            const chip = document.createElement('div');
+            chip.style.cssText = `
+              background: ${inter.type === 'h_bond' ? 'rgba(0,255,157,0.12)' : 'rgba(255,183,3,0.12)'};
+              border: 1px solid ${inter.type === 'h_bond' ? 'rgba(0,255,157,0.3)' : 'rgba(255,183,3,0.3)'};
+              color: ${inter.type === 'h_bond' ? '#00ff9d' : '#ffb703'};
+              border-radius: 6px;
+              padding: 3px 8px;
+              font-size: 10px;
+              font-family: var(--font-mono);
+              white-space: nowrap;
+            `;
+            chip.innerText = `${inter.label} (${inter.distance_angstrom} Å)`;
+            chipsEl.appendChild(chip);
+          });
+        }
+      }
+    }
+
+    function toggleDockingAutoRotate() {
+      dockingAutoRotate = !dockingAutoRotate;
+      const btn = document.getElementById('btn-docking-rotate');
+      if (btn) {
+        btn.innerText = dockingAutoRotate ? '⏹ Dönüşü Durdur' : '🔄 Otomatik Döndür';
+        if (dockingAutoRotate) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+    }
+
+    function focusDockingLigand() {
+      if (!dockingCamera || !dockingControls) return;
+      dockingCamera.position.set(0, 4, 14);
+      dockingControls.target.set(0, 0, 0);
+    }
+
+    function focusDockingPocket() {
+      if (!dockingCamera || !dockingControls) return;
+      dockingCamera.position.set(0, 10, 32);
+      dockingControls.target.set(0, 0, 0);
+    }
+
+    function replayDockingAnimation() {
+      if (dockingLastResult) {
+        renderDocking3D(dockingLastResult);
+      } else {
+        triggerDockingRun();
+      }
+    }
+
+    function openDockingStudio(moleculeName, event) {
+      if (event) event.stopPropagation();
+      switchTab('tab-docking');
+      populateDockingLigands();
+      const sel = document.getElementById('docking-ligand-select');
+      if (sel && moleculeName) {
+        sel.value = moleculeName;
+        onDockingLigandSelectChange();
+      }
+      setTimeout(() => {
+        triggerDockingRun();
+      }, 100);
+    }
+
+    function openDockingFromModal() {
+      const molTitle = document.getElementById('modal-title');
+      const molName = molTitle ? molTitle.innerText : 'DeNovo_Champion';
+      closeMoleculeModal();
+      openDockingStudio(molName);
+    }
+
+    function transferDockedDrugToSimulator() {
+      if (!dockingLastResult) {
+        showToast('⚠️ Önce bir molekül kenetleyin.');
+        return;
+      }
+      const molName = dockingLastResult.ligand.name;
+      selectMolecule(molName);
+    }
+
+    function copyDockingSummary() {
+      if (!dockingLastResult) {
+        showToast('⚠️ Henüz bir kenetlenme sonucu yok.');
+        return;
+      }
+      const d = dockingLastResult;
+      const text = `=== IN SILICO MOLECULAR DOCKING REPORT ===\n` +
+                   `Reseptör: ${d.receptor.name} (${d.receptor.pdb_template})\n` +
+                   `Ligand: ${d.ligand.name}\n` +
+                   `SMILES: ${d.ligand.smiles}\n` +
+                   `ΔG_bind: ${d.telemetry.delta_g_kcal_mol} kcal/mol\n` +
+                   `Ayrışma Sabiti (Kd): ${d.telemetry.estimated_kd}\n` +
+                   `Ligand Verimliliği (LE): ${d.telemetry.ligand_efficiency}\n` +
+                   `H-Bağları: ${d.telemetry.hbond_count} adet\n` +
+                   `Hidrofobik Temaslar: ${d.telemetry.hydrophobic_contacts} kontak\n` +
+                   `Afinite Sınıfı: ${d.telemetry.affinity_class}\n` +
+                   `=========================================`;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 Kenetlenme Raporu Panoya Kopyalandı!');
+      }).catch(err => {
+        showToast('❌ Kopyalama hatası: ' + err);
+      });
+    }
+
     function onWindowResize() {
       if (neuralCamera && neuralRenderer) {
         const c1 = document.getElementById('canvas-neural-3d');
@@ -4551,6 +5286,17 @@
           cellularRenderer.setSize(w, h);
         }
       }
+
+      if (dockingCamera && dockingRenderer) {
+        const c3 = document.getElementById('canvas-docking-3d');
+        if (c3 && c3.parentElement) {
+          const w = c3.parentElement.clientWidth;
+          const h = c3.parentElement.clientHeight;
+          dockingCamera.aspect = w / h;
+          dockingCamera.updateProjectionMatrix();
+          dockingRenderer.setSize(w, h);
+        }
+      }
     }
     window.addEventListener('resize', onWindowResize);
 
@@ -4562,6 +5308,8 @@
       loadLeaderboard();
       loadMLAnalytics();
       loadCocktails();
+      initDockingScene();
+      loadDockingReceptors();
       drawOscilloscope('canvas-oscilloscope', vmHistory, -80.0, 30.0, '#00f0ff', 'Vm (Membrane mV)');
       drawOscilloscope('canvas-calcium-wave', calciumHistory, 80.0, 1200.0, '#ffb703', '[Ca2+]i Transient (nM)');
       stepSimulation();
