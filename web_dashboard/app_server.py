@@ -38,6 +38,7 @@ from denovo_ai.molecule_generator import DeNovoMoleculeGenerator, compute_lipins
 from denovo_ai.dose_optimizer import AutonomousDoseOptimizer
 from denovo_ai.cocktail_generator import cocktail_synthesizer
 from pipeline.docking_engine import docking_engine
+from pipeline.clinical_trial_engine import clinical_trial_engine
 
 HOST = "127.0.0.1"
 PORT = 8060
@@ -237,6 +238,11 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             # 3D Moleküler Kenetlenme Reseptör Bağlanma Havuzları
             receptors = docking_engine.get_available_receptors()
             self._send_json(receptors)
+
+        elif self.path == "/api/clinical_trial/protocols":
+            # Sanal Klinik Deney Protokolleri ve Tedavi Kolları
+            protocols = clinical_trial_engine.get_trial_protocols()
+            self._send_json(protocols)
 
         elif self.path.startswith("/api/export_dataset"):
             # Veri setini CSV veya JSON olarak dışa aktar
@@ -556,6 +562,21 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             try:
                 result = docking_engine.run_docking(receptor_key=rec_key, molecule_or_smiles=mol_input)
                 self._send_json(result)
+            except Exception as ex:
+                self._send_json({"status": "error", "message": str(ex)}, status=500)
+
+        elif self.path == "/api/clinical_trial/run":
+            # Sanal Klinik Deney ve Kaplan-Meier Simülasyonu
+            cohort_size = int(payload.get("cohort_size", 100))
+            selected_arms = payload.get("selected_arms", None)
+            time_horizon = int(payload.get("time_horizon_days", 60))
+            try:
+                results = clinical_trial_engine.run_trial(
+                    cohort_size_per_arm=cohort_size,
+                    selected_arms=selected_arms,
+                    time_horizon_days=time_horizon
+                )
+                self._send_json(results)
             except Exception as ex:
                 self._send_json({"status": "error", "message": str(ex)}, status=500)
 

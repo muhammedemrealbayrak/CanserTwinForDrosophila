@@ -1086,6 +1086,7 @@
       <button class="tab-btn" onclick="switchTab('tab-cellular')">🔬 3D Tümör Simülatörü</button>
       <button class="tab-btn" onclick="switchTab('tab-dual')">⚡ İkili Senkron Görünüm</button>
       <button class="tab-btn" onclick="switchTab('tab-docking')">🧬 3D Kenetlenme</button>
+      <button class="tab-btn" onclick="switchTab('tab-trial')">📊 Sanal Klinik Deney</button>
       <button class="tab-btn" onclick="switchTab('tab-cocktails')">🧪 Sinerjik Kokteyller & Reçeteler</button>
       <button class="tab-btn" onclick="switchTab('tab-online')">🌐 Çevrimiçi Veri & PubChem</button>
       <button class="tab-btn" onclick="switchTab('tab-compounds')">📚 Molekül Veri Bankası</button>
@@ -2263,6 +2264,204 @@
       </div>
     </section>
 
+    <!-- SEKME: SANAL KLİNİK DENEY & KAPLAN-MEIER SAĞKALIM ANALİZİ -->
+    <section id="tab-trial" class="tab-content">
+      <div style="padding:22px; max-width:1500px; margin:0 auto; width:100%;">
+
+        <!-- Üst Başlık & Kontrol Paneli -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:16px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg, #ef4444 0%, #ffb703 50%, #00ff9d 100%); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 20px rgba(0,255,157,0.3);">📊</div>
+            <div>
+              <h2 style="font-size:20px; font-weight:800; color:#fff; letter-spacing:0.5px;">Sanal Klinik Deney & Kaplan-Meier Sağkalım Analizi</h2>
+              <p style="font-size:12px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;">
+                FDA / EMA Preklinik Dijital İkiz Protokolü • Monte Carlo Heterojen Kohort Simülasyonu • Log-Rank Testi (Mantel-Cox)
+              </p>
+            </div>
+          </div>
+
+          <!-- Deney Başlatma ve Parametre Kontrolleri -->
+          <div style="display:flex; align-items:center; gap:12px; background:rgba(14,20,36,0.9); padding:8px 16px; border-radius:12px; border:1px solid var(--border-glow); backdrop-filter:blur(10px);">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Kohort (Kol Başına N):</span>
+              <select id="trial-cohort-size" style="background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:5px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer;">
+                <option value="50">N = 50 (Toplam 200)</option>
+                <option value="100" selected>N = 100 (Toplam 400 - Standart)</option>
+                <option value="250">N = 250 (Toplam 1,000)</option>
+                <option value="500">N = 500 (Toplam 2,000 - Büyük Faz III)</option>
+              </select>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Takip Süresi:</span>
+              <select id="trial-time-horizon" style="background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:5px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer;">
+                <option value="30">30 Gün (Akut Faz)</option>
+                <option value="60" selected>60 Gün (Tam Yaşam Döngüsü)</option>
+                <option value="90">90 Gün (Uzun Süreli Takip)</option>
+              </select>
+            </div>
+
+            <button id="btn-run-clinical-trial" class="btn-action primary" onclick="runVirtualClinicalTrial()" style="padding:9px 18px; font-size:12px; font-weight:800; background:linear-gradient(135deg, #00ff9d 0%, #00f0ff 100%); color:#03060d; box-shadow:0 0 16px rgba(0,255,157,0.4);">
+              <span>🚀 Randomize Deneyi Başlat</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Kol Özeti Mini Kartları -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-bottom:20px;">
+          
+          <div class="hud-card" style="border-left:4px solid #ef4444; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:700; color:#ef4444;">Kol A: Kontrol (Plasebo)</span>
+              <span class="tag-category tag-chemo" style="font-size:9px;">Tedavisiz</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <div>
+                <div style="font-size:10px; color:var(--text-muted);">Medyan Sağkalım:</div>
+                <div id="trial-med-ctrl" style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-mono);">19.5 Gün</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; color:var(--text-muted);">60G Sağkalım:</div>
+                <div id="trial-os60-ctrl" style="font-size:16px; font-weight:800; color:#ef4444; font-family:var(--font-mono);">%0.0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-card" style="border-left:4px solid #ffb703; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:700; color:#ffb703;">Kol B: Sisplatin (Kemo)</span>
+              <span class="tag-category tag-targeted" style="font-size:9px;">Kemoterapi</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <div>
+                <div style="font-size:10px; color:var(--text-muted);">Medyan Sağkalım:</div>
+                <div id="trial-med-chemo" style="font-size:16px; font-weight:800; color:#fff; font-family:var(--font-mono);">24.0 Gün</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; color:var(--text-muted);">Tehlike Oranı (HR):</div>
+                <div id="trial-hr-chemo" style="font-size:16px; font-weight:800; color:#ffb703; font-family:var(--font-mono);">0.38</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-card" style="border-left:4px solid #00f0ff; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:700; color:#00f0ff;">Kol C: DeNovo_Champion</span>
+              <span class="tag-category tag-denovo" style="font-size:9px;">Hedefe Yönelik AI</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <div>
+                <div style="font-size:10px; color:var(--text-muted);">Medyan Sağkalım:</div>
+                <div id="trial-med-target" style="font-size:16px; font-weight:800; color:#00f0ff; font-family:var(--font-mono);">NR (>60G)</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; color:var(--text-muted);">Tehlike Oranı (HR):</div>
+                <div id="trial-hr-target" style="font-size:16px; font-weight:800; color:#00f0ff; font-family:var(--font-mono);">0.05</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hud-card" style="border-left:4px solid #00ff9d; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:700; color:#00ff9d;">Kol D: Multimodal Kurtarma</span>
+              <span class="tag-category tag-denovo" style="font-size:9px; background:rgba(0,255,157,0.2); border-color:#00ff9d; color:#00ff9d;">🌟 Süper Sinerji</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <div>
+                <div style="font-size:10px; color:var(--text-muted);">Medyan Sağkalım:</div>
+                <div id="trial-med-multi" style="font-size:16px; font-weight:800; color:#00ff9d; font-family:var(--font-mono);">NR (>60G)</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; color:var(--text-muted);">60G Sağkalım:</div>
+                <div id="trial-os60-multi" style="font-size:16px; font-weight:800; color:#00ff9d; font-family:var(--font-mono);">%100.0</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Ana Görselleştirme: Kaplan-Meier Grafiği & Risk Altındaki Hasta Tablosu -->
+        <div class="hud-card" style="padding:20px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h3 style="font-size:15px; font-weight:800; color:#fff;">Kaplan-Meier Genel Sağkalım Eğrileri (Overall Survival - OS)</h3>
+              <p style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Basamaklı Yaşam Fonksiyonu: S(t) = ∏ (1 - d_i / n_i) | Log-Rank Karşılaştırmalı</p>
+            </div>
+            <div style="display:flex; gap:12px; font-size:11px; font-family:var(--font-mono);">
+              <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:14px; height:3px; background:#ef4444;"></span> Kontrol</span>
+              <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:14px; height:3px; background:#ffb703;"></span> Kemoterapi</span>
+              <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:14px; height:3px; background:#00f0ff;"></span> DeNovo_Champion</span>
+              <span style="display:flex; align-items:center; gap:6px;"><span style="display:inline-block; width:14px; height:3px; background:#00ff9d;"></span> Multimodal Sinerji</span>
+            </div>
+          </div>
+
+          <!-- Chart.js Tuvali -->
+          <div style="height:360px; width:100%; position:relative;">
+            <canvas id="canvas-kaplan-meier"></canvas>
+          </div>
+
+          <!-- Risk Altındaki Hasta Sayıları Tablosu (Numbers at Risk) -->
+          <div style="margin-top:16px; border-top:1px solid var(--border-subtle); padding-top:12px;">
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted); font-family:var(--font-mono); margin-bottom:8px; text-transform:uppercase;">
+              Risk Altındaki Hasta Sayısı (Numbers at Risk):
+            </div>
+            <div style="overflow-x:auto;">
+              <table style="width:100%; font-size:11px; font-family:var(--font-mono); text-align:center; border-collapse:collapse;" id="table-numbers-at-risk">
+                <thead>
+                  <tr style="color:var(--text-muted); border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <th style="text-align:left; padding:4px 8px;">Tedavi Kolu</th>
+                    <th style="padding:4px 8px;">Gün 0</th>
+                    <th style="padding:4px 8px;">Gün 15</th>
+                    <th style="padding:4px 8px;">Gün 30</th>
+                    <th style="padding:4px 8px;">Gün 45</th>
+                    <th style="padding:4px 8px;">Gün 60</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-numbers-at-risk">
+                  <!-- JS ile doldurulacak -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- İstatistiksel Değerlendirme & FDA/EMA Tipi Onkolojik Karar Tablosu -->
+        <div class="hud-card" style="padding:20px; margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <h3 style="font-size:15px; font-weight:800; color:#fff;">Onkolojik İstatistik Karşılaştırması & Onay Kararları</h3>
+              <p style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Mantel-Cox Log-Rank Testi, Hazard Ratio (HR %95 GA) ve Klinik Üstünlük Değerlendirmesi</p>
+            </div>
+            <button class="btn-action secondary" onclick="copyTrialReport()" style="padding:6px 14px; font-size:11px;">
+              📋 Klinik Raporu Kopyala
+            </button>
+          </div>
+
+          <div class="data-table-wrap" style="max-height:300px;">
+            <table style="width:100%;" id="table-trial-stats">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Tedavi Kolu / Rejim</th>
+                  <th>Medyan Sağkalım</th>
+                  <th>30G Sağkalım</th>
+                  <th>60G Sağkalım</th>
+                  <th>Tehlike Oranı (HR)</th>
+                  <th>%95 Güven Aralığı</th>
+                  <th>Log-Rank p</th>
+                  <th style="text-align:right;">Klinik Karar (Regülasyon)</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-trial-stats">
+                <!-- JS ile doldurulacak -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Molekül Detay & Tam SMILES İnceleme Modalı -->
@@ -2422,6 +2621,8 @@
       } else if (tabId === 'tab-docking') {
         populateDockingLigands();
         if (!dockingScene) initDockingScene();
+      } else if (tabId === 'tab-trial') {
+        if (!clinicalTrialData) runVirtualClinicalTrial();
       }
 
       setTimeout(() => { onWindowResize(); }, 60);
@@ -5264,6 +5465,289 @@
       });
     }
 
+    // =========================================================================
+    // SANAL KLİNİK DENEY & KAPLAN-MEIER SAĞKALIM MOTORU
+    // =========================================================================
+    let kmChartInstance = null;
+    let clinicalTrialData = null;
+
+    async function runVirtualClinicalTrial() {
+      const cohortSel = document.getElementById('trial-cohort-size');
+      const timeSel = document.getElementById('trial-time-horizon');
+      const btn = document.getElementById('btn-run-clinical-trial');
+
+      const cohortSize = cohortSel ? parseInt(cohortSel.value, 10) : 100;
+      const timeHorizon = timeSel ? parseInt(timeSel.value, 10) : 60;
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳ Randomize Deney Yürütülüyor (N=${cohortSize * 4})...</span>`;
+      }
+
+      try {
+        const res = await fetch('/api/clinical_trial/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cohort_size: cohortSize,
+            time_horizon_days: timeHorizon
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          clinicalTrialData = data;
+          renderKaplanMeierChart(data);
+          updateTrialSummaryCards(data);
+          renderNumbersAtRiskTable(data);
+          renderTrialStatsTable(data);
+          showToast(`🏆 N=${data.trial_parameters.total_patients} hastalı Sanal Klinik Deney tamamlandı!`);
+        } else {
+          showToast('❌ Klinik deney hatası: ' + (data.message || 'Bilinmeyen hata'));
+        }
+      } catch (err) {
+        showToast('❌ Bağlantı hatası: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀 Randomize Deneyi Başlat</span>';
+        }
+      }
+    }
+
+    function renderKaplanMeierChart(data) {
+      const canvas = document.getElementById('canvas-kaplan-meier');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const arms = data.arms_data;
+      const datasets = [];
+
+      const colorMap = {
+        'control_placebo': '#ef4444',
+        'chemo_standard': '#ffb703',
+        'targeted_ai': '#00f0ff',
+        'multimodal_rescue': '#00ff9d'
+      };
+
+      Object.entries(arms).forEach(([armKey, arm]) => {
+        const pts = arm.km_curve.map(pt => ({
+          x: pt.time,
+          y: Math.round(pt.survival * 1000) / 10
+        }));
+
+        datasets.push({
+          label: arm.arm_info.short_name,
+          data: pts,
+          borderColor: colorMap[armKey] || '#a855f7',
+          backgroundColor: 'transparent',
+          borderWidth: armKey === 'multimodal_rescue' ? 3.2 : 2.2,
+          stepped: 'before',
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          tension: 0
+        });
+      });
+
+      if (kmChartInstance) {
+        kmChartInstance.destroy();
+      }
+
+      kmChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          scales: {
+            x: {
+              type: 'linear',
+              title: {
+                display: true,
+                text: 'Takip Süresi (Gün)',
+                color: '#94a3b8',
+                font: { family: 'JetBrains Mono', size: 11, weight: '600' }
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' },
+              ticks: { color: '#cbd5e1', font: { family: 'JetBrains Mono', size: 10 } },
+              min: 0,
+              max: data.trial_parameters.time_horizon_days
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Genel Sağkalım Olasılığı (Overall Survival - %)',
+                color: '#94a3b8',
+                font: { family: 'JetBrains Mono', size: 11, weight: '600' }
+              },
+              grid: { color: 'rgba(255, 255, 255, 0.06)' },
+              ticks: {
+                color: '#cbd5e1',
+                font: { family: 'JetBrains Mono', size: 10 },
+                callback: v => `${v}%`
+              },
+              min: 0,
+              max: 100
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(8, 12, 22, 0.95)',
+              titleColor: '#00f0ff',
+              bodyColor: '#fff',
+              borderColor: 'rgba(0, 240, 255, 0.3)',
+              borderWidth: 1,
+              padding: 10,
+              callbacks: {
+                title: ctx => `Gün: ${ctx[0].parsed.x}`,
+                label: ctx => ` ${ctx.dataset.label}: %${ctx.parsed.y.toFixed(1)} Sağkalım`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateTrialSummaryCards(data) {
+      const arms = data.arms_data;
+      if (arms['control_placebo']) {
+        const elMed = document.getElementById('trial-med-ctrl');
+        const elOs = document.getElementById('trial-os60-ctrl');
+        if (elMed) elMed.innerText = arms['control_placebo'].median_os_formatted;
+        if (elOs) elOs.innerText = `%${arms['control_placebo'].os_60_days_pct}`;
+      }
+      if (arms['chemo_standard']) {
+        const elMed = document.getElementById('trial-med-chemo');
+        const elHr = document.getElementById('trial-hr-chemo');
+        const stat = data.statistical_comparisons.find(c => c.arm_key === 'chemo_standard');
+        if (elMed) elMed.innerText = arms['chemo_standard'].median_os_formatted;
+        if (elHr && stat) elHr.innerText = stat.hazard_ratio;
+      }
+      if (arms['targeted_ai']) {
+        const elMed = document.getElementById('trial-med-target');
+        const elHr = document.getElementById('trial-hr-target');
+        const stat = data.statistical_comparisons.find(c => c.arm_key === 'targeted_ai');
+        if (elMed) elMed.innerText = arms['targeted_ai'].median_os_formatted;
+        if (elHr && stat) elHr.innerText = stat.hazard_ratio;
+      }
+      if (arms['multimodal_rescue']) {
+        const elMed = document.getElementById('trial-med-multi');
+        const elOs = document.getElementById('trial-os60-multi');
+        if (elMed) elMed.innerText = arms['multimodal_rescue'].median_os_formatted;
+        if (elOs) elOs.innerText = `%${arms['multimodal_rescue'].os_60_days_pct}`;
+      }
+    }
+
+    function renderNumbersAtRiskTable(data) {
+      const tbody = document.getElementById('tbody-numbers-at-risk');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const colorMap = {
+        'control_placebo': '#ef4444',
+        'chemo_standard': '#ffb703',
+        'targeted_ai': '#00f0ff',
+        'multimodal_rescue': '#00ff9d'
+      };
+
+      Object.entries(data.numbers_at_risk).forEach(([armKey, counts]) => {
+        const armInfo = data.arms_data[armKey].arm_info;
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+
+        let cellsHtml = `<td style="text-align:left; padding:6px 8px; font-weight:700; color:${colorMap[armKey] || '#fff'};">
+          ${armInfo.short_name}
+        </td>`;
+
+        counts.forEach(cnt => {
+          cellsHtml += `<td style="padding:6px 8px; color:#cbd5e1;">${cnt}</td>`;
+        });
+
+        tr.innerHTML = cellsHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTrialStatsTable(data) {
+      const tbody = document.getElementById('tbody-trial-stats');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const colorMap = {
+        'control_placebo': '#ef4444',
+        'chemo_standard': '#ffb703',
+        'targeted_ai': '#00f0ff',
+        'multimodal_rescue': '#00ff9d'
+      };
+
+      data.statistical_comparisons.forEach(c => {
+        const tr = document.createElement('tr');
+        const isControl = c.arm_key === 'control_placebo';
+        let badgeStyle = 'background:rgba(0,255,157,0.15); color:#00ff9d; border:1px solid rgba(0,255,157,0.3);';
+        if (isControl) {
+          badgeStyle = 'background:rgba(255,255,255,0.05); color:#94a3b8; border:1px solid rgba(255,255,255,0.1);';
+        } else if (c.hazard_ratio >= 0.70) {
+          badgeStyle = 'background:rgba(255,183,3,0.15); color:#ffb703; border:1px solid rgba(255,183,3,0.3);';
+        }
+
+        tr.innerHTML = `
+          <td style="font-weight:700; color:${colorMap[c.arm_key] || '#fff'};">
+            ${c.arm_name}
+          </td>
+          <td style="font-family:var(--font-mono); font-weight:700; color:#fff;">${c.median_os_formatted}</td>
+          <td style="font-family:var(--font-mono); color:${c.os_30 > 50 ? '#00ff9d' : '#ffb703'};">%${c.os_30}</td>
+          <td style="font-family:var(--font-mono); font-weight:700; color:${c.os_60 > 50 ? '#00ff9d' : (c.os_60 > 0 ? '#ffb703' : '#ef4444')};">%${c.os_60}</td>
+          <td style="font-family:var(--font-mono); font-weight:700; color:${isControl ? '#94a3b8' : (c.hazard_ratio < 0.4 ? '#00ff9d' : '#ffb703')};">
+            ${isControl ? '1.0 (Ref)' : c.hazard_ratio}
+          </td>
+          <td style="font-family:var(--font-mono); font-size:11px; color:#cbd5e1;">
+            ${isControl ? '—' : `[${c.hr_ci_95[0]} - ${c.hr_ci_95[1]}]`}
+          </td>
+          <td style="font-family:var(--font-mono); font-weight:600; color:${isControl ? '#94a3b8' : '#00f0ff'};">
+            ${c.p_value_formatted}
+          </td>
+          <td style="text-align:right;">
+            <span class="tag-category" style="${badgeStyle} font-size:10px; font-weight:700;">
+              ${c.clinical_significance}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function copyTrialReport() {
+      if (!clinicalTrialData) {
+        showToast('⚠️ Henüz bir klinik deney sonucu yok.');
+        return;
+      }
+      const d = clinicalTrialData;
+      let text = `=== IN SILICO RANDOMIZED CLINICAL TRIAL REPORT ===\n` +
+                 `Toplam Hasta (Drosophila İkizi): ${d.trial_parameters.total_patients} (Kol başına N=${d.trial_parameters.cohort_size_per_arm})\n` +
+                 `Takip Süresi: ${d.trial_parameters.time_horizon_days} Gün\n` +
+                 `--------------------------------------------------\n`;
+
+      d.statistical_comparisons.forEach(c => {
+        text += `[${c.arm_name}]\n` +
+                `  Medyan Sağkalım: ${c.median_os_formatted}\n` +
+                `  60 Günlük OS: %${c.os_60}\n` +
+                `  Hazard Ratio (HR): ${c.hazard_ratio} (95% CI: ${c.hr_ci_95[0]} - ${c.hr_ci_95[1]})\n` +
+                `  Log-Rank p: ${c.p_value_formatted}\n` +
+                `  Klinik Karar: ${c.clinical_significance}\n\n`;
+      });
+      text += `==================================================`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 Klinik Deney Raporu Panoya Kopyalandı!');
+      }).catch(err => {
+        showToast('❌ Kopyalama hatası: ' + err);
+      });
+    }
+
     function onWindowResize() {
       if (neuralCamera && neuralRenderer) {
         const c1 = document.getElementById('canvas-neural-3d');
@@ -5310,6 +5794,7 @@
       loadCocktails();
       initDockingScene();
       loadDockingReceptors();
+      runVirtualClinicalTrial();
       drawOscilloscope('canvas-oscilloscope', vmHistory, -80.0, 30.0, '#00f0ff', 'Vm (Membrane mV)');
       drawOscilloscope('canvas-calcium-wave', calciumHistory, 80.0, 1200.0, '#ffb703', '[Ca2+]i Transient (nM)');
       stepSimulation();
