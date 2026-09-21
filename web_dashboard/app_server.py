@@ -39,6 +39,7 @@ from denovo_ai.dose_optimizer import AutonomousDoseOptimizer
 from denovo_ai.cocktail_generator import cocktail_synthesizer
 from pipeline.docking_engine import docking_engine
 from pipeline.clinical_trial_engine import clinical_trial_engine
+from pipeline.translational_engine import translational_engine
 
 HOST = "127.0.0.1"
 PORT = 8060
@@ -243,6 +244,16 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             # Sanal Klinik Deney Protokolleri ve Tedavi Kolları
             protocols = clinical_trial_engine.get_trial_protocols()
             self._send_json(protocols)
+
+        elif self.path == "/api/translational/homologs":
+            # Drosophila <-> İnsan Onkogen Homoloji Veritabanı
+            homologs = translational_engine.get_homologs()
+            self._send_json({"homolog_pairs": homologs, "status": "success"})
+
+        elif self.path == "/api/translational/tcga_cohorts":
+            # TCGA İnsan Klinik Kanser Kohortları
+            cohorts = translational_engine.get_tcga_cohorts()
+            self._send_json({"cohorts": cohorts, "status": "success"})
 
         elif self.path.startswith("/api/export_dataset"):
             # Veri setini CSV veya JSON olarak dışa aktar
@@ -577,6 +588,21 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
                     time_horizon_days=time_horizon
                 )
                 self._send_json(results)
+            except Exception as ex:
+                self._send_json({"status": "error", "message": str(ex)}, status=500)
+
+        elif self.path == "/api/translational/predict":
+            # Drosophila -> İnsan Translasyonel İlaç Aktarılabilirlik Analizi
+            mol = payload.get("molecule") or payload.get("molecule_name") or "DeNovo_Champion_Mol1"
+            cohort = payload.get("tcga_cohort") or payload.get("tcga_cohort_id") or "TCGA-GBM"
+            target_gene = payload.get("target_gene")
+            try:
+                result = translational_engine.translate_molecule(
+                    molecule_name_or_smiles=mol,
+                    target_tcga_cohort=cohort,
+                    target_gene=target_gene
+                )
+                self._send_json(result)
             except Exception as ex:
                 self._send_json({"status": "error", "message": str(ex)}, status=500)
 

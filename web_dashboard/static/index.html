@@ -1087,6 +1087,7 @@
       <button class="tab-btn" onclick="switchTab('tab-dual')">⚡ İkili Senkron Görünüm</button>
       <button class="tab-btn" onclick="switchTab('tab-docking')">🧬 3D Kenetlenme</button>
       <button class="tab-btn" onclick="switchTab('tab-trial')">📊 Sanal Klinik Deney</button>
+      <button class="tab-btn" onclick="switchTab('tab-translational')">🌐 Translasyonel Köprü</button>
       <button class="tab-btn" onclick="switchTab('tab-cocktails')">🧪 Sinerjik Kokteyller & Reçeteler</button>
       <button class="tab-btn" onclick="switchTab('tab-online')">🌐 Çevrimiçi Veri & PubChem</button>
       <button class="tab-btn" onclick="switchTab('tab-compounds')">📚 Molekül Veri Bankası</button>
@@ -2462,6 +2463,228 @@
       </div>
     </section>
 
+    <!-- SEKME: TRANSLASYONEL ONKOLOJİ & İNSAN KANSER GENOMU KÖPRÜSÜ -->
+    <section id="tab-translational" class="tab-content">
+      <div style="padding:22px; max-width:1500px; margin:0 auto; width:100%;">
+
+        <!-- Üst Başlık & Kontrol Paneli -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:16px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg, #00f0ff 0%, #3b82f6 50%, #a855f7 100%); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 20px rgba(0,240,255,0.3);">🌐</div>
+            <div>
+              <h2 style="font-size:20px; font-weight:800; color:#fff; letter-spacing:0.5px;">Translasyonel Onkoloji & İnsan Kanser Genomu Köprüsü</h2>
+              <p style="font-size:12px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;">
+                Drosophila melanogaster ➔ Homo sapiens Homoloji Eşleme (DIOPT / OrthoDB) • TCGA Klinik Kohortları & İnsan İlaç Aktarılabilirlik Skoru
+              </p>
+            </div>
+          </div>
+
+          <!-- Molekül, Hedef Gen ve TCGA Kohort Seçim Kontrolleri -->
+          <div style="display:flex; align-items:center; gap:12px; background:rgba(14,20,36,0.9); padding:8px 16px; border-radius:12px; border:1px solid var(--border-glow); backdrop-filter:blur(10px);">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Test Edilecek Molekül:</span>
+              <select id="trans-molecule-select" style="background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:5px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer;">
+                <!-- JS ile doldurulacak -->
+              </select>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Drosophila Hedef Geni:</span>
+              <select id="trans-target-select" onchange="runTranslationalPrediction()" style="background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:5px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer;">
+                <!-- JS ile doldurulacak -->
+              </select>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase;">Hedef TCGA İnsan Kohortu:</span>
+              <select id="trans-tcga-select" onchange="runTranslationalPrediction()" style="background:rgba(6,9,17,0.95); color:#fff; border:1px solid var(--border-subtle); border-radius:6px; padding:5px 8px; font-size:11px; font-family:var(--font-mono); cursor:pointer;">
+                <option value="TCGA-GBM">TCGA-GBM (Glioblastom - Beyin)</option>
+                <option value="TCGA-LUAD">TCGA-LUAD (Akciğer Adenokarsinomu)</option>
+                <option value="TCGA-COAD">TCGA-COAD (Kolorektal Kanser)</option>
+                <option value="TCGA-SKCM">TCGA-SKCM (Kutanöz Melanom)</option>
+              </select>
+            </div>
+
+            <button id="btn-run-translation" class="btn-action primary" onclick="runTranslationalPrediction()" style="padding:9px 18px; font-size:12px; font-weight:800; background:linear-gradient(135deg, #00f0ff 0%, #a855f7 100%); color:#fff; box-shadow:0 0 16px rgba(0,240,255,0.35);">
+              <span>🚀 İnsana Aktarımı Analiz Et</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ana Grid: Sol Metrikler & Sağ Homoloji Eşleme -->
+        <div style="display:grid; grid-template-columns:380px 1fr; gap:16px; margin-bottom:20px;">
+          
+          <!-- Sol Sütun: Translasyonel Skor ve Klinik Hazırlık -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            
+            <!-- Büyük Druggability Göstergesi -->
+            <div class="hud-card" style="padding:16px;">
+              <div class="hud-title">
+                <span>🎯 İnsan İlaç Aktarılabilirlik Skoru</span>
+                <span id="trans-readiness-badge" class="tag-category tag-denovo" style="font-size:10px;">Faz-1 Hazır</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin:8px 0;">
+                <span id="trans-druggability-score" style="font-size:36px; font-weight:800; color:#00ff9d; font-family:var(--font-mono);">88.5</span>
+                <span style="font-size:14px; color:var(--text-muted); font-family:var(--font-mono);">/ 100</span>
+              </div>
+              <p style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+                Drosophila hedef cebi ile insan homolog proteini arasındaki yapısal korunum ve afinite aktarım katsayısı.
+              </p>
+            </div>
+
+            <!-- Klinik Tahmin Metrikleri -->
+            <div class="hud-card" style="padding:16px;">
+              <div class="hud-title">
+                <span>📊 İnsan Tümörlerinde Tahminler</span>
+                <span style="font-size:10px; color:var(--cyan); font-family:var(--font-mono);">PREKLİNİK</span>
+              </div>
+              
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px;">
+                <span style="color:var(--text-muted);">Tahmini İnsan IC50:</span>
+                <span id="trans-human-ic50" style="color:#00ff9d; font-weight:700; font-family:var(--font-mono);">48.0 nM (Yüksek Potans)</span>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px;">
+                <span style="color:var(--text-muted);">TCGA Yanıt Olasılığı:</span>
+                <span id="trans-response-prob" style="color:#00f0ff; font-weight:700; font-family:var(--font-mono);">%72.4</span>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:11px;">
+                <span style="color:var(--text-muted);">Dizi Kimliği (Identity):</span>
+                <span id="trans-seq-identity" style="color:#fff; font-weight:700; font-family:var(--font-mono);">%88.0</span>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:11px;">
+                <span style="color:var(--text-muted);">Aktif Cep Korunumu:</span>
+                <span id="trans-pocket-identity" style="color:#ffb703; font-weight:700; font-family:var(--font-mono);">%96.0</span>
+              </div>
+            </div>
+
+            <!-- Güvenlik ve Tolerabilite Penceresi -->
+            <div class="hud-card" style="padding:14px;">
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted); font-family:var(--font-mono); text-transform:uppercase; margin-bottom:4px;">İnsan Güvenlik Penceresi (Therapeutic Index):</div>
+              <div id="trans-safety-class" style="font-size:12px; font-weight:700; color:#00ff9d;">Geniş Güvenlik Penceresi (Siber Soft-Drug)</div>
+              <div id="trans-recommendation-text" style="font-size:11px; color:#cbd5e1; line-height:1.4; margin-top:8px; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; border-left:3px solid var(--cyan);">
+                Molekül, insan hedef cebine son derece yüksek afinite ile uymaktadır. TCGA hasta kohortlarında Faz I/II klinik deneylere aday gösterilmesi önerilir.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Sağ Sütun: Homoloji Detayı, Dizi Hizalama & TCGA Mutasyon Profili -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            
+            <!-- Homolog Gen Kartı -->
+            <div class="hud-card" style="padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                  <span class="tag-category tag-targeted" style="font-size:10px;">DIOPT Ortoloji Eşleşmesi</span>
+                  <h3 id="trans-homolog-title" style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">
+                    Drosophila Ras85D ➔ İnsan KRAS
+                  </h3>
+                </div>
+                <div style="text-align:right;">
+                  <span id="trans-diopt-badge" style="font-size:11px; color:var(--cyan); font-family:var(--font-mono); font-weight:700;">DIOPT: 15/15</span>
+                  <div id="trans-target-pathway" style="font-size:10px; color:var(--text-muted); margin-top:2px;">Ras/Raf/MAPK Kaskadı</div>
+                </div>
+              </div>
+              <p id="trans-functional-conservation" style="font-size:11px; color:#cbd5e1; line-height:1.4; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:6px;">
+                GTP/GDP bağlanma cebi ve G12/G13 onkogenik mutasyon sıcak noktaları tam korunmuştur.
+              </p>
+            </div>
+
+            <!-- Aktif Katalitik Cep Dizi Hizalama Görünümü (Sequence Alignment) -->
+            <div class="hud-card" style="padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:700; color:var(--cyan); font-family:var(--font-mono); text-transform:uppercase;">
+                  🧬 Aktif Katalitik Cep Dizi Hizalaması (Pairwise Sequence Alignment)
+                </span>
+                <span style="font-size:10px; color:var(--emerald); font-family:var(--font-mono);">BLAST / Clustal Omega</span>
+              </div>
+              
+              <div style="background:rgba(4,7,16,0.95); border:1px solid rgba(0,240,255,0.25); border-radius:8px; padding:12px; font-family:var(--font-mono); font-size:11px; overflow-x:auto;">
+                <div style="display:flex; gap:10px; margin-bottom:4px;">
+                  <span style="color:var(--amber); width:70px; flex-shrink:0;">Drosophila:</span>
+                  <span id="trans-align-fly" style="color:#fff; letter-spacing:1px;">MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQ</span>
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom:4px;">
+                  <span style="color:var(--text-muted); width:70px; flex-shrink:0;">Match:</span>
+                  <span id="trans-align-match" style="color:var(--emerald); letter-spacing:1px;">************************************************************</span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <span style="color:var(--cyan); width:70px; flex-shrink:0;">Human:</span>
+                  <span id="trans-align-human" style="color:#fff; letter-spacing:1px;">MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQ</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hedef TCGA Kanser Kohort Bilgi Kartı -->
+            <div class="hud-card" style="padding:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:700; color:#fff; font-family:var(--font-mono); text-transform:uppercase;" id="trans-cohort-name">
+                  TCGA-GBM (Glioblastoma Multiforme)
+                </span>
+                <span id="trans-cohort-samples" style="font-size:10px; color:var(--cyan); font-family:var(--font-mono);">595 İnsan Hasta Örneği</span>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:11px; margin-bottom:10px;">
+                <div>
+                  <span style="color:var(--text-muted);">Standart Tedavi (SoC):</span>
+                  <div id="trans-cohort-soc" style="color:#fff; font-weight:600; margin-top:2px;">Temozolomid + RT (Stupp)</div>
+                </div>
+                <div>
+                  <span style="color:var(--text-muted);">Karşılanmamış Tıbbi İhtiyaç:</span>
+                  <div id="trans-cohort-unmet" style="color:#ff2a6d; font-weight:600; margin-top:2px;">Kritik Derecede Yüksek</div>
+                </div>
+              </div>
+
+              <div style="font-size:11px; color:#cbd5e1;">
+                <strong style="color:var(--cyan);">Sinek Modeli Translasyon Değeri:</strong>
+                <span id="trans-fly-relevance">Mantar cisimciği & glial tümör mikromimarisi ile %89 patolojik örtüşme.</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Alt Bölüm: 7 Kritik Onkogen Homoloji Matrisi Tablosu -->
+        <div class="hud-card" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <h3 style="font-size:15px; font-weight:800; color:#fff;">Drosophila ⟷ Homo Sapiens Onkogen Homoloji Matrisi</h3>
+              <p style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">
+                DIOPT v9.0, OrthoDB ve HGNC standartlarında çapraz tür dizi ve katalitik cep analizi
+              </p>
+            </div>
+            <button class="btn-action secondary" onclick="copyTranslationalBrief()" style="padding:6px 14px; font-size:11px;">
+              📋 Translasyonel Raporu Kopyala
+            </button>
+          </div>
+
+          <div class="data-table-wrap" style="max-height:300px;">
+            <table style="width:100%;" id="table-homologs-matrix">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Drosophila Geni</th>
+                  <th>İnsan Ortoloğu</th>
+                  <th>Hedef Biyolojik Yolak</th>
+                  <th>DIOPT Skoru</th>
+                  <th>Dizi Kimliği (%)</th>
+                  <th>Katalitik Cep Korunumu (%)</th>
+                  <th style="text-align:right;">TCGA Mutasyon Yaygınlığı</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-homologs-matrix">
+                <!-- JS ile doldurulacak -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Molekül Detay & Tam SMILES İnceleme Modalı -->
@@ -2623,6 +2846,9 @@
         if (!dockingScene) initDockingScene();
       } else if (tabId === 'tab-trial') {
         if (!clinicalTrialData) runVirtualClinicalTrial();
+      } else if (tabId === 'tab-translational') {
+        loadTranslationalMetadata();
+        if (!translationalLastResult) runTranslationalPrediction();
       }
 
       setTimeout(() => { onWindowResize(); }, 60);
@@ -5748,6 +5974,275 @@
       });
     }
 
+    /* =========================================================================
+       TRANSLATIONAL ONCOLOGY (Drosophila ⟷ Human TCGA Bridge)
+       ========================================================================= */
+    let translationalHomologs = [];
+    let translationalCohorts = [];
+    let translationalLastResult = null;
+
+    async function loadTranslationalMetadata() {
+      try {
+        const [homologsRes, cohortsRes, compoundsRes] = await Promise.all([
+          fetch('/api/translational/homologs').then(r => r.json()),
+          fetch('/api/translational/tcga_cohorts').then(r => r.json()),
+          fetch('/api/compounds').then(r => r.json()).catch(() => ({ compounds: [] }))
+        ]);
+
+        if (homologsRes && homologsRes.homolog_pairs) {
+          translationalHomologs = homologsRes.homolog_pairs;
+          
+          // Populate Target Gene select
+          const targetSelect = document.getElementById('trans-target-select');
+          if (targetSelect) {
+            targetSelect.innerHTML = translationalHomologs.map(h => 
+              `<option value="${h.fly_gene}">${h.fly_gene} ➔ ${h.human_ortholog} (${h.pathway.split('/')[0]})</option>`
+            ).join('');
+          }
+
+          // Populate Homologs Matrix Table
+          renderHomologsTable(translationalHomologs);
+        }
+
+        if (cohortsRes && cohortsRes.cohorts) {
+          translationalCohorts = cohortsRes.cohorts;
+          const cohortSelect = document.getElementById('trans-tcga-select');
+          if (cohortSelect && cohortSelect.options.length === 0) {
+            cohortSelect.innerHTML = translationalCohorts.map(c => 
+              `<option value="${c.cohort_id}">${c.cohort_id} (${c.cancer_type})</option>`
+            ).join('');
+          }
+        }
+
+        // Populate Molecule select
+        const molSelect = document.getElementById('trans-molecule-select');
+        if (molSelect && molSelect.options.length <= 1) {
+          let mols = [
+            { name: 'DeNovo_Champion_Mol1', fly_ic50: 38.5 },
+            { name: 'DeNovo_Resistant_Overcomer', fly_ic50: 52.0 },
+            { name: 'Cisplatin', fly_ic50: 1200.0 },
+            { name: 'Temozolomide', fly_ic50: 850.0 },
+            { name: 'Multimodal_Synergy_Cocktail', fly_ic50: 24.0 }
+          ];
+          if (compoundsRes && compoundsRes.compounds && compoundsRes.compounds.length > 0) {
+            compoundsRes.compounds.slice(0, 8).forEach(c => {
+              if (!mols.find(m => m.name === c.name)) {
+                mols.push({ name: c.name, fly_ic50: 65.0 });
+              }
+            });
+          }
+          molSelect.innerHTML = mols.map(m => 
+            `<option value="${m.name}" data-ic50="${m.fly_ic50}">${m.name}</option>`
+          ).join('');
+        }
+
+      } catch (err) {
+        console.warn('Translational metadata load warning:', err);
+      }
+    }
+
+    async function runTranslationalPrediction() {
+      const btn = document.getElementById('btn-run-translation');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ Analiz Ediliyor...</span>';
+      }
+
+      const targetSelect = document.getElementById('trans-target-select');
+      const cohortSelect = document.getElementById('trans-tcga-select');
+      const molSelect = document.getElementById('trans-molecule-select');
+
+      const targetGene = targetSelect ? targetSelect.value : 'Ras85D';
+      const cohortId = cohortSelect ? cohortSelect.value : 'TCGA-GBM';
+      const molName = molSelect ? molSelect.value : 'DeNovo_Champion_Mol1';
+      
+      let flyIc50 = 38.5;
+      if (molSelect && molSelect.selectedOptions && molSelect.selectedOptions[0]) {
+        flyIc50 = parseFloat(molSelect.selectedOptions[0].getAttribute('data-ic50')) || 38.5;
+      }
+
+      try {
+        const response = await fetch('/api/translational/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            target_gene: targetGene,
+            tcga_cohort_id: cohortId,
+            molecule_name: molName,
+            fly_ic50_nm: flyIc50
+          })
+        });
+
+        if (!response.ok) throw new Error('Sunucu hatası: ' + response.status);
+        const data = await response.json();
+        translationalLastResult = data;
+        updateTranslationalUI(data);
+        showToast(`✅ ${data.molecule_name} ➔ ${data.human_ortholog} translasyon analizi tamamlandı!`);
+      } catch (err) {
+        console.error('Translational prediction error:', err);
+        showToast('❌ Translasyon analizi başarısız: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀 İnsana Aktarımı Analiz Et</span>';
+        }
+      }
+    }
+
+    function updateTranslationalUI(d) {
+      if (!d) return;
+
+      // Score and badges
+      const scoreEl = document.getElementById('trans-druggability-score');
+      if (scoreEl) scoreEl.textContent = d.translational_druggability_score.toFixed(1);
+
+      const readinessBadge = document.getElementById('trans-readiness-badge');
+      if (readinessBadge) {
+        readinessBadge.textContent = d.clinical_readiness;
+        if (d.translational_druggability_score >= 80) {
+          readinessBadge.className = 'tag-category tag-denovo';
+        } else if (d.translational_druggability_score >= 60) {
+          readinessBadge.className = 'tag-category tag-targeted';
+        } else {
+          readinessBadge.className = 'tag-category tag-standard';
+        }
+      }
+
+      // Predicted values
+      const humanIc50El = document.getElementById('trans-human-ic50');
+      if (humanIc50El) {
+        humanIc50El.textContent = `${d.predicted_human_ic50_nm.toFixed(1)} nM (${d.predicted_potency_class})`;
+      }
+
+      const respProbEl = document.getElementById('trans-response-prob');
+      if (respProbEl) {
+        respProbEl.textContent = `%${d.predicted_tcga_response_rate_percent.toFixed(1)}`;
+      }
+
+      const seqIdentEl = document.getElementById('trans-seq-identity');
+      if (seqIdentEl) {
+        seqIdentEl.textContent = `%${d.sequence_identity_percent.toFixed(1)}`;
+      }
+
+      const pocketIdentEl = document.getElementById('trans-pocket-identity');
+      if (pocketIdentEl) {
+        pocketIdentEl.textContent = `%${d.catalytic_pocket_identity_percent.toFixed(1)}`;
+      }
+
+      const safetyClassEl = document.getElementById('trans-safety-class');
+      if (safetyClassEl) {
+        safetyClassEl.textContent = d.safety_window_assessment;
+      }
+
+      const recTextEl = document.getElementById('trans-recommendation-text');
+      if (recTextEl) {
+        recTextEl.textContent = d.clinical_recommendation;
+      }
+
+      // Homolog Header
+      const titleEl = document.getElementById('trans-homolog-title');
+      if (titleEl) {
+        titleEl.textContent = `Drosophila ${d.fly_target_gene} ➔ İnsan ${d.human_ortholog}`;
+      }
+
+      const dioptEl = document.getElementById('trans-diopt-badge');
+      if (dioptEl) {
+        dioptEl.textContent = `DIOPT: ${d.diopt_score}/15 (${d.diopt_confidence})`;
+      }
+
+      const pathwayEl = document.getElementById('trans-target-pathway');
+      if (pathwayEl) {
+        pathwayEl.textContent = d.target_pathway;
+      }
+
+      const funcEl = document.getElementById('trans-functional-conservation');
+      if (funcEl) {
+        funcEl.textContent = d.functional_conservation_note;
+      }
+
+      // Alignment box
+      if (d.sequence_alignment) {
+        const flyAlignEl = document.getElementById('trans-align-fly');
+        const matchAlignEl = document.getElementById('trans-align-match');
+        const humanAlignEl = document.getElementById('trans-align-human');
+        if (flyAlignEl) flyAlignEl.textContent = d.sequence_alignment.fly_pocket_seq;
+        if (matchAlignEl) matchAlignEl.textContent = d.sequence_alignment.match_symbols;
+        if (humanAlignEl) humanAlignEl.textContent = d.sequence_alignment.human_pocket_seq;
+      }
+
+      // Cohort details
+      if (d.tcga_cohort_details) {
+        const c = d.tcga_cohort_details;
+        const cohortNameEl = document.getElementById('trans-cohort-name');
+        if (cohortNameEl) cohortNameEl.textContent = `${c.cohort_id} (${c.cancer_type})`;
+
+        const cohortSamplesEl = document.getElementById('trans-cohort-samples');
+        if (cohortSamplesEl) cohortSamplesEl.textContent = `${c.primary_tissue} • ${c.sample_count} Hasta Örneği`;
+
+        const socEl = document.getElementById('trans-cohort-soc');
+        if (socEl) socEl.textContent = c.standard_of_care;
+
+        const unmetEl = document.getElementById('trans-cohort-unmet');
+        if (unmetEl) unmetEl.textContent = c.unmet_need;
+
+        const flyRelEl = document.getElementById('trans-fly-relevance');
+        if (flyRelEl) flyRelEl.textContent = c.fly_model_relevance;
+      }
+    }
+
+    function renderHomologsTable(pairs) {
+      const tbody = document.getElementById('tbody-homologs-matrix');
+      if (!tbody) return;
+
+      tbody.innerHTML = pairs.map(p => `
+        <tr style="cursor:pointer; transition:background 0.2s;" onclick="selectHomologGene('${p.fly_gene}')" title="Bu gen için translasyon analizini başlat">
+          <td style="text-align:left; font-weight:700; color:#fff; font-family:var(--font-mono);">${p.fly_gene}</td>
+          <td style="font-weight:700; color:var(--cyan); font-family:var(--font-mono);">${p.human_ortholog}</td>
+          <td style="color:#cbd5e1; font-size:11px;">${p.pathway}</td>
+          <td><span class="tag-category tag-targeted" style="font-size:10px;">${p.diopt_score}/15 (${p.confidence})</span></td>
+          <td style="font-family:var(--font-mono); color:#fff;">%${p.sequence_identity_percent.toFixed(1)}</td>
+          <td style="font-family:var(--font-mono); color:#00ff9d; font-weight:700;">%${p.catalytic_pocket_identity_percent.toFixed(1)}</td>
+          <td style="text-align:right; font-family:var(--font-mono); color:#ff2a6d; font-weight:700;">%${p.tcga_alteration_frequency_percent.toFixed(1)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function selectHomologGene(gene) {
+      const targetSelect = document.getElementById('trans-target-select');
+      if (targetSelect) {
+        targetSelect.value = gene;
+      }
+      runTranslationalPrediction();
+    }
+
+    function copyTranslationalBrief() {
+      if (!translationalLastResult) {
+        showToast('⚠️ Henüz bir translasyonel analiz sonucu yok.');
+        return;
+      }
+      const r = translationalLastResult;
+      let text = `=== IN SILICO TRANSLATIONAL ONCOLOGY & IND-READY BRIEF ===\n` +
+                 `Molekül: ${r.molecule_name}\n` +
+                 `Drosophila Hedef Gen: ${r.fly_target_gene}\n` +
+                 `Homo Sapiens Ortoloğu: ${r.human_ortholog} (DIOPT Skoru: ${r.diopt_score}/15 - ${r.diopt_confidence})\n` +
+                 `Biyolojik Yolak: ${r.target_pathway}\n` +
+                 `--------------------------------------------------------\n` +
+                 `İnsan Druggability Skoru: ${r.translational_druggability_score.toFixed(1)} / 100\n` +
+                 `Klinik Hazırlık Derecesi: ${r.clinical_readiness}\n` +
+                 `Drosophila IC50: ${r.fly_ic50_nm} nM ➔ Tahmini İnsan IC50: ${r.predicted_human_ic50_nm.toFixed(1)} nM (${r.predicted_potency_class})\n` +
+                 `Hedef TCGA Kohortu: ${r.tcga_cohort_id} - ${r.tcga_cohort_details.cancer_type}\n` +
+                 `Tahmini Klinik Yanıt Olasılığı: %${r.predicted_tcga_response_rate_percent.toFixed(1)}\n` +
+                 `Güvenlik Penceresi / Terapötik İndeks: ${r.safety_window_assessment}\n` +
+                 `Klinik Geliştirme Önerisi:\n${r.clinical_recommendation}\n` +
+                 `========================================================`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 Translasyonel IND Raporu Panoya Kopyalandı!');
+      }).catch(err => {
+        showToast('❌ Kopyalama hatası: ' + err);
+      });
+    }
+
     function onWindowResize() {
       if (neuralCamera && neuralRenderer) {
         const c1 = document.getElementById('canvas-neural-3d');
@@ -5795,6 +6290,8 @@
       initDockingScene();
       loadDockingReceptors();
       runVirtualClinicalTrial();
+      loadTranslationalMetadata();
+      runTranslationalPrediction();
       drawOscilloscope('canvas-oscilloscope', vmHistory, -80.0, 30.0, '#00f0ff', 'Vm (Membrane mV)');
       drawOscilloscope('canvas-calcium-wave', calciumHistory, 80.0, 1200.0, '#ffb703', '[Ca2+]i Transient (nM)');
       stepSimulation();
