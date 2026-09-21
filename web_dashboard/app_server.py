@@ -453,6 +453,16 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             except Exception as ex:
                 self._send_json({"status": "error", "message": str(ex)}, status=500)
 
+        elif self.path == "/api/cocktails/evaluate":
+            # Özel kombinasyon ve dozaj için farmakolojik sinerji analizi
+            components = payload.get("components", [])
+            target_kill = float(payload.get("target_kill", 0.95))
+            try:
+                eval_res = cocktail_synthesizer.evaluate_combination_pharmacology(components, target_kill=target_kill)
+                self._send_json({"status": "success", "evaluation": eval_res})
+            except Exception as ex:
+                self._send_json({"status": "error", "message": str(ex)}, status=500)
+
         elif self.path == "/api/set_treatment_modality":
             mod_id = payload.get("modality", "targeted_small_molecule")
             force_reset = payload.get("reset", False)

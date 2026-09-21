@@ -692,8 +692,8 @@
 
     .cocktail-stats-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
     }
 
     .cocktail-stat {
@@ -4013,6 +4013,9 @@
 
           const comps = Array.isArray(c.components) ? c.components : [];
 
+          const blissExcess = Number(c.bliss_excess_score || 0.035);
+          const crosstalks = Array.isArray(c.crosstalk_interactions) ? c.crosstalk_interactions : [];
+
           card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
               <span class="cocktail-badge ${badgeClass}">${synergyText}</span>
@@ -4024,23 +4027,43 @@
             <p style="font-size:12px; color:var(--text-muted); line-height:1.4;">${c.description || ''}</p>
 
             <div class="cocktail-comp-box">
-              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; font-family:var(--font-mono); margin-bottom:2px; display:flex; justify-content:space-between;">
-                <span>Kombinasyon Formülü & Dozajı:</span>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; font-family:var(--font-mono); margin-bottom:4px; display:flex; justify-content:space-between;">
+                <span>Kombinasyon Formülü & Dozajı (DRI):</span>
                 <span style="color:var(--cyan);">${comps.length} Ajan</span>
               </div>
-              ${comps.map(cp => `
-                <div class="cocktail-comp-item">
-                  <span style="font-weight:700; color:#fff;">• ${cp.name}</span>
-                  <span style="font-family:var(--font-mono); color:var(--amber); font-weight:700;">${cp.dose_uM} µM</span>
-                </div>
-                <div style="font-size:10px; color:var(--text-muted); padding-left:10px; margin-bottom:4px;">${cp.role || ''}</div>
-              `).join('')}
+              ${comps.map(cp => {
+                const driVal = cp.dri_fold ? Number(cp.dri_fold).toFixed(1) : (c.dri_profile && c.dri_profile[cp.name] ? Number(c.dri_profile[cp.name].dri_fold).toFixed(1) : null);
+                return `
+                  <div class="cocktail-comp-item">
+                    <span style="font-weight:700; color:#fff;">• ${cp.name}</span>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      ${driVal ? `<span style="font-size:10px; font-family:var(--font-mono); color:var(--emerald); background:rgba(0,255,157,0.1); padding:1px 6px; border-radius:4px; border:1px solid rgba(0,255,157,0.3);" title="Dose Reduction Index: Doz ${driVal}x kat azaltıldı">DRI ${driVal}x</span>` : ''}
+                      <span style="font-family:var(--font-mono); color:var(--amber); font-weight:700;">${cp.dose || (cp.dose_uM + ' µM')}</span>
+                    </div>
+                  </div>
+                  <div style="font-size:10px; color:var(--text-muted); padding-left:10px; margin-bottom:4px;">${cp.role || ''}</div>
+                `;
+              }).join('')}
             </div>
+
+            ${crosstalks.length > 0 ? `
+              <div style="margin: 6px 0; display:flex; flex-wrap:wrap; gap:4px;">
+                ${crosstalks.map(ct => `
+                  <span style="font-size:9.5px; font-family:var(--font-mono); color:var(--cyan); background:rgba(0,240,255,0.08); padding:2px 6px; border-radius:4px; border:1px solid rgba(0,240,255,0.25);" title="Biyolojik Çapraz Sinyal Kooperasyonu">
+                    🔗 ${ct.targets} (+${Math.round(ct.coupling_strength * 100)}% Koop.)
+                  </span>
+                `).join('')}
+              </div>
+            ` : ''}
 
             <div class="cocktail-stats-row">
               <div class="cocktail-stat">
                 <span class="s-val" style="color:${ciColor};">${ciVal.toFixed(2)}</span>
                 <span class="s-lbl">Chou-Talalay CI</span>
+              </div>
+              <div class="cocktail-stat">
+                <span class="s-val" style="color:var(--emerald);">+${(blissExcess * 100).toFixed(1)}%</span>
+                <span class="s-lbl">Bliss Fazlalık</span>
               </div>
               <div class="cocktail-stat">
                 <span class="s-val" style="color:var(--cyan);">${potencyMult.toFixed(1)}x</span>
@@ -4052,7 +4075,7 @@
               </div>
             </div>
 
-            <div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:10px; font-size:11px; color:#cbd5e1; line-height:1.4;">
+            <div style="background:rgba(255,255,255,0.03); border-radius:8px; padding:10px; font-size:11px; color:#cbd5e1; line-height:1.4; margin-top:8px;">
               <strong style="color:var(--cyan);">Farmakolojik Mekanizma:</strong> ${rationale}
             </div>
 
@@ -4098,7 +4121,7 @@
 
         if (statusBox && statusText) {
           statusBox.style.display = 'flex';
-          statusText.innerHTML = `✅ <strong>${c.name}</strong> başarıyla sentezlendi! Chou-Talalay CI: <span style="color:var(--emerald); font-weight:bold;">${c.chou_talalay_ci}</span> | Toksisite Kalkanı: <span style="color:var(--amber); font-weight:bold;">-%${Math.round(c.toxicity_shield_pct * 100)}</span>`;
+          statusText.innerHTML = `✅ <strong>${c.name}</strong> başarıyla sentezlendi! Chou-Talalay CI: <span style="color:var(--emerald); font-weight:bold;">${c.chou_talalay_ci}</span> | Bliss Sinerji: <span style="color:var(--cyan); font-weight:bold;">+${((c.bliss_excess_score||0)*100).toFixed(1)}%</span> | Toksisite Kalkanı: <span style="color:var(--amber); font-weight:bold;">-%${Math.round(c.toxicity_shield_pct * 100)}</span>`;
         }
 
         await loadCocktails();

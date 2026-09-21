@@ -43,12 +43,13 @@ class HemocyteAgent3D:
         cancer_cells: List[CancerCell3D],
         domain_bounds: np.ndarray,
         fuel_efficiency: float = 1.0,
-        anti_cd47_active: bool = False
+        anti_cd47_active: bool = False,
+        potency_multiplier: float = 1.0
     ) -> Optional[int]:
         """
         Kemotaksi ile en yakın canlı kanser hücresine yönelir ve temas halinde saldırır.
-        Tükenmişlik, hedef klonunun immün-kaçış özellikleri ve Anti-CD47 kontrol noktası
-        blokajını simüle eder.
+        Tükenmişlik, hedef klonunun immün-kaçış özellikleri, Anti-CD47 kontrol noktası
+        blokajını ve sinerjik kokteyl potens çarpanını simüle eder.
         
         Returns:
             Etkisiz hale getirilen (öldürülen) kanser hücresi ID'si veya None.
@@ -92,18 +93,19 @@ class HemocyteAgent3D:
             # Tükenmişlik etkisi: Yorgun hemositler daha az hasar verir
             exhaustion_pen = max(0.15, 1.0 - 0.85 * self.exhaustion_index)
             cd47_boost = 2.2 if anti_cd47_active else 1.0
+            potency = max(0.5, float(potency_multiplier))
 
             # Saldırı Mekaniği
             if self.subtype == HemocyteSubtype.LAMELLOCYTE:
                 # Lamellosit Kapsülasyonu
                 target_cell.state = CancerState.ENCAPSULATED
-                strike = 18.0 * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * dt
+                strike = 18.0 * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
                 self.cytotoxic_energy -= 8.0 * dt
                 self.exhaustion_index = min(1.0, self.exhaustion_index + 0.08 * dt)
             else:
                 # Plazmatosit Fagositoz / Sitotoksisite
-                strike = 22.0 * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * dt
+                strike = 22.0 * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
                 self.cytotoxic_energy -= 10.0 * dt
                 self.exhaustion_index = min(1.0, self.exhaustion_index + 0.10 * dt)

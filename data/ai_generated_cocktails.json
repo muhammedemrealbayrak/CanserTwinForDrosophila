@@ -1,5 +1,1503 @@
 [
   {
+    "id": "ai_cocktail_05b2035f",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.05
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.06
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.34,
+    "chou_talalay_ci": 0.34,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.03,
+    "bliss_observed_kill": 0.929,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.351,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 6.844,
+        "dri_fold": 8.05,
+        "sparing_pct": 87.6
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.04,
+        "dri_fold": 8.06,
+        "sparing_pct": 87.6
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.251,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.124,
+      "component_ratio_y": 0.124,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.66
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_53082f7e",
+    "name": "AI Sinerji: MCN + Trametinib + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 17.31
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 13.18
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "7.5 µM",
+        "dose_uM": 7.5,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1",
+        "target_class": "SIRT1",
+        "qsar_tox": 0.012,
+        "dri_fold": 22.2
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.22,
+    "chou_talalay_ci": 0.22,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.019,
+    "bliss_observed_kill": 0.912,
+    "bliss_expected_kill": 0.893,
+    "hsa_excess_score": 0.36,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.2,
+    "target_potency_multiplier": 2.2,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 20.249,
+        "dri_fold": 17.31,
+        "sparing_pct": 94.2
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.066,
+        "dri_fold": 13.18,
+        "sparing_pct": 92.4
+      },
+      "Resveratrol (Stilbenoid)": {
+        "dose_uM": 7.5,
+        "single_effective_dx_uM": 166.498,
+        "dri_fold": 22.2,
+        "sparing_pct": 95.5
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.058,
+      "component_ratio_y": 0.076,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.78
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +1.9%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.2x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +1.9%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.2x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_e849b452",
+    "name": "AI Sinerji: MCN + 2-Deoxyglucose + EGCG",
+    "is_ai_generated": true,
+    "objective_key": "metabolic_epigenetic",
+    "objective_title": "Warburg Metabolik Açlık & Epigenetik Şok Protokolü",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 6.95
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "1.8 µM",
+        "dose_uM": 1.8,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg",
+        "target_class": "Warburg",
+        "qsar_tox": 0.05,
+        "dri_fold": 9.9
+      },
+      {
+        "name": "EGCG (Yeşil Çay Kateşini)",
+        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
+        "dose": "5.5 µM",
+        "dose_uM": 5.5,
+        "target": "Mitokondriyal Membran Stabilizasyonu",
+        "role": "Mitokondriyal Membran Stabilizasyonu",
+        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
+        "target_key": "Mitochondria",
+        "target_class": "Mitochondria",
+        "qsar_tox": 0.01,
+        "dri_fold": 9.73
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.38,
+    "chou_talalay_ci": 0.38,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.016,
+    "bliss_observed_kill": 0.887,
+    "bliss_expected_kill": 0.872,
+    "hsa_excess_score": 0.335,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.0,
+    "target_potency_multiplier": 2.0,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 8.132,
+        "dri_fold": 6.95,
+        "sparing_pct": 85.6
+      },
+      "2-Deoxyglucose (2-DG)": {
+        "dose_uM": 1.8,
+        "single_effective_dx_uM": 17.827,
+        "dri_fold": 9.9,
+        "sparing_pct": 89.9
+      },
+      "EGCG (Yeşil Çay Kateşini)": {
+        "dose_uM": 5.5,
+        "single_effective_dx_uM": 53.542,
+        "dri_fold": 9.73,
+        "sparing_pct": 89.7
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "2-Deoxyglucose (2-DG)",
+        "targets": "nAChR ⟷ Warburg",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.144,
+      "component_ratio_y": 0.101,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.62
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.6%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.6%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_19ea1cc4",
+    "name": "AI Sinerji: DeNovo_Champion + Metronomic + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "metronomic_chemo_soft",
+    "objective_title": "Ultra-Düşük Toksisite Soft-Drug Kemo-İmmün Kurtarma",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 6.77
+      },
+      {
+        "name": "Metronomic Cisplatin",
+        "smiles": "N.N.Cl[Pt]Cl",
+        "dose": "0.39 µM",
+        "dose_uM": 0.39,
+        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
+        "target_key": "DNA",
+        "target_class": "DNA",
+        "qsar_tox": 0.24,
+        "dri_fold": 35.6
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 11.76
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.28,
+    "chou_talalay_ci": 0.28,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.064,
+    "bliss_observed_kill": 0.864,
+    "bliss_expected_kill": 0.8,
+    "hsa_excess_score": 0.286,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 5.756,
+        "dri_fold": 6.77,
+        "sparing_pct": 85.2
+      },
+      "Metronomic Cisplatin": {
+        "dose_uM": 0.39,
+        "single_effective_dx_uM": 13.885,
+        "dri_fold": 35.6,
+        "sparing_pct": 97.2
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 49.175,
+        "dri_fold": 11.76,
+        "sparing_pct": 91.5
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Metronomic Cisplatin",
+        "targets": "nAChR ⟷ DNA",
+        "coupling_strength": 0.28
+      },
+      {
+        "agent_a": "Metronomic Cisplatin",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "DNA ⟷ NF-kB",
+        "coupling_strength": 0.3
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.148,
+      "component_ratio_y": 0.028,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.72
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.28 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.4%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.28 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.4%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_24af6a42",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.05
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.06
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.34,
+    "chou_talalay_ci": 0.34,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.03,
+    "bliss_observed_kill": 0.929,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.351,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 6.844,
+        "dri_fold": 8.05,
+        "sparing_pct": 87.6
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.04,
+        "dri_fold": 8.06,
+        "sparing_pct": 87.6
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.251,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.124,
+      "component_ratio_y": 0.124,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.66
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_72fa196d",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 13.66
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 13.18
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "0.94 µM",
+        "dose_uM": 0.94,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47",
+        "target_class": "CD47",
+        "qsar_tox": 0.02,
+        "dri_fold": 16.15
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.22,
+    "chou_talalay_ci": 0.22,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.049,
+    "bliss_observed_kill": 0.954,
+    "bliss_expected_kill": 0.905,
+    "hsa_excess_score": 0.376,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 3.2,
+    "target_potency_multiplier": 3.2,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 11.612,
+        "dri_fold": 13.66,
+        "sparing_pct": 92.7
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.066,
+        "dri_fold": 13.18,
+        "sparing_pct": 92.4
+      },
+      "Anti-CD47 Mimetic Peptide": {
+        "dose_uM": 0.94,
+        "single_effective_dx_uM": 15.185,
+        "dri_fold": 16.15,
+        "sparing_pct": 93.8
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Anti-CD47 Mimetic Peptide",
+        "targets": "nAChR ⟷ CD47",
+        "coupling_strength": 0.36
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Anti-CD47 Mimetic Peptide",
+        "targets": "MEK ⟷ CD47",
+        "coupling_strength": 0.25
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.073,
+      "component_ratio_y": 0.076,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.78
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +4.9%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Anti-CD47 Mimetic Peptide için 16.15x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 3.2x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +4.9%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Anti-CD47 Mimetic Peptide için 16.15x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 3.2x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_6ce5a154",
+    "name": "AI Sinerji: MCN + 2-Deoxyglucose + EGCG",
+    "is_ai_generated": true,
+    "objective_key": "metabolic_epigenetic",
+    "objective_title": "Warburg Metabolik Açlık & Epigenetik Şok Protokolü",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 6.95
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "1.8 µM",
+        "dose_uM": 1.8,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg",
+        "target_class": "Warburg",
+        "qsar_tox": 0.05,
+        "dri_fold": 9.9
+      },
+      {
+        "name": "EGCG (Yeşil Çay Kateşini)",
+        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
+        "dose": "5.5 µM",
+        "dose_uM": 5.5,
+        "target": "Mitokondriyal Membran Stabilizasyonu",
+        "role": "Mitokondriyal Membran Stabilizasyonu",
+        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
+        "target_key": "Mitochondria",
+        "target_class": "Mitochondria",
+        "qsar_tox": 0.01,
+        "dri_fold": 9.73
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.38,
+    "chou_talalay_ci": 0.38,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.016,
+    "bliss_observed_kill": 0.887,
+    "bliss_expected_kill": 0.872,
+    "hsa_excess_score": 0.335,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.0,
+    "target_potency_multiplier": 2.0,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 8.132,
+        "dri_fold": 6.95,
+        "sparing_pct": 85.6
+      },
+      "2-Deoxyglucose (2-DG)": {
+        "dose_uM": 1.8,
+        "single_effective_dx_uM": 17.827,
+        "dri_fold": 9.9,
+        "sparing_pct": 89.9
+      },
+      "EGCG (Yeşil Çay Kateşini)": {
+        "dose_uM": 5.5,
+        "single_effective_dx_uM": 53.542,
+        "dri_fold": 9.73,
+        "sparing_pct": 89.7
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "2-Deoxyglucose (2-DG)",
+        "targets": "nAChR ⟷ Warburg",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.144,
+      "component_ratio_y": 0.101,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.62
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.6%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.6%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_f0f4389a",
+    "name": "AI Sinerji: DeNovo_Champion + Metronomic + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "metronomic_chemo_soft",
+    "objective_title": "Ultra-Düşük Toksisite Soft-Drug Kemo-İmmün Kurtarma",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 6.77
+      },
+      {
+        "name": "Metronomic Cisplatin",
+        "smiles": "N.N.Cl[Pt]Cl",
+        "dose": "0.39 µM",
+        "dose_uM": 0.39,
+        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
+        "target_key": "DNA",
+        "target_class": "DNA",
+        "qsar_tox": 0.24,
+        "dri_fold": 35.6
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 11.76
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.28,
+    "chou_talalay_ci": 0.28,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.064,
+    "bliss_observed_kill": 0.864,
+    "bliss_expected_kill": 0.8,
+    "hsa_excess_score": 0.286,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 5.756,
+        "dri_fold": 6.77,
+        "sparing_pct": 85.2
+      },
+      "Metronomic Cisplatin": {
+        "dose_uM": 0.39,
+        "single_effective_dx_uM": 13.885,
+        "dri_fold": 35.6,
+        "sparing_pct": 97.2
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 49.175,
+        "dri_fold": 11.76,
+        "sparing_pct": 91.5
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Metronomic Cisplatin",
+        "targets": "nAChR ⟷ DNA",
+        "coupling_strength": 0.28
+      },
+      {
+        "agent_a": "Metronomic Cisplatin",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "DNA ⟷ NF-kB",
+        "coupling_strength": 0.3
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.148,
+      "component_ratio_y": 0.028,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.72
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.28 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.4%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.28 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.4%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_1a3f4268",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.05
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.06
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.34,
+    "chou_talalay_ci": 0.34,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.03,
+    "bliss_observed_kill": 0.929,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.351,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 6.844,
+        "dri_fold": 8.05,
+        "sparing_pct": 87.6
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.04,
+        "dri_fold": 8.06,
+        "sparing_pct": 87.6
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.251,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.124,
+      "component_ratio_y": 0.124,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.66
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_9ced1080",
+    "name": "AI Sinerji: MCN + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 17.31
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 13.18
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 26.81
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.22,
+    "chou_talalay_ci": 0.22,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.032,
+    "bliss_observed_kill": 0.924,
+    "bliss_expected_kill": 0.892,
+    "hsa_excess_score": 0.372,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 20.249,
+        "dri_fold": 17.31,
+        "sparing_pct": 94.2
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.066,
+        "dri_fold": 13.18,
+        "sparing_pct": 92.4
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 112.078,
+        "dri_fold": 26.81,
+        "sparing_pct": 96.3
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.058,
+      "component_ratio_y": 0.076,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.78
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +3.2%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 26.81x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.22 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +3.2%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 26.81x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_aebeb374",
+    "name": "AI Sinerji: MCN + 2-Deoxyglucose + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "metabolic_epigenetic",
+    "objective_title": "Warburg Metabolik Açlık & Epigenetik Şok Protokolü",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 6.95
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "1.8 µM",
+        "dose_uM": 1.8,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg",
+        "target_class": "Warburg",
+        "qsar_tox": 0.05,
+        "dri_fold": 9.9
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 9.95
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.38,
+    "chou_talalay_ci": 0.38,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.015,
+    "bliss_observed_kill": 0.893,
+    "bliss_expected_kill": 0.878,
+    "hsa_excess_score": 0.34,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.0,
+    "target_potency_multiplier": 2.0,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 8.132,
+        "dri_fold": 6.95,
+        "sparing_pct": 85.6
+      },
+      "2-Deoxyglucose (2-DG)": {
+        "dose_uM": 1.8,
+        "single_effective_dx_uM": 17.827,
+        "dri_fold": 9.9,
+        "sparing_pct": 89.9
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 41.581,
+        "dri_fold": 9.95,
+        "sparing_pct": 89.9
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "2-Deoxyglucose (2-DG)",
+        "targets": "nAChR ⟷ Warburg",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.144,
+      "component_ratio_y": 0.101,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.62
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.5%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 9.95x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.38 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +1.5%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, 2-Deoxyglucose (2-DG) ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 9.95x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.0x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_62d2546f",
+    "name": "AI Sinerji: MCN + Metronomic + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "metronomic_chemo_soft",
+    "objective_title": "Ultra-Düşük Toksisite Soft-Drug Kemo-İmmün Kurtarma",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.17 µM",
+        "dose_uM": 1.17,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 8.11
+      },
+      {
+        "name": "Metronomic Cisplatin",
+        "smiles": "N.N.Cl[Pt]Cl",
+        "dose": "0.39 µM",
+        "dose_uM": 0.39,
+        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
+        "target_key": "DNA",
+        "target_class": "DNA",
+        "qsar_tox": 0.24,
+        "dri_fold": 35.6
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 11.76
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.25,
+    "chou_talalay_ci": 0.25,
+    "synergy_label": "Çok Güçlü Sinerji (CI < 0.30)",
+    "synergy_description": "Derin Moleküler Kooperasyon",
+    "bliss_excess_score": 0.068,
+    "bliss_observed_kill": 0.856,
+    "bliss_expected_kill": 0.788,
+    "hsa_excess_score": 0.304,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.17,
+        "single_effective_dx_uM": 9.49,
+        "dri_fold": 8.11,
+        "sparing_pct": 87.7
+      },
+      "Metronomic Cisplatin": {
+        "dose_uM": 0.39,
+        "single_effective_dx_uM": 13.885,
+        "dri_fold": 35.6,
+        "sparing_pct": 97.2
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 49.175,
+        "dri_fold": 11.76,
+        "sparing_pct": 91.5
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "Metronomic Cisplatin",
+        "targets": "nAChR ⟷ DNA",
+        "coupling_strength": 0.28
+      },
+      {
+        "agent_a": "Metronomic Cisplatin",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "DNA ⟷ NF-kB",
+        "coupling_strength": 0.3
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.123,
+      "component_ratio_y": 0.028,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.75
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.25 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.8%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.25 (Çok Güçlü Sinerji (CI < 0.30)), Bliss Sinerji Fazlalığı = +6.8%. MCN (Karbamat Soft-Drug) ile uyarılmış santral nöro-immün refleks, Metronomic Cisplatin ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 35.6x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_433eb469",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.05
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.06
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.34,
+    "chou_talalay_ci": 0.34,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.03,
+    "bliss_observed_kill": 0.929,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.351,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 6.844,
+        "dri_fold": 8.05,
+        "sparing_pct": 87.6
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.04,
+        "dri_fold": 8.06,
+        "sparing_pct": 87.6
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.251,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.124,
+      "component_ratio_y": 0.124,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.66
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_c0b768af",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.85 µM",
+        "dose_uM": 0.85,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.05
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.06
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.34,
+    "chou_talalay_ci": 0.34,
+    "synergy_label": "Süper Sinerji (CI < 0.45)",
+    "synergy_description": "Çoklu Yolak Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.03,
+    "bliss_observed_kill": 0.929,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.351,
+    "toxicity_reduction_pct": 70.0,
+    "toxicity_shield_pct": 0.7,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.85,
+        "single_effective_dx_uM": 6.844,
+        "dri_fold": 8.05,
+        "sparing_pct": 87.6
+      },
+      "Trametinib": {
+        "dose_uM": 0.005,
+        "single_effective_dx_uM": 0.04,
+        "dri_fold": 8.06,
+        "sparing_pct": 87.6
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.251,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.124,
+      "component_ratio_y": 0.124,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.66
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.34 (Süper Sinerji (CI < 0.45)), Bliss Sinerji Fazlalığı = +3.0%. DeNovo_Champion (F-NAc) ile uyarılmış santral nöro-immün refleks, Trametinib ile onkojenik kaskadı eşzamanlı durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak sistemik doku hasarı %70.0 oranında kalkanlanır ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_8b062fd7",
+    "name": "AI Sinerji: MCN + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5.0 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK"
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.5 µM",
+        "dose_uM": 4.5,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB"
+      },
+      {
+        "name": "Metronomic Cisplatin",
+        "smiles": "N.N.Cl[Pt]Cl",
+        "dose": "0.4 µM",
+        "dose_uM": 0.4,
+        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
+        "target_key": "DNA"
+      }
+    ],
+    "component_count": 4,
+    "synergy_index_ci": 0.35,
+    "chou_talalay_ci": 0.35,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 92.0,
+    "toxicity_shield_pct": 0.92,
+    "potency_boost": 2.8,
+    "target_potency_multiplier": 2.8,
+    "clinical_rationale": "Chou-Talalay CI = 0.35 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, Trametinib ile onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) eşzamanlı durdurur. Curcumin (Zerdeçal Polifenolü) koruyucu kalkanı sayesinde doku toksisitesi %92.0 oranında sönümlenir ve lizis hızı 2.8x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.35 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, Trametinib ile onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) eşzamanlı durdurur. Curcumin (Zerdeçal Polifenolü) koruyucu kalkanı sayesinde doku toksisitesi %92.0 oranında sönümlenir ve lizis hızı 2.8x katına çıkar."
+  },
+  {
     "id": "ai_cocktail_dd35a081",
     "name": "AI Sinerji: DeNovo_Champion + 2-Deoxyglucose + Curcumin",
     "is_ai_generated": true,
