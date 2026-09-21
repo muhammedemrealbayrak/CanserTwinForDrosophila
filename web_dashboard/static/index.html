@@ -1089,6 +1089,7 @@
       <button class="tab-btn" onclick="switchTab('tab-trial')">📊 Sanal Klinik Deney</button>
       <button class="tab-btn" onclick="switchTab('tab-translational')">🌐 Translasyonel Köprü</button>
       <button class="tab-btn" onclick="switchTab('tab-unity')">🎮 Unity / C# .NET</button>
+      <button class="tab-btn" onclick="switchTab('tab-paper')">📄 Akademik Makale</button>
       <button class="tab-btn" onclick="switchTab('tab-cocktails')">🧪 Sinerjik Kokteyller & Reçeteler</button>
       <button class="tab-btn" onclick="switchTab('tab-online')">🌐 Çevrimiçi Veri & PubChem</button>
       <button class="tab-btn" onclick="switchTab('tab-compounds')">📚 Molekül Veri Bankası</button>
@@ -2835,6 +2836,55 @@
       </div>
     </section>
 
+    <!-- SEKME: AKADEMİK MAKALE & PREPRINT YAYIN TASLAĞI -->
+    <section id="tab-paper" class="tab-content">
+      <div style="padding:24px; max-width:1200px; margin:0 auto; width:100%;">
+
+        <!-- Makale Üst Başlık & Dergi Bilgisi -->
+        <div class="hud-card" style="padding:24px; margin-bottom:20px; border-left:4px solid var(--cyan);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+            <div>
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <span class="tag-category tag-denovo" style="font-size:10px;">bioRxiv Preprint</span>
+                <span class="tag-category tag-targeted" style="font-size:10px;">Hedef: Nature Digital Medicine / Cell Systems</span>
+                <span class="tag-category tag-standard" style="font-size:10px;">Eylül 2026</span>
+              </div>
+              <h1 style="font-size:22px; font-weight:800; color:#fff; line-height:1.3; max-width:900px;">
+                In Silico Whole-Brain Digital Twin of Drosophila melanogaster Discovers Synergistic Neuro-Immune Anti-Cancer Therapies Translated to Human Onco-Genomics
+              </h1>
+              <div style="margin-top:10px; font-size:12px; color:var(--cyan); font-weight:700;">
+                Muhammed Emre Albayrak<sup style="color:var(--amber);">1,*</sup>
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono); margin-top:2px;">
+                <sup>1</sup>In Silico Oncology & Computational Neurobiology Laboratory, Istanbul, Turkey • *İletişim: contact@memrealbayrak.com
+              </div>
+            </div>
+
+            <!-- İndirme & Dışa Aktarma Butonları -->
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <a href="/api/paper/download?format=latex" class="btn-action primary" style="text-decoration:none; text-align:center; padding:8px 16px; font-size:11px; font-weight:700;">
+                <span>📥 LaTeX (.TEX) İndir</span>
+              </a>
+              <a href="/api/paper/download?format=markdown" class="btn-action secondary" style="text-decoration:none; text-align:center; padding:8px 16px; font-size:11px;">
+                <span>📥 Markdown (.MD) İndir</span>
+              </a>
+              <button class="btn-action secondary" onclick="copyBibtexCitation()" style="padding:8px 16px; font-size:11px;">
+                <span>📋 BibTeX Alıntısını Kopyala</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Makale Metni Okuyucu Tuvali -->
+        <div class="hud-card" style="padding:32px; line-height:1.7; font-size:13px; color:#cbd5e1; background:rgba(6,9,17,0.92); border:1px solid rgba(0,240,255,0.2);">
+          <div id="paper-markdown-view" style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <p style="color:var(--text-muted); font-family:var(--font-mono);">Makale içeriği yükleniyor...</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Molekül Detay & Tam SMILES İnceleme Modalı -->
@@ -3001,6 +3051,8 @@
         if (!translationalLastResult) runTranslationalPrediction();
       } else if (tabId === 'tab-unity') {
         loadUnityIntegrationData();
+      } else if (tabId === 'tab-paper') {
+        loadAcademicPaper();
       }
 
       setTimeout(() => { onWindowResize(); }, 60);
@@ -6476,6 +6528,112 @@
         showToast(`✅ Unity Sahnesi Hazır! ${data.metadata.total_neurons} Nöron, ${data.metadata.total_tumor_cells} Tümör Hücresi`);
       } catch (err) {
         showToast('❌ Unity telemetri hatası: ' + err.message);
+      }
+    }
+
+    /* =========================================================================
+       AKADEMİK MAKALE & PREPRINT OKUYUCU (bioRxiv / Nature Format)
+       ========================================================================= */
+    let academicPaperContent = null;
+    let academicPaperMetadata = null;
+
+    async function loadAcademicPaper() {
+      const container = document.getElementById('paper-markdown-view');
+      if (!container) return;
+
+      if (academicPaperContent) {
+        return; // Already loaded
+      }
+
+      try {
+        const [metaRes, contentRes] = await Promise.all([
+          fetch('/api/paper/metadata').then(r => r.json()).catch(() => null),
+          fetch('/api/paper/content').then(r => r.json()).catch(() => null)
+        ]);
+
+        if (metaRes) academicPaperMetadata = metaRes;
+
+        if (contentRes && contentRes.content) {
+          academicPaperContent = contentRes.content;
+          renderPaperMarkdown(academicPaperContent);
+        } else {
+          container.innerHTML = '<p style="color:#ff2a6d;">Makale yüklenemedi.</p>';
+        }
+      } catch (err) {
+        container.innerHTML = `<p style="color:#ff2a6d;">Hata: ${err.message}</p>`;
+      }
+    }
+
+    function renderPaperMarkdown(rawMd) {
+      const container = document.getElementById('paper-markdown-view');
+      if (!container) return;
+
+      let html = rawMd
+        .replace(/^---[\s\S]*?---\n/, '')
+        .replace(/^# (.*$)/gim, '<h1 style="font-size:22px; font-weight:800; color:#fff; margin:24px 0 12px; border-bottom:1px solid rgba(0,240,255,0.25); padding-bottom:8px;">$1</h1>')
+        .replace(/^## (.*$)/gim, '<h2 style="font-size:18px; font-weight:800; color:var(--cyan); margin:20px 0 10px; border-left:3px solid var(--cyan); padding-left:10px;">$1</h2>')
+        .replace(/^### (.*$)/gim, '<h3 style="font-size:14px; font-weight:700; color:#fff; margin:16px 0 8px;">$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong style="color:#fff;">$1</strong>')
+        .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+        .replace(/`([^`]+)`/gim, '<code style="background:rgba(0,240,255,0.1); color:var(--cyan); padding:2px 6px; border-radius:4px; font-family:var(--font-mono); font-size:11px;">$1</code>')
+        .replace(/```([\s\S]*?)```/gim, '<pre style="background:rgba(4,7,16,0.95); border:1px solid rgba(0,240,255,0.25); border-radius:8px; padding:14px; overflow-x:auto; font-family:var(--font-mono); font-size:11px; color:#e2e8f0; margin:14px 0;">$1</pre>')
+        .replace(/^---$/gim, '<hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:20px 0;">')
+        .split('\n\n')
+        .map(p => {
+          p = p.trim();
+          if (!p) return '';
+          if (p.startsWith('<h1') || p.startsWith('<h2') || p.startsWith('<h3') || p.startsWith('<pre') || p.startsWith('<hr') || p.startsWith('<table')) {
+            return p;
+          }
+          if (p.startsWith('|')) {
+            return renderSimpleTable(p);
+          }
+          return `<p style="margin-bottom:12px; line-height:1.7;">${p}</p>`;
+        })
+        .join('');
+
+      container.innerHTML = html;
+    }
+
+    function renderSimpleTable(tableText) {
+      const lines = tableText.trim().split('\n');
+      if (lines.length < 2) return tableText;
+
+      const headerCols = lines[0].split('|').filter(c => c.trim() !== '');
+      let bodyRows = lines.slice(2);
+
+      let tableHtml = '<div class="data-table-wrap" style="margin:16px 0; overflow-x:auto;"><table style="width:100%; font-size:11px;">';
+      tableHtml += '<thead><tr>' + headerCols.map(c => `<th>${c.trim()}</th>`).join('') + '</tr></thead><tbody>';
+
+      bodyRows.forEach(r => {
+        const cols = r.split('|').filter(c => c.trim() !== '');
+        if (cols.length > 0) {
+          tableHtml += '<tr>' + cols.map(c => `<td style="color:#cbd5e1;">${c.trim()}</td>`).join('') + '</tr>';
+        }
+      });
+
+      tableHtml += '</tbody></table></div>';
+      return tableHtml;
+    }
+
+    async function copyBibtexCitation() {
+      try {
+        if (!academicPaperMetadata) {
+          const res = await fetch('/api/paper/metadata');
+          academicPaperMetadata = await res.json();
+        }
+        const bib = academicPaperMetadata.bibtex || 
+`@article{albayrak2026drosophila,
+  title={In Silico Whole-Brain Digital Twin of Drosophila melanogaster Discovers Synergistic Neuro-Immune Anti-Cancer Therapies Translated to Human Onco-Genomics},
+  author={Albayrak, Muhammed Emre},
+  journal={bioRxiv Preprint},
+  year={2026}
+}`;
+        navigator.clipboard.writeText(bib).then(() => {
+          showToast('📋 BibTeX Alıntısı Panoya Kopyalandı!');
+        });
+      } catch (err) {
+        showToast('❌ BibTeX kopyalama hatası: ' + err.message);
       }
     }
 

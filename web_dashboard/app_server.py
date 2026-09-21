@@ -289,6 +289,67 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(zip_bytes)
 
+        elif self.path == "/api/paper/metadata":
+            # Akademik Makale Başlık ve Özet Bilgisi
+            bib_path = os.path.join(os.path.dirname(__file__), "..", "paper", "references.bib")
+            bib_text = ""
+            if os.path.exists(bib_path):
+                with open(bib_path, "r", encoding="utf-8") as f:
+                    bib_text = f.read()
+
+            self._send_json({
+                "title": "In Silico Whole-Brain Digital Twin of Drosophila melanogaster Discovers Synergistic Neuro-Immune Anti-Cancer Therapies Translated to Human Onco-Genomics",
+                "authors": [
+                    {"name": "Muhammed Emre Albayrak", "affiliation": "In Silico Oncology & Computational Neurobiology Laboratory, Istanbul, Turkey", "email": "contact@memrealbayrak.com"}
+                ],
+                "target_journals": ["bioRxiv", "Nature Digital Medicine", "Cell Systems"],
+                "status": "Preprint Ready (Peer-Review Draft)",
+                "date": "September 2026",
+                "bibtex": bib_text
+            })
+
+        elif self.path == "/api/paper/content":
+            # Akademik Makale Tam Metni (Markdown)
+            paper_md_path = os.path.join(os.path.dirname(__file__), "..", "paper", "drosophila_digital_twin_preprint.md")
+            content = ""
+            if os.path.exists(paper_md_path):
+                with open(paper_md_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+            self._send_json({"content": content, "format": "markdown", "status": "success"})
+
+        elif self.path.startswith("/api/paper/download"):
+            # Makale Dosyası İndirme (.tex, .md, .bib)
+            parsed = urlparse(self.path)
+            qs = parse_qs(parsed.query)
+            fmt = qs.get("format", ["markdown"])[0].lower()
+            paper_dir = os.path.join(os.path.dirname(__file__), "..", "paper")
+
+            if fmt == "latex" or fmt == "tex":
+                fpath = os.path.join(paper_dir, "drosophila_digital_twin_preprint.tex")
+                fname = "drosophila_digital_twin_preprint.tex"
+                ctype = "application/x-tex"
+            elif fmt == "bibtex" or fmt == "bib":
+                fpath = os.path.join(paper_dir, "references.bib")
+                fname = "references.bib"
+                ctype = "text/plain; charset=utf-8"
+            else:
+                fpath = os.path.join(paper_dir, "drosophila_digital_twin_preprint.md")
+                fname = "drosophila_digital_twin_preprint.md"
+                ctype = "text/markdown; charset=utf-8"
+
+            if os.path.exists(fpath):
+                with open(fpath, "rb") as f:
+                    body = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", ctype)
+                self.send_header("Content-Disposition", f'attachment; filename="{fname}"')
+                self.send_header("Content-Length", str(len(body)))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(body)
+            else:
+                self.send_error(404, "Dosya bulunamadı")
+
         elif self.path.startswith("/api/export_dataset"):
             # Veri setini CSV veya JSON olarak dışa aktar
             parsed = urlparse(self.path)

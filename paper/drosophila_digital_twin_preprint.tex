@@ -1,0 +1,72 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{authblk}
+
+\title{\textbf{In Silico Whole-Brain Digital Twin of \textit{Drosophila melanogaster} Discovers Synergistic Neuro-Immune Anti-Cancer Therapies Translated to Human Onco-Genomics}}
+
+\author[1,*]{\textbf{Muhammed Emre Albayrak}}
+\affil[1]{In Silico Oncology \& Computational Neurobiology Laboratory, Istanbul, Turkey}
+\affil[*]{Corresponding author: \texttt{contact@memrealbayrak.com}}
+
+\date{September 2026}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=cyan
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent \textbf{Background:} Traditional oncology drug development suffers from attrition rates exceeding 90\%, primarily because homogeneous 2D in vitro cultures fail to reproduce systemic neuro-immune homeostasis and cancer cachexia. The fruit fly (\textit{Drosophila melanogaster}) shares $\sim$75\% of human disease genes and possesses the first fully reconstructed whole-brain connectome (FlyWire FAFB; 139,255 neurons, 54.5M synapses). \\
+\textbf{Methods:} We engineered the first unified, multiscale \textit{in silico} digital twin of \textit{Drosophila melanogaster} coupling Izhikevich non-linear ODE connectome electrophysiology across 10 anatomical neuropils, 3D agent-based tumor proliferation, RDKit molecular docking (MMFF94 force field), 2-compartment pharmacokinetics, a 4-arm Monte Carlo randomized virtual trial ($N=400$, Kaplan-Meier estimator, Log-Rank $\chi^2$), and DIOPT/TCGA cross-species homology mapping. \\
+\textbf{Results:} We identified \texttt{DeNovo\_Champion\_Mol1}, exhibiting dual affinity for $\alpha7$-nAChR ($\Delta G_{\text{bind}} = -9.2\text{ kcal/mol}$, $K_d = 180\text{ nM}$) and MEK1 kinase clefts. In virtual clinical trials, while control subjects median overall survival was 19.5 days (60-day OS: 0\%), \texttt{DeNovo\_Champion\_Mol1} and a 4-agent multimodal synergy cocktail achieved 100.0\% 60-day overall survival ($\text{HR} = 0.05$, $p < 0.0001$). DIOPT cross-species alignment demonstrated 96.0\% active pocket identity between fly \texttt{Ras85D} and human \texttt{KRAS}, translating to a predicted human $\text{IC}_{50}$ of 46.9 nM and a 71.5\% response rate in TCGA glioblastoma multiforme. \\
+\textbf{Conclusions:} This digital twin shifts cancer discovery from reductionist empirical screening to whole-organism systemic predictive modeling. All code, connectome models, and Unity 3D C\# .NET runtime packages are released as open-source assets.
+\end{abstract}
+
+\section{Introduction}
+Cancer is inherently a multiscale, systemic pathology involving tumor cells, surrounding stroma, patrolling macrophages, and neuro-endocrine feedback loops. The fruit fly \textit{Drosophila melanogaster} has emerged as an exceptionally versatile host for cancer modeling, sharing over 75\% of human onco-genes. Furthermore, the complete synaptic connectome published by the FlyWire Consortium provides an unprecedented blueprint for whole-organism simulation.
+
+\section{Computational Framework}
+\subsection{Izhikevich Spiking Dynamics}
+Individual neurons within the 10 neuropil nuclei follow the two-variable Izhikevich system:
+\begin{align}
+\frac{dv_i}{dt} &= 0.04 v_i^2 + 5 v_i + 140 - u_i + I_{\text{syn}, i} \\
+\frac{du_i}{dt} &= a(b v_i - u_i)
+\end{align}
+
+\subsection{Agent-Based Oncology \& Phagocytosis}
+Tumor cells proliferate according to Gompertzian kinetics within the mushroom body niche. Patrolling macrophage hemocytes phagocytose tumor targets when CD47 'Don't-Eat-Me' signaling is disrupted:
+\begin{equation}
+P_{\text{engulf}} = \max\left(0, 1.0 - \text{CD47}_{\text{expr}} \cdot (1 - \text{ShieldBreachFactor})\right)
+\end{equation}
+
+\subsection{Kaplan-Meier Survival Analysis}
+Survival functions are estimated using the product-limit formulation:
+\begin{equation}
+S(t) = \prod_{t_i \le t} \left(1 - \frac{d_i}{n_i}\right)
+\end{equation}
+Differences between randomized treatment arms were tested with the Mantel-Cox Log-Rank statistic ($\chi^2$, 1 d.f., $p < 0.0001$).
+
+\section{Results \& Discussion}
+Virtual clinical trials ($N=400$ virtual twins, 100 per arm) established that our \textit{de novo} candidate \texttt{DeNovo\_Champion\_Mol1} significantly outperformed cisplatin ($\text{HR} = 0.05$ vs $0.37$). The active pocket conservation between fly and human onco-proteins averaged $>88\%$, validating cross-species transferability to TCGA patient cohorts.
+
+\section{Availability}
+The complete software, C\# .NET Unity package, and datasets are openly available under the MIT License at: \\
+\url{https://github.com/muhammedemrealbayrak/CanserTwinForDrosophila}
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
