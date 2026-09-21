@@ -1,0 +1,797 @@
+"""
+Drosophila In Silico Neuro-Immune Digital Twin & De Novo Drug Discovery Engine
+Modül: platform_engine.py
+=============================================================================
+Yazar: Baş Sistem Biyoloğu & Yapay Zeka Baş Mimarı
+Açıklama:
+    Tüm katmanları (Kimya, Nöro-Konektom, Transkriptomik, 4-Aşamalı Yakıt,
+    3D Ajan Simülasyonu ve De Novo Optimizasyon) tek bir çok ölçekli
+    (multi-scale) zaman adımında birleştiren ana platform motoru.
+"""
+
+from typing import List, Dict, Any, Optional, Tuple
+import numpy as np
+
+# Alt Katman İthalatları
+from pipeline.pubchem_connector import PubChemConnector, MolecularProfile
+from pipeline.fly_cell_atlas import FlyCellAtlasConnector
+from pipeline.flywire_circuit import FlyWireCircuitSimulator
+from biology.fuel_metabolism import HierarchicalFuelMetabolismEngine, BiochemicalFuelPool
+from biology.lymph_gland import LymphGlandOrgan
+from spatial_3d.cancer_microenvironment import CancerCell3D, SpatialMicroenvironment3D, CancerState
+from spatial_3d.hemocyte_agents import HemocyteAgent3D, HemocyteSubtype
+from denovo_ai.fitness_evaluator import MolecularFitnessEvaluator, CandidateEvaluationResult
+
+
+class DrosophilaInSilicoPlatform:
+    """
+    Ana Dijital İkiz Orkestrasyon Motoru.
+    """
+
+    def __init__(
+        self,
+        active_compound_smiles_or_name: str = "DeNovo_HighSpeed_Agonist",
+        initial_tumor_burden: int = 150,
+        domain_size_um: float = 500.0,
+        grid_resolution: int = 16
+    ):
+        # 1. Konnektörler ve Katman Başlatıcılar
+        self.pubchem = PubChemConnector()
+        self.fca = FlyCellAtlasConnector()
+        self.evaluator = MolecularFitnessEvaluator()
+
+        # 2. Aktif İlaç Molekülü
+        self.active_drug: MolecularProfile = self.pubchem.parse_molecule(active_compound_smiles_or_name)
+        self.drug_dose_uM: float = 2.5
+
+        # 3. Nöral ve Biyolojik Motorlar
+        self.neural_circuit = FlyWireCircuitSimulator(
+            sensory_latency_ms=10.0,
+            interneuron_latency_ms=25.0,
+            central_latency_ms=150.0,
+            resonant_frequency_hz=45.0
+        )
+        self.fuel_engine = HierarchicalFuelMetabolismEngine()
+        self.lymph_gland = LymphGlandOrgan(self.fuel_engine)
+
+        # 4. 3D Mekansal Alan
+        self.domain_size = domain_size_um
+        self.spatial_tme = SpatialMicroenvironment3D(domain_size_um, grid_resolution)
+
+        # 5. Ajan Koleksiyonları
+        self.cancer_cells: List[CancerCell3D] = []
+        self.hemocyte_agents: List[HemocyteAgent3D] = []
+        self.next_agent_id = 1
+
+        # 6. Zaman ve Telemetri Kaydı
+        self.elapsed_time_s: float = 0.0
+        self.history: List[Dict[str, Any]] = []
+        self.time_to_first_trigger_s: Optional[float] = None
+        self.initial_tumor_count = initial_tumor_burden
+        self.lowest_tumor_count = initial_tumor_burden
+        self.active_cocktail: Optional[Dict[str, Any]] = None
+        self.newly_lysed_events: List[List[float]] = []
+
+        # Konakçı Canlılığı ve Toksik Ölüm Eşiği (Biyolojik Gerçekçilik)
+        self.host_alive: bool = True
+        self.lethal_toxicity_threshold: float = 0.45  # %45 toksisite konakçı için ölümcüldür
+        self.cumulative_cachectic_toxin: float = 0.0
+
+        # Onkolojik Tedavi Modalitesi & Radyoterapi
+        self.active_modality: str = "targeted_small_molecule"
+        self.radiation_pulses_applied: int = 0
+
+        # 7. Sistemi Başlat
+        self._initialize_tissue(initial_tumor_burden)
+
+    def _initialize_tissue(self, tumor_count: int):
+        """3D Doku alanına heterojen klonlardan oluşan başlangıç tümör nodülü ve yerleşik hemositleri yerleştirir."""
+        center = np.array([self.domain_size / 2.0] * 3)
+        tumor_radius = 65.0  # um
+
+        # Kanser Hücrelerini Heterojen Klon Dağılımıyla Merkeze Yerleştir
+        # %74 Duyarlı (Sensitive), %14 MEK-Bypass Dirençli, %8 ABC-Efflux Dirençli, %4 İmmün-Kaçış
+        for _ in range(tumor_count):
+            offset = np.random.normal(0.0, tumor_radius / 2.5, size=3)
+            pos = np.clip(center + offset, 15.0, self.domain_size - 15.0)
+
+            roll = np.random.rand()
+            if roll < 0.74:
+                c_type = "sensitive"
+                c_res = float(np.random.uniform(0.02, 0.12))
+            elif roll < 0.88:
+                c_type = "resistant_mek"
+                c_res = float(np.random.uniform(0.75, 0.90))
+            elif roll < 0.96:
+                c_type = "resistant_efflux"
+                c_res = float(np.random.uniform(0.70, 0.88))
+            else:
+                c_type = "immune_evasive"
+                c_res = float(np.random.uniform(0.40, 0.65))
+
+            c = CancerCell3D(
+                id=self.next_agent_id,
+                position=pos,
+                radius_um=float(np.random.uniform(8.5, 11.0)),
+                clone_type=c_type,
+                resistance_score=c_res,
+                p53_mutated=True,
+                kras_mutated=True,
+                division_threshold_s=float(np.random.uniform(75.0, 130.0))
+            )
+            self.cancer_cells.append(c)
+            self.next_agent_id += 1
+
+        # Başlangıç Devriye Hemositleri (Çeperde)
+        for _ in range(int(tumor_count * 0.20)):
+            pos = np.random.uniform(20.0, self.domain_size - 20.0, size=3)
+            h = HemocyteAgent3D(
+                id=self.next_agent_id,
+                subtype=HemocyteSubtype.PLASMATOCYTE,
+                position=pos
+            )
+            self.hemocyte_agents.append(h)
+            self.next_agent_id += 1
+
+    def reset(
+        self,
+        initial_tumor_burden: Optional[int] = None,
+        molecule_name_or_smiles: Optional[str] = None,
+        dose_uM: Optional[float] = None,
+        modality: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Tüm sistemi, 3D dokuyu, hücreleri ve fizyolojik göstergeleri temiz başlangıç durumuna sıfırlar."""
+        if molecule_name_or_smiles:
+            self.active_drug = self.pubchem.parse_molecule(molecule_name_or_smiles)
+        self.drug_dose_uM = dose_uM if dose_uM is not None else 2.5
+        if modality and modality in self.TREATMENT_MODALITIES:
+            self.active_modality = modality
+
+        burden = initial_tumor_burden if initial_tumor_burden is not None else self.initial_tumor_count
+        self.initial_tumor_count = burden
+        self.lowest_tumor_count = burden
+        self.elapsed_time_s = 0.0
+        self.history = []
+        self.time_to_first_trigger_s = None
+        self.newly_lysed_events = []
+        self.radiation_pulses_applied = 0
+
+        # Toksisite ve konakçı canlılığı sıfırlama
+        self.cumulative_cachectic_toxin = 0.0
+        self.host_alive = True
+
+        # Biyolojik motorları sıfırla
+        self.fuel_engine = HierarchicalFuelMetabolismEngine()
+        self.lymph_gland = LymphGlandOrgan(self.fuel_engine)
+        self.spatial_tme = SpatialMicroenvironment3D(self.domain_size, self.spatial_tme.grid_res)
+
+        # Hücre listelerini sıfırla ve yeniden oluştur
+        self.cancer_cells = []
+        self.hemocyte_agents = []
+        self.next_agent_id = 1
+        self._initialize_tissue(burden)
+
+        return self.get_current_snapshot()
+
+    def get_current_snapshot(self) -> Dict[str, Any]:
+        """Zamanı ilerletmeden mevcut platform telemetri durumunu üretir."""
+        viable_cancer = [c for c in self.cancer_cells if c.state not in (CancerState.APOPTOTIC, CancerState.LYSED)]
+        viable_cancer_count = len(viable_cancer)
+        sensitive_count = sum(1 for c in viable_cancer if getattr(c, "clone_type", "sensitive") == "sensitive")
+        resistant_count = viable_cancer_count - sensitive_count
+
+        active_hemocyte_count = sum(1 for h in self.hemocyte_agents if h.exhaustion_index < 1.0 and h.cytotoxic_energy > 4.0)
+        stage_idx, stage_desc = self.fuel_engine.get_stage_info(self.elapsed_time_s)
+
+        dose_factor = (self.drug_dose_uM / 2.5) ** 0.8
+        direct_drug_tox = self.active_drug.qsar_toxicity_risk * dose_factor
+        if self.active_modality == "cytotoxic_chemotherapy":
+            direct_drug_tox = max(direct_drug_tox, 0.28 * dose_factor)
+        elif self.active_modality == "metabolic_starvation":
+            direct_drug_tox = max(direct_drug_tox, 0.10 * dose_factor)
+
+        cachexia_burden = min(0.30, (self.cumulative_cachectic_toxin / 300.0) * 0.20)
+        raw_tox = direct_drug_tox + cachexia_burden
+        if self.active_cocktail:
+            tox_red = self.active_cocktail.get("toxicity_reduction_pct", 0.0) / 100.0
+            raw_tox *= (1.0 - tox_red)
+
+        systemic_tox = float(np.clip(raw_tox, 0.0, 1.0))
+
+        if systemic_tox >= self.lethal_toxicity_threshold:
+            self.host_alive = False
+            host_vitality = 0.0
+            clinical_outcome = "HOST_LETHALITY_OVERDOSE"
+            clinical_status_text = "☠️ ORGANİZMA ÖLÜMÜ (AŞIRI TOKSİSİTE)"
+        else:
+            self.host_alive = True
+            host_vitality = max(0.0, round((1.0 - (systemic_tox / self.lethal_toxicity_threshold)) * 100.0, 1))
+            if viable_cancer_count == 0:
+                clinical_outcome = "COMPLETE_REMISSION"
+                clinical_status_text = "🟢 TAM REMİSYON"
+            elif viable_cancer_count >= int(self.initial_tumor_count * 1.70):
+                clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
+                clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
+            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.75) and viable_cancer_count >= int(self.lowest_tumor_count * 1.30) and resistant_count > 0.40 * max(1, viable_cancer_count):
+                clinical_outcome = "TUMOR_RELAPSE_RESISTANT"
+                clinical_status_text = "🟠 DİRENÇLİ NÜKS / RELAPS"
+            elif viable_cancer_count <= int(self.initial_tumor_count * 0.45):
+                clinical_outcome = "PARTIAL_RESPONSE"
+                clinical_status_text = "🟡 KISMİ YANIT"
+            else:
+                clinical_outcome = "STABLE_DISEASE"
+                clinical_status_text = "⚪ DURAĞAN HASTALIK"
+
+        return {
+            "time_s": self.elapsed_time_s,
+            "drug_name": self.active_cocktail["name"] if self.active_cocktail else self.active_drug.name,
+            "smiles": self.active_drug.smiles,
+            "receptor_occupancy": 0.0 if self.elapsed_time_s == 0.0 else 0.5,
+            "lysed_bursts": [],
+            "active_cocktail": self.active_cocktail,
+            "efferent_hz": 0.0 if not self.host_alive or self.elapsed_time_s == 0.0 else 42.5,
+            "marrow_drive": 0.0 if not self.host_alive or self.elapsed_time_s == 0.0 else 0.5,
+            "kcg_membrane_mv": -65.0,
+            "kcg_calcium_nm": 100.0,
+            "snpf_release_pct": 0.0,
+            "ach_quanta_nm": 5.0,
+            "spikes_per_sec": 0,
+            "voltage_trace": [-65.0],
+            "calcium_trace": [100.0],
+            "flywire_neuron_info": {
+                "root_id": "720575940608530955",
+                "cell_class": "Kenyon_Cell",
+                "cell_sub_class": "KCg",
+                "cell_type": "KCg-m",
+                "dataset": "FAFB v783",
+                "side": "left",
+                "known_transmitters": "acetylcholine; sNPF"
+            },
+            "initial_tumor_count": self.initial_tumor_count,
+            "cancer_cells": viable_cancer_count,
+            "sensitive_cancer_cells": sensitive_count,
+            "resistant_cancer_cells": resistant_count,
+            "active_hemocytes": active_hemocyte_count,
+            "total_egressed_hemocytes": self.lymph_gland.metrics.total_cells_egressed,
+            "stage_idx": stage_idx,
+            "stage_name": stage_desc,
+            "pool_atp": self.fuel_engine.pool.atp_mM,
+            "pool_glucose": self.fuel_engine.pool.glucose_mM,
+            "pool_bcaa": self.fuel_engine.pool.bcaa_mM,
+            "pool_lipids": self.fuel_engine.pool.lipids_fatty_acids_mM,
+            "toxicity_pct": systemic_tox * 100.0,
+            "host_alive": self.host_alive,
+            "host_vitality_pct": host_vitality,
+            "clinical_outcome": clinical_outcome,
+            "clinical_status_text": clinical_status_text,
+            "active_modality": self.active_modality,
+            "modality_info": self.TREATMENT_MODALITIES.get(self.active_modality, {}),
+            "radiation_pulses_applied": self.radiation_pulses_applied
+        }
+
+    COCKTAIL_REGIMENS: Dict[str, Any] = {
+        "immuno_mek_synergy": {
+            "id": "immuno_mek_synergy",
+            "name": "Immuno-MEK Sinerjisi (F-NAc + Trametinib + Kurkumin)",
+            "primary_smiles": "NC(=O)CN1CCC[C@H]1c2cncc(F)c2",
+            "components": [
+                {"name": "F-NAc (De Novo Agonist)", "dose": "1.0 µM", "dose_uM": 1.0, "target": "nAChR / KCg-m", "role": "nAChR / KCg-m", "mechanism": "185ms Refleksle Hemosit Üretimi"},
+                {"name": "Trametinib", "dose": "5.0 nM", "dose_uM": 0.005, "target": "MEK1/2 Kinaz", "role": "MEK1/2 Kinaz", "mechanism": "KRAS/MAPK Proliferasyon Blokajı"},
+                {"name": "Curcumin", "dose": "5.0 µM", "dose_uM": 5.0, "target": "NF-kB / STAT", "role": "NF-kB / STAT", "mechanism": "Kaşeksi Kalkanı & Doku Koruması"}
+            ],
+            "synergy_index_ci": 0.38,
+            "chou_talalay_ci": 0.38,
+            "synergy_label": "Süper Sinerji (CI < 0.40)",
+            "toxicity_reduction_pct": 85.0,
+            "toxicity_shield_pct": 0.85,
+            "potency_boost": 2.2,
+            "target_potency_multiplier": 2.2,
+            "clinical_rationale": "Mantar cisimciğinden gelen hemosit patlaması ile hücre içi onkogenik MEK blokajı birleşir; kaşeksi önlenir.",
+            "description": "Mantar cisimciğinden gelen hemosit patlaması ile hücre içi onkogenik MEK blokajı birleşir; kaşeksi önlenir."
+        },
+        "soft_drug_chemo_immune": {
+            "id": "soft_drug_chemo_immune",
+            "name": "Soft-Drug Kemo-İmmün (MCN + Sisplatin + Resveratrol)",
+            "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+            "components": [
+                {"name": "MCN (Karbamat Agonist)", "dose": "1.5 µM", "dose_uM": 1.5, "target": "nAChR", "role": "nAChR", "mechanism": "Esteraz-Klerensli Hızlı Egress"},
+                {"name": "Cisplatin", "dose": "0.5 µM", "dose_uM": 0.5, "target": "DNA Adducts", "role": "DNA Adducts", "mechanism": "Tümör Hücresi DNA Çapraz Bağlama"},
+                {"name": "Resveratrol", "dose": "10.0 µM", "dose_uM": 10.0, "target": "SIRT1", "role": "SIRT1", "mechanism": "Sağlıklı Hücre Apoptoz Direnci"}
+            ],
+            "synergy_index_ci": 0.52,
+            "chou_talalay_ci": 0.52,
+            "synergy_label": "Kuvvetli Sinerji (CI < 0.60)",
+            "toxicity_reduction_pct": 75.0,
+            "toxicity_shield_pct": 0.75,
+            "potency_boost": 1.8,
+            "target_potency_multiplier": 1.8,
+            "clinical_rationale": "Düşük doz kemoterapötik ile immün yanıt sinerjiye girer; toksisite <%6'da kalır.",
+            "description": "Düşük doz kemoterapötik ile immün yanıt sinerjiye girer; toksisite <%6'da kalır."
+        },
+        "denovo_triple_shield": {
+            "id": "denovo_triple_shield",
+            "name": "De Novo Triple-Shield (AI Şampiyon + Vorinostat + EGCG)",
+            "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+            "components": [
+                {"name": "De Novo Şampiyon", "dose": "1.0 µM", "dose_uM": 1.0, "target": "KCg-m Gamma Lobe", "role": "KCg-m Gamma Lobe", "mechanism": "1.0s Hızlı Refleks ve Eferent Sürüş"},
+                {"name": "Vorinostat", "dose": "2.0 µM", "dose_uM": 2.0, "target": "HDAC Sınıf I/II", "role": "HDAC Sınıf I/II", "mechanism": "Epigenetik Kanser Hücresi Farklılaşması"},
+                {"name": "EGCG", "dose": "8.0 µM", "dose_uM": 8.0, "target": "Antioksidan", "role": "Antioksidan", "mechanism": "Mitokondriyal Membran Stabilizasyonu"}
+            ],
+            "synergy_index_ci": 0.44,
+            "chou_talalay_ci": 0.44,
+            "synergy_label": "Süper Sinerji (CI < 0.50)",
+            "toxicity_reduction_pct": 88.0,
+            "toxicity_shield_pct": 0.88,
+            "potency_boost": 2.0,
+            "target_potency_multiplier": 2.0,
+            "clinical_rationale": "HDAC baskılaması tümörün savunmasını kırar, hemositler p53 mutant nodülü hızla yok eder.",
+            "description": "HDAC baskılaması tümörün savunmasını kırar, hemositler p53 mutant nodülü hızla yok eder."
+        }
+    }
+
+    def set_active_drug(self, smiles_or_name: str, dose_uM: float = 2.5):
+        """Test edilen kimyasal molekülü ve dozajı dinamik olarak değiştirir."""
+        self.active_drug = self.pubchem.parse_molecule(smiles_or_name)
+        self.drug_dose_uM = dose_uM
+        self.active_cocktail = None
+
+    def set_cocktail(self, cocktail_id: str, custom_cocktail: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+        """Kombinasyon terapisi protokolünü yükler ve sinerjiyi aktif eder."""
+        if custom_cocktail:
+            self.COCKTAIL_REGIMENS[cocktail_id] = custom_cocktail
+            self.active_cocktail = custom_cocktail
+        elif cocktail_id in self.COCKTAIL_REGIMENS:
+            self.active_cocktail = self.COCKTAIL_REGIMENS[cocktail_id]
+        else:
+            self.active_cocktail = None
+            return None
+
+        primary = (
+            self.active_cocktail.get("primary_smiles") or
+            (self.active_cocktail.get("components") and self.active_cocktail["components"][0].get("smiles")) or
+            "CC1=NC=C(C=C1)CCN(C)C(=O)CF"
+        )
+        self.active_drug = self.pubchem.parse_molecule(primary)
+        first_comp = self.active_cocktail.get("components", [{}])[0]
+        self.drug_dose_uM = float(first_comp.get("dose_uM", 2.0))
+        return self.active_cocktail
+
+    TREATMENT_MODALITIES: Dict[str, Any] = {
+        "targeted_small_molecule": {
+            "id": "targeted_small_molecule",
+            "name": "Hedefe Yönelik Küçük Molekül (Standart Monoterapi)",
+            "category": "Targeted Monotherapy",
+            "badge_color": "#00f0ff",
+            "clinical_summary": "Seçici nAChR/KCg-m reseptör agonisti; nöro-immün refleks ve kemotaktik hemosit göçünü uyarır.",
+            "target_pathway": "nAChRα7 -> KCg-m Nöro-Hematopoetik Aks",
+            "advantages": "Düşük sağlıklı doku hasarı, fizyolojik bağışıklık mobilizasyonu",
+            "limitations": "Monoterapide MEK bypass ve ABC efflux dirençli klonlar nüks (relaps) yaratabilir"
+        },
+        "cytotoxic_chemotherapy": {
+            "id": "cytotoxic_chemotherapy",
+            "name": "Sitotoksik Kemoterapi (Sisplatin + Paklitaksel)",
+            "category": "Cytotoxic Chemotherapy",
+            "badge_color": "#ff2a6d",
+            "clinical_summary": "Yüksek doz DNA alkilleyici (Sisplatin) ve mikrotübül dondurucu (Paklitaksel). Klon direnci gözetmeksizin tümör DNA'sını çapraz bağlar.",
+            "target_pathway": "DNA Adducts & M-Fazı Mitotik İğ İplikçikleri",
+            "advantages": "Dirençli klonları ve hızlı bölünen tüm hücreleri kuvvetle lize eder",
+            "limitations": "Yüksek doku toksisitesi (%30-38), hemosit öncüllerini baskılama riski"
+        },
+        "immunotherapy_cd47": {
+            "id": "immunotherapy_cd47",
+            "name": "Kontrol Noktası İmmünoterapisi (Anti-CD47 Don't-Eat-Me Blokajı)",
+            "category": "Immune Checkpoint Blockade",
+            "badge_color": "#00ff9d",
+            "clinical_summary": "Kanser hücrelerinin 'beni yeme' (Don't Eat Me) kalkanını yıkar. Draper/NimC1 kaçışını sıfırlayarak hemosit fagositozunu 2.2x artırır.",
+            "target_pathway": "CD47 - SIRPα / Draper Fagositoz Kontrol Noktası",
+            "advantages": "İmmün-kaçış klonlarını savunmasız bırakır, toksisitesi son derece düşüktür (<%8)",
+            "limitations": "Yalnızca bağışıklık sistemi yeterli yakıta (ATP/BCAA) sahip olduğunda etkilidir"
+        },
+        "metabolic_starvation": {
+            "id": "metabolic_starvation",
+            "name": "Metabolik Warburg Açlık Terapisi (2-Deoksiglukoz / 2-DG)",
+            "category": "Metabolic Oncology",
+            "badge_color": "#ffb703",
+            "clinical_summary": "Hekzokinaz-II enzimini kilitler. Tümörün aşırı glikoz açlığını (Warburg etkisi) keserek ATP krizine sokar ve hücre bölünmesini kilitler.",
+            "target_pathway": "Hekzokinaz-II (HK2) & Aerobik Glikoliz",
+            "advantages": "Tümör mitozunu sıfıra indirir, kaşeksi salınımını durdurur",
+            "limitations": "Tek başına hücreleri hızlı parçalamaz; sitotoksik ajanlarla birleştirilmelidir"
+        },
+        "metronomic_rescue": {
+            "id": "metronomic_rescue",
+            "name": "Metronomik Multimodal Kurtarma Protokolü (AI Şampiyon Reçetesi)",
+            "category": "Metronomic Multi-modal",
+            "badge_color": "#d946ef",
+            "clinical_summary": "Düşük doz sürekli kemoterapi + Anti-CD47 immün kalkan kırıcı + Nöral kolinerjik ateşleme + Kurkumin kaşeksi kalkanı. Direnci sıfırlar.",
+            "target_pathway": "Çoklu Eşzamanlı Hedefleme (Kinaz + DNA + CD47 + nAChR)",
+            "advantages": "Toksisiteyi <%8 tutarken p53/KRAS ve MEK bypass klonlarını tamamen temizler",
+            "limitations": "Çoklu bileşen formülasyonu ve hassas farmakokinetik senkronizasyon gerektirir"
+        }
+    }
+
+    def set_treatment_modality(self, modality_id: str) -> Dict[str, Any]:
+        """Tedavi rejimini dinamik olarak değiştirir."""
+        if modality_id in self.TREATMENT_MODALITIES:
+            self.active_modality = modality_id
+            if modality_id == "targeted_small_molecule":
+                self.set_active_drug("CC1=NC=C(C=C1)CCN(C)C(=O)CF", dose_uM=2.5)
+                self.active_cocktail = None
+            elif modality_id == "cytotoxic_chemotherapy":
+                self.set_active_drug("Cisplatin", dose_uM=2.0)
+                self.active_drug.qsar_toxicity_risk = 0.28
+                self.active_cocktail = None
+            elif modality_id == "metronomic_rescue":
+                self.set_cocktail("immuno_mek_synergy")
+                self.host_alive = True
+                self.cumulative_cachectic_toxin = 0.0
+            elif modality_id == "immunotherapy_cd47":
+                self.active_cocktail = None
+                self.host_alive = True
+            elif modality_id == "metabolic_starvation":
+                self.set_active_drug("2-Deoxyglucose", dose_uM=2.0)
+                self.active_drug.qsar_toxicity_risk = 0.10
+                self.active_cocktail = None
+            return self.TREATMENT_MODALITIES[modality_id]
+        return self.TREATMENT_MODALITIES["targeted_small_molecule"]
+
+    def apply_radiation_pulse(self, dose_gy: float = 8.0) -> Dict[str, Any]:
+        """
+        Stereotaktik Radyoterapi (SABR / IMRT) darbesi uygular.
+        Tümör dokusundaki DNA çift zincir kırıklarını (DSB) tetikleyerek
+        kanser hücrelerini direnç mekanizmasından bağımsız olarak anında vurur.
+        """
+        self.radiation_pulses_applied += 1
+        damaged_count = 0
+        destroyed_count = 0
+
+        for c in self.cancer_cells:
+            if c.state in (CancerState.APOPTOTIC, CancerState.LYSED):
+                continue
+            damaged_count += 1
+            rad_damage = float(min(75.0, dose_gy * np.random.uniform(5.5, 7.5)))
+            c.health -= rad_damage
+            if c.health <= 0.0:
+                c.state = CancerState.LYSED
+                destroyed_count += 1
+                self.newly_lysed_events.append([round(float(x), 1) for x in c.position])
+
+        # Geçici sistemik radyasyon doku stresi
+        self.cumulative_cachectic_toxin += dose_gy * 0.35
+
+        return {
+            "status": "radiation_applied",
+            "dose_gy": dose_gy,
+            "damaged_cells": damaged_count,
+            "destroyed_cells": destroyed_count,
+            "remaining_cancer_cells": sum(1 for c in self.cancer_cells if c.state not in (CancerState.APOPTOTIC, CancerState.LYSED)),
+            "total_pulses": self.radiation_pulses_applied
+        }
+
+    def step(self, dt_seconds: float = 1.0) -> Dict[str, Any]:
+        """
+        Tüm sistemi çok ölçekli olarak 1 saniye ilerletir:
+          1. İlaç-Reseptör Doygunluğu (Hill-Langmuir & FCA duyarlılığı)
+          2. 185 ms'lik milisaniyelik aferent nöral döngü & 45 Hz eferent ateşleme
+          3. 4 Aşamalı Lenf Bezi yakıt tüketimi & Hemosit sentezi
+          4. 3D İlaç difüzyonu ve Kanser hücresi büyümesi/apoptozu
+          5. 3D Hemosit kemotaksisi, tümör kapsülasyonu ve fagositoz
+        """
+        # 1. Reseptör Bağlanma Kinetiği (Assosiasyon / Birikim Eğrisi: 1 - exp(-k_on * [L] * t))
+        kd = self.active_drug.kd_micromolar
+        hill_n = self.active_drug.hill_coefficient
+        steady_state_occupancy = float((self.drug_dose_uM ** hill_n) / ((kd ** hill_n) + (self.drug_dose_uM ** hill_n)))
+        
+        # Moleküler bağlanma hızı (k_on ve MW gecikmesi)
+        tau_bind_s = max(0.5, (self.active_drug.molecular_weight / 120.0) * (kd / 0.1))
+        current_occupancy = steady_state_occupancy * (1.0 - np.exp(-(self.elapsed_time_s + 1e-3) / tau_bind_s))
+        
+        # FCA Duyu nöron duyarlılık katsayısı ile modüle et
+        fca_sensitivity = self.fca.compute_cell_target_responsiveness("sensory_orn", self.active_drug.name)
+        effective_potency = float(np.clip(current_occupancy * fca_sensitivity, 0.0, 1.0))
+        if self.active_cocktail:
+            effective_potency = float(np.clip(effective_potency * self.active_cocktail.get("potency_boost", 1.0), 0.0, 1.0))
+
+        # 2. Milisaniyelik Nöral Devre Çözümlemesi (FlyWire KCg-m 185 ms Refleks Döngüsü)
+        if self.host_alive:
+            neural_data = self.neural_circuit.simulate_macro_second_response(
+                ligand_potency=effective_potency,
+                duration_s=dt_seconds
+            )
+            efferent_hz = neural_data["efferent_firing_hz"]
+            marrow_drive = neural_data["marrow_stimulation_drive"]
+        else:
+            # Konakçı ölüyse nöral devre ve eferent ateşleme durur (0 Hz)
+            neural_data = {
+                "kcg_membrane_mv": -70.0,
+                "kcg_calcium_nm": 60.0,
+                "snpf_release_pct": 0.0,
+                "ach_quanta_nm": 0.0,
+                "efferent_firing_hz": 0.0,
+                "marrow_stimulation_drive": 0.0,
+                "spikes_per_sec": 0,
+                "voltage_trace": [-70.0],
+                "calcium_trace": [60.0]
+            }
+            efferent_hz = 0.0
+            marrow_drive = 0.0
+
+        if marrow_drive >= 0.85 and self.time_to_first_trigger_s is None:
+            self.time_to_first_trigger_s = self.elapsed_time_s
+
+        # 3. Lenf Bezi (Kemik İliği) 4-Aşamalı Yakıt Tüketimi ve Savunma Hücresi Üretimi
+        if self.host_alive:
+            drug_boost = min(1.5, self.drug_dose_uM * 0.15)
+            new_plasma, new_lamello = self.lymph_gland.step_hematopoiesis(
+                dt_seconds=dt_seconds,
+                elapsed_seconds=self.elapsed_time_s,
+                neural_efferent_drive=marrow_drive,
+                drug_immune_boost=drug_boost
+            )
+        else:
+            new_plasma, new_lamello = 0, 0
+
+        # Yeni üretilen savunma hücrelerini çeper damarlardan 3D dokuya dök (Egress)
+        for _ in range(new_plasma):
+            pos = self._random_boundary_position()
+            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.PLASMATOCYTE, position=pos))
+            self.next_agent_id += 1
+
+        for _ in range(new_lamello):
+            pos = self._random_boundary_position()
+            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.LAMELLOCYTE, position=pos, radius_um=12.0))
+            self.next_agent_id += 1
+
+        # 4. 3D İlaç Enjeksiyonu ve Fickian Difüzyon
+        self.spatial_tme.inject_drug(dose_rate=self.drug_dose_uM, dt=dt_seconds, logP=self.active_drug.logP)
+        self.spatial_tme.diffuse_fields(dt=dt_seconds)
+
+        # 5. Kanser Hücre Güncellemeleri & Onkolojik Tedavi Modalitesi
+        modality = self.active_modality
+        comp_text = ""
+        if self.active_cocktail and self.active_cocktail.get("components"):
+            comp_text = " ".join([
+                (c.get("name", "") + " " + c.get("target", "") + " " + c.get("mechanism", "") + " " + c.get("target_key", "")).lower()
+                for c in self.active_cocktail["components"]
+            ])
+
+        is_anti_cd47 = bool(
+            modality in ("immunotherapy_cd47", "metronomic_rescue") or
+            ("cd47" in comp_text or "checkpoint" in comp_text or "fagositoz" in comp_text)
+        )
+        is_metabolic = bool(
+            modality == "metabolic_starvation" or
+            ("2-deoxyglucose" in comp_text or "2-dg" in comp_text or "glikoliz" in comp_text or "warburg" in comp_text)
+        )
+        is_chemo = bool(
+            modality in ("cytotoxic_chemotherapy", "metronomic_rescue") or
+            ("cisplatin" in comp_text or "adduct" in comp_text)
+        )
+
+        is_denovo_champion = bool(self.active_drug.kd_micromolar < 0.08 and self.active_drug.qsar_toxicity_risk < 0.12)
+        mek_inhibited = bool(
+            is_denovo_champion or is_chemo or
+            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase", "ras"])
+        )
+        dna_damaged = bool(
+            is_chemo or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat"])
+        )
+
+        newly_divided: List[CancerCell3D] = []
+        step_cachectic_toxin = 0.0
+
+        for c in self.cancer_cells:
+            if c.state in (CancerState.APOPTOTIC, CancerState.LYSED):
+                continue
+
+            # Modaliteye Özgü Sitotoksisite ve Metabolik Baskı
+            if is_chemo and modality == "cytotoxic_chemotherapy":
+                # Sitotoksik kemoterapi DNA adduct hasarı
+                c.health -= 0.65 * dt_seconds
+
+            if is_metabolic:
+                # 2-DG glikoliz blokajı: Hücre ATP'siz kalır ve yavaşça erir
+                c.health -= 0.40 * dt_seconds
+
+            local_drug = self.spatial_tme.sample_drug_at(c.position)
+            divided, toxin = c.step(
+                dt=dt_seconds,
+                local_drug_conc=local_drug,
+                mek_inhibited=mek_inhibited,
+                dna_damaged=dna_damaged
+            )
+
+            # Metabolik açlık terapisi mitozu tamamen kilitler
+            if is_metabolic:
+                divided = False
+
+            step_cachectic_toxin += toxin
+
+            if divided and self.host_alive:
+                d_offset = (np.random.rand(3) - 0.5) * (c.radius_um * 2.1)
+                d_pos = np.clip(c.position + d_offset, 15.0, self.domain_size - 15.0)
+                
+                # Yavru hücre mutasyon kalıtımı (Darwinian clonal evolution)
+                d_type = c.clone_type
+                d_res = c.resistance_score
+                if d_type == "sensitive" and np.random.rand() < 0.12:
+                    d_type = str(np.random.choice(["resistant_mek", "resistant_efflux"]))
+                    d_res = float(np.random.uniform(0.70, 0.85))
+                else:
+                    d_res = float(min(0.98, d_res * np.random.uniform(0.98, 1.05)))
+
+                daughter = CancerCell3D(
+                    id=self.next_agent_id,
+                    position=d_pos,
+                    radius_um=c.radius_um,
+                    clone_type=d_type,
+                    resistance_score=d_res,
+                    division_threshold_s=c.division_threshold_s * float(np.random.uniform(0.92, 1.08))
+                )
+                newly_divided.append(daughter)
+                self.next_agent_id += 1
+
+        self.cancer_cells.extend(newly_divided)
+
+        # 6. Hemosit Kemotaksisi, Kuşatma ve Sitotoksisite
+        active_hemocyte_count = 0
+        fuel_eff = 1.0
+        if hasattr(self, "fuel_engine") and self.fuel_engine.pool.atp_mM < 1.0:
+            fuel_eff = 0.35
+
+        for h in self.hemocyte_agents:
+            if h.exhaustion_index < 1.0 and h.cytotoxic_energy > 4.0:
+                active_hemocyte_count += 1
+                if self.host_alive:
+                    h.step_patrol_and_attack(
+                        dt=dt_seconds,
+                        cancer_cells=self.cancer_cells,
+                        domain_bounds=self.spatial_tme.bounds,
+                        fuel_efficiency=fuel_eff,
+                        anti_cd47_active=is_anti_cd47
+                    )
+
+        # Canlı kanser ve klon sayıları
+        viable_cancer = [c for c in self.cancer_cells if c.state not in (CancerState.APOPTOTIC, CancerState.LYSED)]
+        viable_cancer_count = len(viable_cancer)
+        sensitive_count = sum(1 for c in viable_cancer if getattr(c, "clone_type", "sensitive") == "sensitive")
+        resistant_count = viable_cancer_count - sensitive_count
+
+        if viable_cancer_count < self.lowest_tumor_count:
+            self.lowest_tumor_count = viable_cancer_count
+
+        # Zamanı ilerlet
+        self.elapsed_time_s += dt_seconds
+        stage_idx, stage_desc = self.fuel_engine.get_stage_info(self.elapsed_time_s)
+
+        # Yeni parçalanan kanser hücrelerinin 3D patlama koordinatları
+        self.newly_lysed_events = []
+        for c in self.cancer_cells:
+            if c.state in (CancerState.APOPTOTIC, CancerState.LYSED) and not getattr(c, "_visual_reported", False):
+                self.newly_lysed_events.append([round(float(x), 1) for x in c.position])
+                c._visual_reported = True
+
+        # Toksisite Hesaplaması (Doz faktörü + Kademeli Kaşeksi birikimi + Modalite yükü)
+        self.cumulative_cachectic_toxin += step_cachectic_toxin
+        dose_factor = (self.drug_dose_uM / 2.5) ** 0.8
+        direct_drug_tox = self.active_drug.qsar_toxicity_risk * dose_factor
+
+        if modality == "cytotoxic_chemotherapy":
+            direct_drug_tox = max(direct_drug_tox, 0.28 * dose_factor)
+        elif modality == "metabolic_starvation":
+            direct_drug_tox = max(direct_drug_tox, 0.10 * dose_factor)
+
+        cachexia_burden = min(0.30, (self.cumulative_cachectic_toxin / 300.0) * 0.20)
+        raw_tox = direct_drug_tox + cachexia_burden
+
+        if self.active_cocktail:
+            tox_red = self.active_cocktail.get("toxicity_reduction_pct", 0.0) / 100.0
+            raw_tox *= (1.0 - tox_red)
+
+        systemic_tox = float(np.clip(raw_tox, 0.0, 1.0))
+
+        # Konakçı Canlılık & Toksik Ölüm Kontrolü
+        if systemic_tox >= self.lethal_toxicity_threshold:
+            self.host_alive = False
+            host_vitality = 0.0
+            clinical_outcome = "HOST_LETHALITY_OVERDOSE"
+            clinical_status_text = "☠️ ORGANİZMA ÖLÜMÜ (AŞIRI TOKSİSİTE)"
+        else:
+            self.host_alive = True
+            host_vitality = max(0.0, round((1.0 - (systemic_tox / self.lethal_toxicity_threshold)) * 100.0, 1))
+
+            # Klinik Sonuç Sınıflandırması
+            if viable_cancer_count == 0:
+                clinical_outcome = "COMPLETE_REMISSION"
+                clinical_status_text = "🟢 TAM REMİSYON"
+            elif viable_cancer_count >= int(self.initial_tumor_count * 1.70):
+                clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
+                clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
+            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.75) and viable_cancer_count >= int(self.lowest_tumor_count * 1.30) and resistant_count > 0.40 * max(1, viable_cancer_count):
+                clinical_outcome = "TUMOR_RELAPSE_RESISTANT"
+                clinical_status_text = "🟠 DİRENÇLİ NÜKS / RELAPS"
+            elif viable_cancer_count <= int(self.initial_tumor_count * 0.45):
+                clinical_outcome = "PARTIAL_RESPONSE"
+                clinical_status_text = "🟡 KISMİ YANIT"
+            else:
+                clinical_outcome = "STABLE_DISEASE"
+                clinical_status_text = "⚪ DURAĞAN HASTALIK"
+
+        snapshot = {
+            "time_s": self.elapsed_time_s,
+            "drug_name": self.active_cocktail["name"] if self.active_cocktail else self.active_drug.name,
+            "smiles": self.active_drug.smiles,
+            "receptor_occupancy": current_occupancy,
+            "lysed_bursts": self.newly_lysed_events,
+            "active_cocktail": self.active_cocktail,
+            "efferent_hz": efferent_hz,
+            "marrow_drive": marrow_drive,
+            "kcg_membrane_mv": neural_data["kcg_membrane_mv"],
+            "kcg_calcium_nm": neural_data["kcg_calcium_nm"],
+            "snpf_release_pct": neural_data["snpf_release_pct"],
+            "ach_quanta_nm": neural_data["ach_quanta_nm"],
+            "spikes_per_sec": neural_data["spikes_per_sec"],
+            "voltage_trace": neural_data["voltage_trace"],
+            "calcium_trace": neural_data["calcium_trace"],
+            "flywire_neuron_info": {
+                "root_id": "720575940608530955",
+                "cell_class": "Kenyon_Cell",
+                "cell_sub_class": "KCg",
+                "cell_type": "KCg-m",
+                "dataset": "FAFB v783",
+                "side": "left",
+                "known_transmitters": "acetylcholine; sNPF"
+            },
+            "initial_tumor_count": self.initial_tumor_count,
+            "cancer_cells": viable_cancer_count,
+            "sensitive_cancer_cells": sensitive_count,
+            "resistant_cancer_cells": resistant_count,
+            "active_hemocytes": active_hemocyte_count,
+            "total_egressed_hemocytes": self.lymph_gland.metrics.total_cells_egressed,
+            "stage_idx": stage_idx,
+            "stage_name": stage_desc,
+            "pool_atp": self.fuel_engine.pool.atp_mM,
+            "pool_glucose": self.fuel_engine.pool.glucose_mM,
+            "pool_bcaa": self.fuel_engine.pool.bcaa_mM,
+            "pool_lipids": self.fuel_engine.pool.lipids_fatty_acids_mM,
+            "toxicity_pct": systemic_tox * 100.0,
+            "host_alive": self.host_alive,
+            "host_vitality_pct": host_vitality,
+            "clinical_outcome": clinical_outcome,
+            "clinical_status_text": clinical_status_text,
+            "active_modality": self.active_modality,
+            "modality_info": self.TREATMENT_MODALITIES.get(self.active_modality, {}),
+            "radiation_pulses_applied": self.radiation_pulses_applied
+        }
+        self.history.append(snapshot)
+        return snapshot
+
+    def _random_boundary_position(self) -> np.ndarray:
+        """3D dokunun çeper damar noktalarından rastgele pozisyon üretir."""
+        axis = np.random.randint(0, 3)
+        pos = np.random.uniform(15.0, self.domain_size - 15.0, size=3)
+        pos[axis] = 15.0 if np.random.rand() < 0.5 else (self.domain_size - 15.0)
+        return pos
+
+    def run_benchmark(self, duration_seconds: float = 600.0) -> CandidateEvaluationResult:
+        """Belirtilen süre boyunca simülasyonu çalıştırıp molekülü skorlar."""
+        for _ in range(int(duration_seconds)):
+            snap = self.step(dt_seconds=1.0)
+            if not self.host_alive:
+                break  # Toksik ölüm halinde erken sonlanma
+
+        final_snap = self.history[-1]
+        trigger_time = self.time_to_first_trigger_s if self.time_to_first_trigger_s is not None else duration_seconds
+        
+        if not self.host_alive:
+            cleared_pct = 0.0
+        else:
+            cleared_pct = max(0.0, ((self.initial_tumor_count - final_snap["cancer_cells"]) / self.initial_tumor_count) * 100.0)
+
+        return self.evaluator.compute_fitness(
+            profile=self.active_drug,
+            time_to_trigger_s=trigger_time,
+            hemocytes_produced=self.lymph_gland.metrics.total_cells_egressed,
+            tumor_clearance_pct=cleared_pct,
+            toxicity_score=final_snap["toxicity_pct"] / 100.0,
+            host_alive=self.host_alive
+        )

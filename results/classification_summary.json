@@ -1,0 +1,31 @@
+{
+  "total_compounds": 55,
+  "categories_distribution": {
+    "Hedefe Yönelik İnhibitör": 30,
+    "Geleneksel Kemoterapötik": 12,
+    "Doğal / Fitokimyasal Ajan": 9,
+    "De Novo Sentetik AI": 4
+  },
+  "potency_distribution": {
+    "Orta Potans (5-25 uM)": 24,
+    "Yüksek Potans (Sub-mikromolar / <1-5 uM)": 24,
+    "Düşük Potans / Diyet Düzeyi (>25 uM)": 7
+  },
+  "feature_importances": {
+    "Fraction_CSP3": 0.1703,
+    "TPSA": 0.1392,
+    "QED_Drug_Likeness": 0.1327,
+    "Molecular_Weight": 0.1303,
+    "HBD": 0.1155,
+    "LogP": 0.1096,
+    "HBA": 0.086,
+    "Rotatable_Bonds": 0.0718,
+    "Aromatic_Rings": 0.0447
+  },
+  "average_descriptors": {
+    "avg_mw": 417.6,
+    "avg_logP": 2.92,
+    "avg_tpsa": 100.0,
+    "avg_qed": 0.47
+  }
+}

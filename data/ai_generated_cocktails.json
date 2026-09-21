@@ -1,0 +1,422 @@
+[
+  {
+    "id": "ai_cocktail_dd35a081",
+    "name": "AI Sinerji: DeNovo_Champion + 2-Deoxyglucose + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "2.0 µM",
+        "dose_uM": 2.0,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg"
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.5 µM",
+        "dose_uM": 4.5,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB"
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5.0 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK"
+      }
+    ],
+    "component_count": 4,
+    "synergy_index_ci": 0.35,
+    "chou_talalay_ci": 0.35,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 91.9,
+    "toxicity_shield_pct": 0.919,
+    "potency_boost": 2.5,
+    "target_potency_multiplier": 2.5,
+    "clinical_rationale": "Chou-Talalay CI = 0.35 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. Curcumin (Zerdeçal Polifenolü) koruyucu kalkanı sayesinde doku toksisitesi %91.9 oranında sönümlenir ve lizis hızı 2.5x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.35 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. Curcumin (Zerdeçal Polifenolü) koruyucu kalkanı sayesinde doku toksisitesi %91.9 oranında sönümlenir ve lizis hızı 2.5x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_8d6637e9",
+    "name": "AI Sinerji: MCN + 2-Deoxyglucose + EGCG",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "2.0 µM",
+        "dose_uM": 2.0,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg"
+      },
+      {
+        "name": "EGCG (Yeşil Çay Kateşini)",
+        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
+        "dose": "6.0 µM",
+        "dose_uM": 6.0,
+        "target": "Mitokondriyal Membran Stabilizasyonu",
+        "role": "Mitokondriyal Membran Stabilizasyonu",
+        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
+        "target_key": "Mitochondria"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.38,
+    "chou_talalay_ci": 0.38,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 88.9,
+    "toxicity_shield_pct": 0.889,
+    "potency_boost": 2.4,
+    "target_potency_multiplier": 2.4,
+    "clinical_rationale": "Chou-Talalay CI = 0.38 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. EGCG (Yeşil Çay Kateşini) koruyucu kalkanı sayesinde doku toksisitesi %88.9 oranında sönümlenir ve lizis hızı 2.4x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.38 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. EGCG (Yeşil Çay Kateşini) koruyucu kalkanı sayesinde doku toksisitesi %88.9 oranında sönümlenir ve lizis hızı 2.4x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_59800488",
+    "name": "AI Sinerji: 5-Fluoro-Nicotine + Vorinostat + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CN1CCC[C@H]1c2cncc(F)c2",
+    "components": [
+      {
+        "name": "5-Fluoro-Nicotine (F-Nic)",
+        "smiles": "CN1CCC[C@H]1c2cncc(F)c2",
+        "dose": "1.2 µM",
+        "dose_uM": 1.2,
+        "target": "Yüksek Afiniteli Santral Agonist",
+        "role": "Yüksek Afiniteli Santral Agonist",
+        "mechanism": "Optik lob ve mantar cisimciği nAChR reseptörlerinde güçlü presinaptik Ca2+ transienti",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Vorinostat (SAHA)",
+        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
+        "target_key": "HDAC"
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.36,
+    "chou_talalay_ci": 0.36,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 85.8,
+    "toxicity_shield_pct": 0.858,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "clinical_rationale": "Chou-Talalay CI = 0.36 (Kuvvetli Sinerji). 5-Fluoro-Nicotine (F-Nic) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %85.8 oranında sönümlenir ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.36 (Kuvvetli Sinerji). 5-Fluoro-Nicotine (F-Nic) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %85.8 oranında sönümlenir ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_0b5b5354",
+    "name": "AI Sinerji: MCN + Vorinostat + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Vorinostat (SAHA)",
+        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
+        "target_key": "HDAC"
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.29,
+    "chou_talalay_ci": 0.29,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 90.0,
+    "toxicity_shield_pct": 0.9,
+    "potency_boost": 2.5,
+    "target_potency_multiplier": 2.5,
+    "clinical_rationale": "Chou-Talalay CI = 0.29 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %90.0 oranında sönümlenir ve lizis hızı 2.5x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.29 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %90.0 oranında sönümlenir ve lizis hızı 2.5x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_19a8354d",
+    "name": "AI Sinerji: DeNovo_Champion + Vorinostat + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": null,
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Vorinostat (SAHA)",
+        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
+        "target_key": "HDAC"
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "8.0 µM",
+        "dose_uM": 8.0,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.31,
+    "chou_talalay_ci": 0.31,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 88.9,
+    "toxicity_shield_pct": 0.889,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "clinical_rationale": "Chou-Talalay CI = 0.31 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Resveratrol (Stilbenoid) koruyucu kalkanı sayesinde doku toksisitesi %88.9 oranında sönümlenir ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.31 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Resveratrol (Stilbenoid) koruyucu kalkanı sayesinde doku toksisitesi %88.9 oranında sönümlenir ve lizis hızı 2.6x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_822b5cae",
+    "name": "AI Sinerji: 5-Fluoro-Nicotine + Vorinostat + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_autodiscovery",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CN1CCC[C@H]1c2cncc(F)c2",
+    "components": [
+      {
+        "name": "5-Fluoro-Nicotine (F-Nic)",
+        "smiles": "CN1CCC[C@H]1c2cncc(F)c2",
+        "dose": "1.2 µM",
+        "dose_uM": 1.2,
+        "target": "Yüksek Afiniteli Santral Agonist",
+        "role": "Yüksek Afiniteli Santral Agonist",
+        "mechanism": "Optik lob ve mantar cisimciği nAChR reseptörlerinde güçlü presinaptik Ca2+ transienti",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Vorinostat (SAHA)",
+        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
+        "target_key": "HDAC"
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "8.0 µM",
+        "dose_uM": 8.0,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.32,
+    "chou_talalay_ci": 0.32,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 89.9,
+    "toxicity_shield_pct": 0.899,
+    "potency_boost": 2.5,
+    "target_potency_multiplier": 2.5,
+    "clinical_rationale": "Chou-Talalay CI = 0.32 (Kuvvetli Sinerji). 5-Fluoro-Nicotine (F-Nic) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Resveratrol (Stilbenoid) koruyucu kalkanı sayesinde doku toksisitesi %89.9 oranında sönümlenir ve lizis hızı 2.5x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.32 (Kuvvetli Sinerji). 5-Fluoro-Nicotine (F-Nic) ile tetiklenen nöro-efferent aks, Vorinostat (SAHA) ile onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) eşzamanlı durdurur. Resveratrol (Stilbenoid) koruyucu kalkanı sayesinde doku toksisitesi %89.9 oranında sönümlenir ve lizis hızı 2.5x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_1e1de153",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + EGCG",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "5.0 nM",
+        "dose_uM": 0.005,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK"
+      },
+      {
+        "name": "EGCG (Yeşil Çay Kateşini)",
+        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
+        "dose": "6.0 µM",
+        "dose_uM": 6.0,
+        "target": "Mitokondriyal Membran Stabilizasyonu",
+        "role": "Mitokondriyal Membran Stabilizasyonu",
+        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
+        "target_key": "Mitochondria"
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "8.0 µM",
+        "dose_uM": 8.0,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1"
+      }
+    ],
+    "component_count": 4,
+    "synergy_index_ci": 0.28,
+    "chou_talalay_ci": 0.28,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 88.8,
+    "toxicity_shield_pct": 0.888,
+    "potency_boost": 2.8,
+    "target_potency_multiplier": 2.8,
+    "clinical_rationale": "Chou-Talalay CI = 0.28 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, Trametinib ile onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) eşzamanlı durdurur. EGCG (Yeşil Çay Kateşini) koruyucu kalkanı sayesinde doku toksisitesi %88.8 oranında sönümlenir ve lizis hızı 2.8x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.28 (Kuvvetli Sinerji). DeNovo_Champion (F-NAc) ile tetiklenen nöro-efferent aks, Trametinib ile onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) eşzamanlı durdurur. EGCG (Yeşil Çay Kateşini) koruyucu kalkanı sayesinde doku toksisitesi %88.8 oranında sönümlenir ve lizis hızı 2.8x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_df001846",
+    "name": "AI Sinerji: MCN + 2-Deoxyglucose + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.5 µM",
+        "dose_uM": 1.5,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR"
+      },
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "2.0 µM",
+        "dose_uM": 2.0,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg"
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "1.0 µM",
+        "dose_uM": 1.0,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47"
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.39,
+    "chou_talalay_ci": 0.39,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "toxicity_reduction_pct": 86.1,
+    "toxicity_shield_pct": 0.861,
+    "potency_boost": 2.6,
+    "target_potency_multiplier": 2.6,
+    "clinical_rationale": "Chou-Talalay CI = 0.39 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %86.1 oranında sönümlenir ve lizis hızı 2.6x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.39 (Kuvvetli Sinerji). MCN (Karbamat Soft-Drug) ile tetiklenen nöro-efferent aks, 2-Deoxyglucose (2-DG) ile onkogenik kaçışı (Hekzokinaz-II / Warburg Glikoliz Blokörü) eşzamanlı durdurur. Anti-CD47 Mimetic Peptide koruyucu kalkanı sayesinde doku toksisitesi %86.1 oranında sönümlenir ve lizis hızı 2.6x katına çıkar."
+  }
+]
