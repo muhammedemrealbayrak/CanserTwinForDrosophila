@@ -40,7 +40,6 @@ from denovo_ai.cocktail_generator import cocktail_synthesizer
 from pipeline.docking_engine import docking_engine
 from pipeline.clinical_trial_engine import clinical_trial_engine
 from pipeline.translational_engine import translational_engine
-from pipeline.unity_exporter import unity_exporter
 
 HOST = "127.0.0.1"
 PORT = 8060
@@ -255,39 +254,6 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             # TCGA İnsan Klinik Kanser Kohortları
             cohorts = translational_engine.get_tcga_cohorts()
             self._send_json({"cohorts": cohorts, "status": "success"})
-
-        elif self.path == "/api/unity/status":
-            # Unity Entegrasyonu Durum Bilgisi
-            scripts = unity_exporter.get_csharp_scripts()
-            self._send_json({
-                "status": "ready",
-                "engine": "Unity 3D / C# .NET",
-                "upm_package": "com.drosophila.insilico.digitaltwin",
-                "scripts_available": list(scripts.keys()),
-                "total_scripts": len(scripts),
-                "neuropils_count": len(unity_exporter.NEUROPIL_ANCHORS)
-            })
-
-        elif self.path == "/api/unity/export_scene":
-            # Unity 3D Sahne Tanımı (Nöropiller, Nöronlar, Tümör ve İmmün Ajanlar)
-            scene = unity_exporter.generate_scene_json()
-            self._send_json(scene)
-
-        elif self.path == "/api/unity/csharp_scripts":
-            # C# Script Kodları (Web Görüntüleyici İçin)
-            scripts = unity_exporter.get_csharp_scripts()
-            self._send_json({"scripts": scripts, "status": "success"})
-
-        elif self.path == "/api/unity/download_package":
-            # Unity UPM / Asset ZIP Paketi İndirme
-            zip_bytes = unity_exporter.create_unity_package_zip()
-            self.send_response(200)
-            self.send_header("Content-Type", "application/zip")
-            self.send_header("Content-Disposition", 'attachment; filename="Drosophila_Twin_Unity_Package.zip"')
-            self.send_header("Content-Length", str(len(zip_bytes)))
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(zip_bytes)
 
         elif self.path == "/api/paper/metadata":
             # Akademik Makale Başlık ve Özet Bilgisi
