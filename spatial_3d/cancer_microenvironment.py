@@ -50,6 +50,11 @@ class CancerCell3D:
     division_threshold_s: float = 48.0 # Agresif Ras85D bölünme döngü süresi (s)
     cachectic_shed_rate: float = 0.005 # Upd3 / PIF / Dawdle kaşeksi sitokin salınımı
     lactate_shed_rate: float = 0.08   # Warburg glikoliz laktat salınımı (mM/s)
+    eiger_level: float = 0.0          # Hemosit kaynaklı yerel Drosophila TNF (Eiger) birikimi (Cordero 2010)
+    jnk_stress: float = 0.0           # Basket (bsk) / JNK stres yolağı aktivitesi [0.0 - 2.0]
+    isc_stemness: float = 1.0         # Bağırsak kök hücre (ISC) dediferansiasyon skoru [0.2 - 1.0] (Cordero 2012, Biteau 2011)
+    ras_hijack_active: bool = True    # Cordero (2010) Ras saptırma anahtarı (Ras aktifken invaziv, MEK blokajında kaspaz lizisi)
+    caspase_lysis_active: bool = False # Dcp-1 / Drice kaspaz aracılı apoptoz bayrağı
     _visual_reported: bool = False
 
     def step(
@@ -61,7 +66,9 @@ class CancerCell3D:
         shp2_inhibited: bool = False,
         kras_inhibited: bool = False,
         dna_damaged: bool = False,
-        metabolic_starved: bool = False
+        metabolic_starved: bool = False,
+        polyphenol_active: bool = False,
+        sirtuin_active: bool = False
     ) -> Tuple[bool, float, float]:
         """
         Kanser hücresini dt süresince günceller.
@@ -144,6 +151,38 @@ class CancerCell3D:
         step_damage = pd_kill * damage_multiplier * p53_mod * dt
         self.health -= step_damage
 
+        # 3.5. Cordero (2010) & Pastor-Pareja (2008) Eiger-JNK İki Uçlu Kılıcı (Dual Switch):
+        # Hemositler tümör odaklarına Eiger (Drosophila TNF) salgılar.
+        # Tümör hücresi Grindelwald (Grnd) ve Wengen (Wgn) reseptörleriyle JNK (Basket/bsk) stresine girer.
+        self.jnk_stress = min(2.0, self.jnk_stress * 0.88 + 0.24 * self.eiger_level)
+
+        # Cordero (2010) & Parisi (2014): resistant_mek klonunda SHP2/RTK bypass nedeniyle
+        # MEK inhibisyonu tek başına MAPK sinyalini kesemez! Yalnızca SHP2 veya KRAS kilitlenirse kesilir.
+        mapk_truly_blocked = (
+            (shp2_inhibited and mek_inhibited) or 
+            kras_inhibited or 
+            (shp2_inhibited and self.clone_type == "resistant_mek") or
+            (mek_inhibited and self.clone_type != "resistant_mek")
+        )
+
+        if mapk_truly_blocked:
+            # MEK/Ras blokajında (Trametinib - Parisi 2014 & Biteau 2011), Ras saptırma kalkanı düşer!
+            # Eiger/Grnd doğrudan Caspase (Dcp-1 / Drice) aktivasyonunu ve kitle apoptozunu tetikler:
+            self.ras_hijack_active = False
+            if self.eiger_level > 0.02:
+                caspase_kill = 2.85 * self.eiger_level * (1.0 + 0.35 * self.jnk_stress) * dt
+                self.health -= caspase_kill
+                self.caspase_lysis_active = bool(caspase_kill > 0.08)
+            else:
+                self.caspase_lysis_active = False
+        else:
+            # Ras/MEK aktif iken (Cordero 2010): Onkojenik Ras JNK'yı apoptoz yerine istila ve Upd3 sitokinine saptırır!
+            self.ras_hijack_active = True
+            self.caspase_lysis_active = False
+
+        # Doğal hemolenf proteaz klerensi ile Eiger bozunumu
+        self.eiger_level = max(0.0, self.eiger_level - 0.16 * dt)
+
         # 4. Darwinian Adaptif Direnç Kazanımı:
         # Sub-letal tekil ilaç baskısı altında sensitive klonlar direnç kazanır
         if conc > 0.08 and self.health > 20.0 and self.clone_type == "sensitive":
@@ -159,11 +198,22 @@ class CancerCell3D:
         cachectic_toxin = self.cachectic_shed_rate * kras_mult * dt
         lactate_shed = self.lactate_shed_rate * dt
 
+        # Cordero (2010) Ras saptırmasında Eiger varlığı Upd3 / Kaşeksi salgısını katlar
+        if self.ras_hijack_active and self.eiger_level > 0.05:
+            cachectic_toxin *= (1.0 + 0.55 * min(2.5, self.eiger_level))
+
         # Lamellositler tarafından kuşatılıp hapsedildiyse (kapsülasyon) mitoz ve salgılar baskılanır
         if self.state == CancerState.ENCAPSULATED:
             return False, cachectic_toxin * 0.35, lactate_shed * 0.30
 
-        # 6. Agresif Ras85D Mitotik Bölünme Dinamiği:
+        # 5.5. Bağırsak Kök Hücre (ISC) Dediferansiasyon ve Wnt/Notch Modülasyonu (Cordero 2012, Shankar 2007)
+        if polyphenol_active:
+            # EGCG / Curcumin / Resveratrol Wnt/Armadillo ve STAT3'ü baskılayarak kök hücreliği kırar
+            self.isc_stemness = max(0.25, self.isc_stemness - 0.035 * dt)
+        else:
+            self.isc_stemness = min(1.0, self.isc_stemness + 0.008 * dt)
+
+        # 6. Agresif Ras85D Mitotik Bölünme Dinamiği (Biteau & Jasper 2011; Cordero 2012):
         # Etkili ilaç baskısı varsa (yüksek konsantrasyon + duyarlı hücre) G1/S fazı kilitlenir.
         # Ancak dirençli klonlar (örn. MEK monoterapisinde resistant_mek) bölünmeye hızla devam eder!
         effective_inhibition = min(1.0, (conc * (1.0 - eff_res)) / 0.18)
@@ -173,7 +223,7 @@ class CancerCell3D:
             effective_inhibition = 1.0
 
         drug_arrest = max(0.0, 1.0 - effective_inhibition)
-        mitotic_speed = (1.45 if self.kras_mutated else 1.0) * drug_arrest
+        mitotic_speed = (1.45 if self.kras_mutated else 1.0) * self.isc_stemness * drug_arrest
         self.division_timer_s += dt * mitotic_speed
 
         if self.division_timer_s >= self.division_threshold_s and self.health > 18.0:

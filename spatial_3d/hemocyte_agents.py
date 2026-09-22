@@ -45,6 +45,8 @@ class HemocyteAgent3D:
     age_s: float = 0.0               # Hemosit operasyonel yaşı
     max_lifespan_s: float = 65.0     # Doğal hücre yaşam döngüsü / apoptoz
     is_apoptotic: bool = False       # Tükenmişlik veya yaşlanma sonucu hücresel ölüm
+    cholinergic_activation: float = 0.0 # nAChR alfa7 / Dalpha1 stimulasyonu [0.0 - 1.0] (Tracey 2002; Aonuma 2020)
+    eiger_production_rate: float = 1.8  # Drosophila TNF (Eiger) sitokin salgılama debisi
 
     def step_patrol_and_attack(
         self,
@@ -54,7 +56,8 @@ class HemocyteAgent3D:
         local_lactate_mM: float = 0.0,
         fuel_efficiency: float = 1.0,
         anti_cd47_active: bool = False,
-        potency_multiplier: float = 1.0
+        potency_multiplier: float = 1.0,
+        cholinergic_active: bool = False
     ) -> Optional[int]:
         """
         Kemotaksi ile en yakın canlı kanser hücresine yönelir ve temas halinde saldırır.
@@ -115,47 +118,66 @@ class HemocyteAgent3D:
             target_res = getattr(target_cell, "resistance_score", 0.0)
             resistance_shield = max(0.20, 1.0 - 0.60 * target_res)
 
-            # 3. Tükenmişlik ve Potens Çarpanı
+            # 3. Tükenmişlik ve Potens Çarpanı (Tracey 2002 kolinerjik kalkanı)
+            if cholinergic_active:
+                self.cholinergic_activation = min(1.0, self.cholinergic_activation + 0.35 * dt)
+            else:
+                self.cholinergic_activation = max(0.0, self.cholinergic_activation - 0.05 * dt)
+
             exhaustion_pen = max(0.12, 1.0 - 0.88 * self.exhaustion_index)
             cd47_boost = 1.35 if anti_cd47_active else 1.0
-            potency = max(0.5, float(potency_multiplier))
+            cholinergic_boost = 1.25 if self.cholinergic_activation > 0.3 else 1.0
+            potency = max(0.5, float(potency_multiplier)) * cholinergic_boost
 
-            # 4. Biyolojik Olarak Kalibre Edilmiş Saldırı Hasarı (Dengeli oran)
+            # Cordero (2010): Hemosit teması kanser hücresine Eiger (Drosophila TNF) aktarır
+            eiger_burst = self.eiger_production_rate * (1.4 if self.cholinergic_activation > 0.3 else 1.0) * dt
+            target_cell.eiger_level = min(3.0, getattr(target_cell, "eiger_level", 0.0) + eiger_burst)
+
+            # 4. Biyolojik Olarak Kalibre Edilmiş Saldırı Hasarı (Tracey 2002 & Aonuma 2020)
+            exhaustion_rate = (0.022 if self.cholinergic_activation > 0.3 else 0.045) * exhaustion_multiplier * dt
+
             if self.subtype == HemocyteSubtype.LAMELLOCYTE:
                 # Lamellosit Kapsülasyonu: Bölünmeyi dondurur, melanizasyon hasarı verir
                 target_cell.state = CancerState.ENCAPSULATED
                 base_strike = 3.6
                 strike = base_strike * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
-                self.cytotoxic_energy -= 4.5 * dt
-                self.exhaustion_index = min(1.0, self.exhaustion_index + (0.045 * exhaustion_multiplier * dt))
-                # Kapsülasyon sonrası 2.5 saniye refrakter bekleme
-                self.refractory_timer_s = 2.5
+                self.cytotoxic_energy -= (3.0 if self.cholinergic_activation > 0.3 else 4.5) * dt
+                self.exhaustion_index = min(1.0, self.exhaustion_index + exhaustion_rate)
+                # Kapsülasyon sonrası refrakter bekleme (Kolinerjik uyarımda daha seri)
+                self.refractory_timer_s = 1.4 if self.cholinergic_activation > 0.3 else 2.5
             else:
                 # Plazmatosit Fagositozu / Sitotoksisite
                 base_strike = 4.5
                 strike = base_strike * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
-                self.cytotoxic_energy -= 5.5 * dt
-                self.exhaustion_index = min(1.0, self.exhaustion_index + (0.055 * exhaustion_multiplier * dt))
-                # Fagositer lizis döngüsü için 3.5 saniye refrakter bekleme
-                self.refractory_timer_s = 3.5
+                self.cytotoxic_energy -= (3.8 if self.cholinergic_activation > 0.3 else 5.5) * dt
+                self.exhaustion_index = min(1.0, self.exhaustion_index + (exhaustion_rate * 1.2))
+                # Fagositer lizis döngüsü refrakter süresi
+                self.refractory_timer_s = 1.8 if self.cholinergic_activation > 0.3 else 3.5
 
             if target_cell.health <= 0.0:
                 target_cell.state = CancerState.LYSED
                 self.kills_count += 1
                 # Bir hücreyi tamamen yuttuktan sonra sindirim için ek refrakter süre
-                self.refractory_timer_s = 4.5
+                self.refractory_timer_s = 2.4 if self.cholinergic_activation > 0.3 else 4.5
                 return target_cell.id
 
             return None
 
-        # Kemotaktik Yönelme (TME laktat asidozu ile hız modüle edilir)
+        # Kemotaktik Yönelme (TME laktat asidozu ve Tracey/Aonuma kolinerjik uyarımı)
+        if cholinergic_active:
+            self.cholinergic_activation = min(1.0, self.cholinergic_activation + 0.25 * dt)
+        else:
+            self.cholinergic_activation = max(0.0, self.cholinergic_activation - 0.04 * dt)
+
         direction_unit = deltas[nearest_idx] / (min_dist + 1e-6)
         noise = (np.random.rand(3) - 0.5) * 0.25
         
         base_speed = 0.30 if self.subtype == HemocyteSubtype.PLASMATOCYTE else 0.20
-        speed_um_s = base_speed * max(0.2, fuel_efficiency) * acidosis_speed_factor
+        # Aonuma (2020): Kolinerjik uyarım hemosit kemotaktik sürünme hızını %45 artırır
+        cholinergic_speed = (1.0 + 0.45 * self.cholinergic_activation)
+        speed_um_s = base_speed * max(0.2, fuel_efficiency) * acidosis_speed_factor * cholinergic_speed
         
         motion = (self.chemotaxis_drive * direction_unit + (1.0 - self.chemotaxis_drive) * noise)
         norm = np.linalg.norm(motion)

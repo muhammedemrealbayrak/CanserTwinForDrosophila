@@ -1,5 +1,1014 @@
 [
   {
+    "id": "ai_cocktail_0b317342",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.81 µM",
+        "dose_uM": 0.81,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.45
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "4 nM",
+        "dose_uM": 0.0047,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.57
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.33,
+    "chou_talalay_ci": 0.33,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.033,
+    "bliss_observed_kill": 0.922,
+    "bliss_expected_kill": 0.89,
+    "hsa_excess_score": 0.36,
+    "toxicity_reduction_pct": 88.0,
+    "toxicity_shield_pct": 0.88,
+    "potency_boost": 2.12,
+    "target_potency_multiplier": 2.12,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.81,
+        "single_effective_dx_uM": 6.8437,
+        "dri_fold": 8.45,
+        "sparing_pct": 88.2
+      },
+      "Trametinib": {
+        "dose_uM": 0.0047,
+        "single_effective_dx_uM": 0.0403,
+        "dri_fold": 8.57,
+        "sparing_pct": 88.3
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.2514,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.118,
+      "component_ratio_y": 0.117,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.67
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_c453c3c9",
+    "name": "AI Sinerji: DMXBA + Olaparib + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COc1ccc(C=C2C(=O)c3ccccc3N2)cc1",
+    "components": [
+      {
+        "name": "DMXBA / GTS-21 (Alpha-7 Selektif)",
+        "smiles": "COc1ccc(C=C2C(=O)c3ccccc3N2)cc1",
+        "dose": "1.3 µM",
+        "dose_uM": 1.3,
+        "target": "Kan-Beyin Bariyerini Geçen Kolinerjik Sürücü",
+        "role": "Kan-Beyin Bariyerini Geçen Kolinerjik Sürücü",
+        "mechanism": "Santral kolinerjik anti-inflamatuar ekseni uyararak periferik hemosit göçünü koordine eder",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.03,
+        "dri_fold": 21.67
+      },
+      {
+        "name": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
+        "smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
+        "dose": "0.0263 µM",
+        "dose_uM": 0.0263,
+        "target": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
+        "role": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
+        "mechanism": "PARP'ı hasarlı DNA üzerinde dondurur; replikasyon çatalı çöküşü ile sentetik öldürücülük tetikler",
+        "target_key": "PARP",
+        "target_class": "PARP",
+        "qsar_tox": 0.055,
+        "dri_fold": 15.32
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "0.935 µM",
+        "dose_uM": 0.935,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47",
+        "target_class": "CD47",
+        "qsar_tox": 0.02,
+        "dri_fold": 16.24
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.18,
+    "chou_talalay_ci": 0.18,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.023,
+    "bliss_observed_kill": 0.908,
+    "bliss_expected_kill": 0.885,
+    "hsa_excess_score": 0.391,
+    "toxicity_reduction_pct": 78.0,
+    "toxicity_shield_pct": 0.78,
+    "potency_boost": 2.49,
+    "target_potency_multiplier": 2.49,
+    "dri_profile": {
+      "DMXBA / GTS-21 (Alpha-7 Selektif)": {
+        "dose_uM": 1.3,
+        "single_effective_dx_uM": 28.1767,
+        "dri_fold": 21.67,
+        "sparing_pct": 95.4
+      },
+      "Olaparib (PARP1/2 Sentetik Ölümcüllük)": {
+        "dose_uM": 0.0263,
+        "single_effective_dx_uM": 0.4029,
+        "dri_fold": 15.32,
+        "sparing_pct": 93.5
+      },
+      "Anti-CD47 Mimetic Peptide": {
+        "dose_uM": 0.935,
+        "single_effective_dx_uM": 15.185,
+        "dri_fold": 16.24,
+        "sparing_pct": 93.8
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DMXBA / GTS-21 (Alpha-7 Selektif)",
+        "agent_b": "Anti-CD47 Mimetic Peptide",
+        "targets": "nAChR ⟷ CD47",
+        "coupling_strength": 0.36
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.046,
+      "component_ratio_y": 0.065,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.82
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.3%. DMXBA / GTS-21 (Alpha-7 Selektif) ve Olaparib (PARP1/2 Sentetik Ölümcüllük) kooperasyonu, onkogenik kaçışı (PARP1/2 DNA Tek Zincir Onarım Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde DMXBA / GTS-21 (Alpha-7 Selektif) için 21.67x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 2.49x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.3%. DMXBA / GTS-21 (Alpha-7 Selektif) ve Olaparib (PARP1/2 Sentetik Ölümcüllük) kooperasyonu, onkogenik kaçışı (PARP1/2 DNA Tek Zincir Onarım Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde DMXBA / GTS-21 (Alpha-7 Selektif) için 21.67x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 2.49x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_29746169",
+    "name": "AI Sinerji: 2-Deoxyglucose + Vorinostat + EGCG",
+    "is_ai_generated": true,
+    "objective_key": "metabolic_epigenetic",
+    "objective_title": "Warburg Metabolik Açlık & Epigenetik Şok Protokolü",
+    "primary_smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+    "components": [
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "1.8 µM",
+        "dose_uM": 1.8,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg",
+        "target_class": "Warburg",
+        "qsar_tox": 0.05,
+        "dri_fold": 9.9
+      },
+      {
+        "name": "Vorinostat (SAHA)",
+        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
+        "dose": "1.2 µM",
+        "dose_uM": 1.2,
+        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
+        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
+        "target_key": "HDAC",
+        "target_class": "HDAC",
+        "qsar_tox": 0.065,
+        "dri_fold": 8.3
+      },
+      {
+        "name": "EGCG (Yeşil Çay Kateşini)",
+        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
+        "dose": "5.5 µM",
+        "dose_uM": 5.5,
+        "target": "Mitokondriyal Membran Stabilizasyonu",
+        "role": "Mitokondriyal Membran Stabilizasyonu",
+        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
+        "target_key": "Mitochondria",
+        "target_class": "Mitochondria",
+        "qsar_tox": 0.01,
+        "dri_fold": 9.73
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.35,
+    "chou_talalay_ci": 0.35,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.02,
+    "bliss_observed_kill": 0.87,
+    "bliss_expected_kill": 0.85,
+    "hsa_excess_score": 0.395,
+    "toxicity_reduction_pct": 82.0,
+    "toxicity_shield_pct": 0.82,
+    "potency_boost": 1.94,
+    "target_potency_multiplier": 1.94,
+    "dri_profile": {
+      "2-Deoxyglucose (2-DG)": {
+        "dose_uM": 1.8,
+        "single_effective_dx_uM": 17.8273,
+        "dri_fold": 9.9,
+        "sparing_pct": 89.9
+      },
+      "Vorinostat (SAHA)": {
+        "dose_uM": 1.2,
+        "single_effective_dx_uM": 9.9631,
+        "dri_fold": 8.3,
+        "sparing_pct": 88.0
+      },
+      "EGCG (Yeşil Çay Kateşini)": {
+        "dose_uM": 5.5,
+        "single_effective_dx_uM": 53.5421,
+        "dri_fold": 9.73,
+        "sparing_pct": 89.7
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "2-Deoxyglucose (2-DG)",
+        "agent_b": "Vorinostat (SAHA)",
+        "targets": "Warburg ⟷ HDAC",
+        "coupling_strength": 0.24
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.101,
+      "component_ratio_y": 0.12,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.65
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.35 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.0%. 2-Deoxyglucose (2-DG) ve Vorinostat (SAHA) kooperasyonu, onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) çoklu düğümden durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 1.94x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.35 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.0%. 2-Deoxyglucose (2-DG) ve Vorinostat (SAHA) kooperasyonu, onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) çoklu düğümden durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 1.94x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_81681bbf",
+    "name": "AI Sinerji: MCN + Metronomic + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": "metronomic_chemo_soft",
+    "objective_title": "Ultra-Düşük Toksisite Soft-Drug Kemo-İmmün Kurtarma",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.12 µM",
+        "dose_uM": 1.12,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 8.47
+      },
+      {
+        "name": "Metronomic Cisplatin",
+        "smiles": "N.N.Cl[Pt]Cl",
+        "dose": "0.35 µM",
+        "dose_uM": 0.35,
+        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
+        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
+        "target_key": "DNA",
+        "target_class": "DNA",
+        "qsar_tox": 0.24,
+        "dri_fold": 39.67
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "7.5 µM",
+        "dose_uM": 7.5,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1",
+        "target_class": "SIRT1",
+        "qsar_tox": 0.012,
+        "dri_fold": 10.08
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.26,
+    "chou_talalay_ci": 0.26,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.065,
+    "bliss_observed_kill": 0.846,
+    "bliss_expected_kill": 0.781,
+    "hsa_excess_score": 0.306,
+    "toxicity_reduction_pct": 82.0,
+    "toxicity_shield_pct": 0.82,
+    "potency_boost": 2.12,
+    "target_potency_multiplier": 2.12,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.12,
+        "single_effective_dx_uM": 9.4895,
+        "dri_fold": 8.47,
+        "sparing_pct": 88.2
+      },
+      "Metronomic Cisplatin": {
+        "dose_uM": 0.35,
+        "single_effective_dx_uM": 13.8847,
+        "dri_fold": 39.67,
+        "sparing_pct": 97.5
+      },
+      "Resveratrol (Stilbenoid)": {
+        "dose_uM": 7.5,
+        "single_effective_dx_uM": 75.6034,
+        "dri_fold": 10.08,
+        "sparing_pct": 90.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MCN (Karbamat Soft-Drug)",
+        "agent_b": "Metronomic Cisplatin",
+        "targets": "nAChR ⟷ DNA",
+        "coupling_strength": 0.28
+      },
+      {
+        "agent_a": "Metronomic Cisplatin",
+        "agent_b": "Resveratrol (Stilbenoid)",
+        "targets": "DNA ⟷ SIRT1",
+        "coupling_strength": 0.26
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.118,
+      "component_ratio_y": 0.025,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.74
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.26 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +6.5%. MCN (Karbamat Soft-Drug) ve Metronomic Cisplatin kooperasyonu, onkogenik kaçışı (Ultra Düşük Doz DNA Çapraz Bağlayıcı) çoklu düğümden durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 39.67x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.26 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +6.5%. MCN (Karbamat Soft-Drug) ve Metronomic Cisplatin kooperasyonu, onkogenik kaçışı (Ultra Düşük Doz DNA Çapraz Bağlayıcı) çoklu düğümden durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 39.67x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_0e5245d1",
+    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "immune_mek_evasion",
+    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.81 µM",
+        "dose_uM": 0.81,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 8.45
+      },
+      {
+        "name": "Trametinib",
+        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
+        "dose": "4 nM",
+        "dose_uM": 0.0047,
+        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
+        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
+        "target_key": "MEK",
+        "target_class": "MEK",
+        "qsar_tox": 0.085,
+        "dri_fold": 8.57
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.33,
+    "chou_talalay_ci": 0.33,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.033,
+    "bliss_observed_kill": 0.922,
+    "bliss_expected_kill": 0.89,
+    "hsa_excess_score": 0.36,
+    "toxicity_reduction_pct": 88.0,
+    "toxicity_shield_pct": 0.88,
+    "potency_boost": 2.12,
+    "target_potency_multiplier": 2.12,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.81,
+        "single_effective_dx_uM": 6.8437,
+        "dri_fold": 8.45,
+        "sparing_pct": 88.2
+      },
+      "Trametinib": {
+        "dose_uM": 0.0047,
+        "single_effective_dx_uM": 0.0403,
+        "dri_fold": 8.57,
+        "sparing_pct": 88.3
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.2514,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Trametinib",
+        "targets": "nAChR ⟷ MEK",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Trametinib",
+        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
+        "targets": "MEK ⟷ NF-kB",
+        "coupling_strength": 0.22
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.118,
+      "component_ratio_y": 0.117,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.67
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.12x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_f205f294",
+    "name": "AI Sinerji: 2-Deoxyglucose + Telaglenastat + Curcumin",
+    "is_ai_generated": true,
+    "objective_key": "dual_metabolic_starvation",
+    "objective_title": "Warburg & Glutaminoliz Çift Yönlü Metabolik Açlık Kokteyli",
+    "primary_smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+    "components": [
+      {
+        "name": "2-Deoxyglucose (2-DG)",
+        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
+        "dose": "1.8 µM",
+        "dose_uM": 1.8,
+        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
+        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
+        "target_key": "Warburg",
+        "target_class": "Warburg",
+        "qsar_tox": 0.05,
+        "dri_fold": 14.13
+      },
+      {
+        "name": "Telaglenastat / CB-839 (GLS1 İnhibitörü)",
+        "smiles": "O=C(NC1=NN=C(CCCCC2=NN=C(NC(CC3=CC=CC(OC(F)(F)F)=C3)=O)C=C2)S1)CC4=NC=CC=C4",
+        "dose": "0.084 µM",
+        "dose_uM": 0.084,
+        "target": "GLS1 Glutaminoliz & Metabolik Yakıt Blokörü",
+        "role": "GLS1 Glutaminoliz & Metabolik Yakıt Blokörü",
+        "mechanism": "Kanser hücresinin glutamin açlığını tetikler, TCA anaplerozunu ve glutatyon (GSH) antioksidan kalkanını çökertir",
+        "target_key": "GLS1",
+        "target_class": "GLS1",
+        "qsar_tox": 0.038,
+        "dri_fold": 10.98
+      },
+      {
+        "name": "Curcumin (Zerdeçal Polifenolü)",
+        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
+        "dose": "4.18 µM",
+        "dose_uM": 4.18,
+        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
+        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
+        "target_key": "NF-kB",
+        "target_class": "NF-kB",
+        "qsar_tox": 0.015,
+        "dri_fold": 14.41
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.25,
+    "chou_talalay_ci": 0.25,
+    "synergy_label": "Süper Sinerji (CI < 0.40)",
+    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
+    "bliss_excess_score": 0.024,
+    "bliss_observed_kill": 0.885,
+    "bliss_expected_kill": 0.861,
+    "hsa_excess_score": 0.395,
+    "toxicity_reduction_pct": 88.0,
+    "toxicity_shield_pct": 0.88,
+    "potency_boost": 1.99,
+    "target_potency_multiplier": 1.99,
+    "dri_profile": {
+      "2-Deoxyglucose (2-DG)": {
+        "dose_uM": 1.8,
+        "single_effective_dx_uM": 25.436,
+        "dri_fold": 14.13,
+        "sparing_pct": 92.9
+      },
+      "Telaglenastat / CB-839 (GLS1 İnhibitörü)": {
+        "dose_uM": 0.084,
+        "single_effective_dx_uM": 0.9221,
+        "dri_fold": 10.98,
+        "sparing_pct": 90.9
+      },
+      "Curcumin (Zerdeçal Polifenolü)": {
+        "dose_uM": 4.18,
+        "single_effective_dx_uM": 60.2514,
+        "dri_fold": 14.41,
+        "sparing_pct": 93.1
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "2-Deoxyglucose (2-DG)",
+        "agent_b": "Telaglenastat / CB-839 (GLS1 İnhibitörü)",
+        "targets": "Warburg ⟷ GLS1",
+        "coupling_strength": 0.32
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.071,
+      "component_ratio_y": 0.091,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.75
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.25 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.4%. 2-Deoxyglucose (2-DG) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 1.99x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.25 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.4%. 2-Deoxyglucose (2-DG) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 1.99x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_237bba7d",
+    "name": "AI Sinerji: AZD3965 + Evorpacept + DeNovo_Champion",
+    "is_ai_generated": true,
+    "objective_key": "lactate_acidosis_cd47_immune",
+    "objective_title": "TME Asidoz Kırıcı & CD47 İmmün Kuşatma Kokteyli",
+    "primary_smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
+    "components": [
+      {
+        "name": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
+        "smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
+        "dose": "0.016 µM",
+        "dose_uM": 0.016,
+        "target": "MCT1 Monokarboksilat Asidoz Blokörü",
+        "role": "MCT1 Monokarboksilat Asidoz Blokörü",
+        "mechanism": "Tümör içi laktat atılımını keser, TME mikromimarisindeki asidozu nötrleyerek hemosit immün infiltrasyonunu 3.1x artırır",
+        "target_key": "MCT1",
+        "target_class": "MCT1",
+        "qsar_tox": 0.035,
+        "dri_fold": 21.09
+      },
+      {
+        "name": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
+        "smiles": "CC(C)NC(=O)C1=CC=C(C=C1)CNC(=O)C2=NC=C(O2)C3=CC=CC=C3Cl",
+        "dose": "0.04 µM",
+        "dose_uM": 0.04,
+        "target": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
+        "role": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını fagositoz aktivasyonu ile yıkar; hemosit kuşatmasını 2.8x patlatır",
+        "target_key": "CD47",
+        "target_class": "CD47",
+        "qsar_tox": 0.014,
+        "dri_fold": 14.1
+      },
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.81 µM",
+        "dose_uM": 0.81,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 14.34
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.19,
+    "chou_talalay_ci": 0.19,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.057,
+    "bliss_observed_kill": 0.955,
+    "bliss_expected_kill": 0.898,
+    "hsa_excess_score": 0.393,
+    "toxicity_reduction_pct": 78.0,
+    "toxicity_shield_pct": 0.78,
+    "potency_boost": 3.02,
+    "target_potency_multiplier": 3.02,
+    "dri_profile": {
+      "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)": {
+        "dose_uM": 0.016,
+        "single_effective_dx_uM": 0.3375,
+        "dri_fold": 21.09,
+        "sparing_pct": 95.3
+      },
+      "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)": {
+        "dose_uM": 0.04,
+        "single_effective_dx_uM": 0.5641,
+        "dri_fold": 14.1,
+        "sparing_pct": 92.9
+      },
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.81,
+        "single_effective_dx_uM": 11.6121,
+        "dri_fold": 14.34,
+        "sparing_pct": 93.0
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
+        "agent_b": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
+        "targets": "MCT1 ⟷ CD47",
+        "coupling_strength": 0.34
+      },
+      {
+        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
+        "agent_b": "DeNovo_Champion (F-NAc)",
+        "targets": "MCT1 ⟷ nAChR",
+        "coupling_strength": 0.32
+      },
+      {
+        "agent_a": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
+        "agent_b": "DeNovo_Champion (F-NAc)",
+        "targets": "CD47 ⟷ nAChR",
+        "coupling_strength": 0.36
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.047,
+      "component_ratio_y": 0.071,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.81
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_6750a6af",
+    "name": "AI Sinerji: Olaparib + Ceralasertib + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": "synthetic_lethality_parp_atr",
+    "objective_title": "Sentetik Ölümcüllük (Synthetic Lethality) PARP & ATR DNA Çöküşü",
+    "primary_smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
+    "components": [
+      {
+        "name": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
+        "smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
+        "dose": "0.0263 µM",
+        "dose_uM": 0.0263,
+        "target": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
+        "role": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
+        "mechanism": "PARP'ı hasarlı DNA üzerinde dondurur; replikasyon çatalı çöküşü ile sentetik öldürücülük tetikler",
+        "target_key": "PARP",
+        "target_class": "PARP",
+        "qsar_tox": 0.055,
+        "dri_fold": 15.32
+      },
+      {
+        "name": "Ceralasertib / AZD6738 (ATR Kinaz)",
+        "smiles": "C[S@@](=O)(C1(CC1)C2=NC(C3=C4C=CNC4=NC=C3)=NC(N5CCOC[C@H]5C)=C2)=N",
+        "dose": "0.021 µM",
+        "dose_uM": 0.021,
+        "target": "ATR Replikasyon Stres Blokörü",
+        "role": "ATR Replikasyon Stres Blokörü",
+        "mechanism": "Replikasyon stres kontrol noktasını (checkpoint) kırarak PARP dirençli tümör hücrelerini genomik kaosa sürükler",
+        "target_key": "ATR",
+        "target_class": "ATR",
+        "qsar_tox": 0.06,
+        "dri_fold": 17.01
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "7.5 µM",
+        "dose_uM": 7.5,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1",
+        "target_class": "SIRT1",
+        "qsar_tox": 0.012,
+        "dri_fold": 22.2
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.18,
+    "chou_talalay_ci": 0.18,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.026,
+    "bliss_observed_kill": 0.901,
+    "bliss_expected_kill": 0.874,
+    "hsa_excess_score": 0.393,
+    "toxicity_reduction_pct": 82.0,
+    "toxicity_shield_pct": 0.82,
+    "potency_boost": 2.5,
+    "target_potency_multiplier": 2.5,
+    "dri_profile": {
+      "Olaparib (PARP1/2 Sentetik Ölümcüllük)": {
+        "dose_uM": 0.0263,
+        "single_effective_dx_uM": 0.4029,
+        "dri_fold": 15.32,
+        "sparing_pct": 93.5
+      },
+      "Ceralasertib / AZD6738 (ATR Kinaz)": {
+        "dose_uM": 0.021,
+        "single_effective_dx_uM": 0.3573,
+        "dri_fold": 17.01,
+        "sparing_pct": 94.1
+      },
+      "Resveratrol (Stilbenoid)": {
+        "dose_uM": 7.5,
+        "single_effective_dx_uM": 166.4984,
+        "dri_fold": 22.2,
+        "sparing_pct": 95.5
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
+        "agent_b": "Ceralasertib / AZD6738 (ATR Kinaz)",
+        "targets": "PARP ⟷ ATR",
+        "coupling_strength": 0.38
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.065,
+      "component_ratio_y": 0.059,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.82
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_6ad42211",
+    "name": "AI Sinerji: MRTX1133 + RMC-4550 + Ponsegromab",
+    "is_ai_generated": true,
+    "objective_key": "kras_g12d_vertical_blockade",
+    "objective_title": "Pan-RAS / KRAS G12D & SHP2 Dikey Çift-Düğüm Blokajı",
+    "primary_smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
+    "components": [
+      {
+        "name": "MRTX1133 (KRAS G12D Blokörü)",
+        "smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
+        "dose": "2 nM",
+        "dose_uM": 0.0026,
+        "target": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
+        "role": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
+        "mechanism": "Switch-II cebine kilitlenerek Asp12 ile tuz köprüsü kurar; MAPK proliferasyonunu kökten durdurur",
+        "target_key": "KRAS_G12D",
+        "target_class": "KRAS_G12D",
+        "qsar_tox": 0.048,
+        "dri_fold": 22.87
+      },
+      {
+        "name": "RMC-4550 (Allosterik SHP2)",
+        "smiles": "CC1C(C2(CCN(CC2)C3=NC(=C(N=C3CO)C4=C(C(=CC=C4)Cl)Cl)C)CO1)N",
+        "dose": "2 nM",
+        "dose_uM": 0.0021,
+        "target": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
+        "role": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
+        "mechanism": "SHP2'yi oto-inhibe konformasyonda tutarak RTK feedback adaptif Ras direnç kaçışını tamamen kilitler",
+        "target_key": "SHP2",
+        "target_class": "SHP2",
+        "qsar_tox": 0.042,
+        "dri_fold": 25.37
+      },
+      {
+        "name": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
+        "smiles": "CC(C)CC(=O)NC1=CC=C(C=C1)S(=O)(=O)NC2=NC=C(S2)C3=CC=CC=C3F",
+        "dose": "0.066 µM",
+        "dose_uM": 0.066,
+        "target": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
+        "role": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
+        "mechanism": "NEJM 2024 klinik bulgularıyla; tümör kaynaklı GDF15 ve Upd3 sitokinlerini nötralize ederek kas/yağ erimesini durdurur",
+        "target_key": "GDF15_Cachexia",
+        "target_class": "GDF15_Cachexia",
+        "qsar_tox": 0.012,
+        "dri_fold": 35.9
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.18,
+    "chou_talalay_ci": 0.18,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.046,
+    "bliss_observed_kill": 0.927,
+    "bliss_expected_kill": 0.881,
+    "hsa_excess_score": 0.418,
+    "toxicity_reduction_pct": 88.0,
+    "toxicity_shield_pct": 0.88,
+    "potency_boost": 2.76,
+    "target_potency_multiplier": 2.76,
+    "dri_profile": {
+      "MRTX1133 (KRAS G12D Blokörü)": {
+        "dose_uM": 0.0026,
+        "single_effective_dx_uM": 0.0595,
+        "dri_fold": 22.87,
+        "sparing_pct": 95.6
+      },
+      "RMC-4550 (Allosterik SHP2)": {
+        "dose_uM": 0.0021,
+        "single_effective_dx_uM": 0.0533,
+        "dri_fold": 25.37,
+        "sparing_pct": 96.1
+      },
+      "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)": {
+        "dose_uM": 0.066,
+        "single_effective_dx_uM": 2.3695,
+        "dri_fold": 35.9,
+        "sparing_pct": 97.2
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
+        "agent_b": "RMC-4550 (Allosterik SHP2)",
+        "targets": "KRAS_G12D ⟷ SHP2",
+        "coupling_strength": 0.38
+      },
+      {
+        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
+        "agent_b": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
+        "targets": "KRAS_G12D ⟷ GDF15_Cachexia",
+        "coupling_strength": 0.32
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.044,
+      "component_ratio_y": 0.039,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.82
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar."
+  },
+  {
+    "id": "ai_cocktail_8e4ce354",
+    "name": "AI Sinerji: MCN + Telaglenastat + Resveratrol",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+    "components": [
+      {
+        "name": "MCN (Karbamat Soft-Drug)",
+        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
+        "dose": "1.12 µM",
+        "dose_uM": 1.12,
+        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
+        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.025,
+        "dri_fold": 18.08
+      },
+      {
+        "name": "Telaglenastat / CB-839 (GLS1 İnhibitörü)",
+        "smiles": "O=C(NC1=NN=C(CCCCC2=NN=C(NC(CC3=CC=CC(OC(F)(F)F)=C3)=O)C=C2)S1)CC4=NC=CC=C4",
+        "dose": "0.084 µM",
+        "dose_uM": 0.084,
+        "target": "GLS1 Glutaminoliz & Metabolik Yakıt Blokörü",
+        "role": "GLS1 Glutaminoliz & Metabolik Yakıt Blokörü",
+        "mechanism": "Kanser hücresinin glutamin açlığını tetikler, TCA anaplerozunu ve glutatyon (GSH) antioksidan kalkanını çökertir",
+        "target_key": "GLS1",
+        "target_class": "GLS1",
+        "qsar_tox": 0.038,
+        "dri_fold": 19.01
+      },
+      {
+        "name": "Resveratrol (Stilbenoid)",
+        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
+        "dose": "7.5 µM",
+        "dose_uM": 7.5,
+        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
+        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
+        "target_key": "SIRT1",
+        "target_class": "SIRT1",
+        "qsar_tox": 0.012,
+        "dri_fold": 22.2
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.18,
+    "chou_talalay_ci": 0.18,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.0,
+    "bliss_observed_kill": 0.88,
+    "bliss_expected_kill": 0.88,
+    "hsa_excess_score": 0.34,
+    "toxicity_reduction_pct": 82.0,
+    "toxicity_shield_pct": 0.82,
+    "potency_boost": 2.2,
+    "target_potency_multiplier": 2.2,
+    "dri_profile": {
+      "MCN (Karbamat Soft-Drug)": {
+        "dose_uM": 1.12,
+        "single_effective_dx_uM": 20.2488,
+        "dri_fold": 18.08,
+        "sparing_pct": 94.5
+      },
+      "Telaglenastat / CB-839 (GLS1 İnhibitörü)": {
+        "dose_uM": 0.084,
+        "single_effective_dx_uM": 1.5968,
+        "dri_fold": 19.01,
+        "sparing_pct": 94.7
+      },
+      "Resveratrol (Stilbenoid)": {
+        "dose_uM": 7.5,
+        "single_effective_dx_uM": 166.4984,
+        "dri_fold": 22.2,
+        "sparing_pct": 95.5
+      }
+    },
+    "crosstalk_interactions": [],
+    "isobologram": {
+      "component_ratio_x": 0.055,
+      "component_ratio_y": 0.053,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.82
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +0.0%. MCN (Karbamat Soft-Drug) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.2x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +0.0%. MCN (Karbamat Soft-Drug) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.2x katına çıkar."
+  },
+  {
     "id": "ai_cocktail_000fcbc0",
     "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
     "is_ai_generated": true,
@@ -4059,1020 +5068,5 @@
     },
     "clinical_rationale": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar.",
     "description": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_775b2a52",
-    "name": "AI Sinerji: Olaparib + Ceralasertib + Resveratrol",
-    "is_ai_generated": true,
-    "objective_key": "synthetic_lethality_parp_atr",
-    "objective_title": "Sentetik Ölümcüllük (Synthetic Lethality) PARP & ATR DNA Çöküşü",
-    "primary_smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
-    "components": [
-      {
-        "name": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
-        "smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
-        "dose": "0.0263 µM",
-        "dose_uM": 0.0263,
-        "target": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
-        "role": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
-        "mechanism": "PARP'ı hasarlı DNA üzerinde dondurur; replikasyon çatalı çöküşü ile sentetik öldürücülük tetikler",
-        "target_key": "PARP",
-        "target_class": "PARP",
-        "qsar_tox": 0.055,
-        "dri_fold": 15.32
-      },
-      {
-        "name": "Ceralasertib / AZD6738 (ATR Kinaz)",
-        "smiles": "C[S@@](=O)(C1(CC1)C2=NC(C3=C4C=CNC4=NC=C3)=NC(N5CCOC[C@H]5C)=C2)=N",
-        "dose": "0.021 µM",
-        "dose_uM": 0.021,
-        "target": "ATR Replikasyon Stres Blokörü",
-        "role": "ATR Replikasyon Stres Blokörü",
-        "mechanism": "Replikasyon stres kontrol noktasını (checkpoint) kırarak PARP dirençli tümör hücrelerini genomik kaosa sürükler",
-        "target_key": "ATR",
-        "target_class": "ATR",
-        "qsar_tox": 0.06,
-        "dri_fold": 17.01
-      },
-      {
-        "name": "Resveratrol (Stilbenoid)",
-        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
-        "dose": "7.5 µM",
-        "dose_uM": 7.5,
-        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
-        "target_key": "SIRT1",
-        "target_class": "SIRT1",
-        "qsar_tox": 0.012,
-        "dri_fold": 22.2
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.026,
-    "bliss_observed_kill": 0.901,
-    "bliss_expected_kill": 0.874,
-    "hsa_excess_score": 0.393,
-    "toxicity_reduction_pct": 82.0,
-    "toxicity_shield_pct": 0.82,
-    "potency_boost": 2.5,
-    "target_potency_multiplier": 2.5,
-    "dri_profile": {
-      "Olaparib (PARP1/2 Sentetik Ölümcüllük)": {
-        "dose_uM": 0.0263,
-        "single_effective_dx_uM": 0.4029,
-        "dri_fold": 15.32,
-        "sparing_pct": 93.5
-      },
-      "Ceralasertib / AZD6738 (ATR Kinaz)": {
-        "dose_uM": 0.021,
-        "single_effective_dx_uM": 0.3573,
-        "dri_fold": 17.01,
-        "sparing_pct": 94.1
-      },
-      "Resveratrol (Stilbenoid)": {
-        "dose_uM": 7.5,
-        "single_effective_dx_uM": 166.4984,
-        "dri_fold": 22.2,
-        "sparing_pct": 95.5
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
-        "agent_b": "Ceralasertib / AZD6738 (ATR Kinaz)",
-        "targets": "PARP ⟷ ATR",
-        "coupling_strength": 0.38
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.065,
-      "component_ratio_y": 0.059,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_ebea731d",
-    "name": "AI Sinerji: MRTX1133 + RMC-4550 + Ponsegromab",
-    "is_ai_generated": true,
-    "objective_key": "kras_g12d_vertical_blockade",
-    "objective_title": "Pan-RAS / KRAS G12D & SHP2 Dikey Çift-Düğüm Blokajı",
-    "primary_smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-    "components": [
-      {
-        "name": "MRTX1133 (KRAS G12D Blokörü)",
-        "smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-        "dose": "2 nM",
-        "dose_uM": 0.0026,
-        "target": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "role": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "mechanism": "Switch-II cebine kilitlenerek Asp12 ile tuz köprüsü kurar; MAPK proliferasyonunu kökten durdurur",
-        "target_key": "KRAS_G12D",
-        "target_class": "KRAS_G12D",
-        "qsar_tox": 0.048,
-        "dri_fold": 22.87
-      },
-      {
-        "name": "RMC-4550 (Allosterik SHP2)",
-        "smiles": "CC1C(C2(CCN(CC2)C3=NC(=C(N=C3CO)C4=C(C(=CC=C4)Cl)Cl)C)CO1)N",
-        "dose": "2 nM",
-        "dose_uM": 0.0021,
-        "target": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "role": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "mechanism": "SHP2'yi oto-inhibe konformasyonda tutarak RTK feedback adaptif Ras direnç kaçışını tamamen kilitler",
-        "target_key": "SHP2",
-        "target_class": "SHP2",
-        "qsar_tox": 0.042,
-        "dri_fold": 25.37
-      },
-      {
-        "name": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "smiles": "CC(C)CC(=O)NC1=CC=C(C=C1)S(=O)(=O)NC2=NC=C(S2)C3=CC=CC=C3F",
-        "dose": "0.066 µM",
-        "dose_uM": 0.066,
-        "target": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "role": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "mechanism": "NEJM 2024 klinik bulgularıyla; tümör kaynaklı GDF15 ve Upd3 sitokinlerini nötralize ederek kas/yağ erimesini durdurur",
-        "target_key": "GDF15_Cachexia",
-        "target_class": "GDF15_Cachexia",
-        "qsar_tox": 0.012,
-        "dri_fold": 35.9
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.046,
-    "bliss_observed_kill": 0.927,
-    "bliss_expected_kill": 0.881,
-    "hsa_excess_score": 0.418,
-    "toxicity_reduction_pct": 88.0,
-    "toxicity_shield_pct": 0.88,
-    "potency_boost": 2.76,
-    "target_potency_multiplier": 2.76,
-    "dri_profile": {
-      "MRTX1133 (KRAS G12D Blokörü)": {
-        "dose_uM": 0.0026,
-        "single_effective_dx_uM": 0.0595,
-        "dri_fold": 22.87,
-        "sparing_pct": 95.6
-      },
-      "RMC-4550 (Allosterik SHP2)": {
-        "dose_uM": 0.0021,
-        "single_effective_dx_uM": 0.0533,
-        "dri_fold": 25.37,
-        "sparing_pct": 96.1
-      },
-      "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)": {
-        "dose_uM": 0.066,
-        "single_effective_dx_uM": 2.3695,
-        "dri_fold": 35.9,
-        "sparing_pct": 97.2
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "RMC-4550 (Allosterik SHP2)",
-        "targets": "KRAS_G12D ⟷ SHP2",
-        "coupling_strength": 0.38
-      },
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "targets": "KRAS_G12D ⟷ GDF15_Cachexia",
-        "coupling_strength": 0.32
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.044,
-      "component_ratio_y": 0.039,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_3c775913",
-    "name": "AI Sinerji: AZD3965 + Evorpacept + DeNovo_Champion",
-    "is_ai_generated": true,
-    "objective_key": "lactate_acidosis_cd47_immune",
-    "objective_title": "TME Asidoz Kırıcı & CD47 İmmün Kuşatma Kokteyli",
-    "primary_smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
-    "components": [
-      {
-        "name": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
-        "dose": "0.016 µM",
-        "dose_uM": 0.016,
-        "target": "MCT1 Monokarboksilat Asidoz Blokörü",
-        "role": "MCT1 Monokarboksilat Asidoz Blokörü",
-        "mechanism": "Tümör içi laktat atılımını keser, TME mikromimarisindeki asidozu nötrleyerek hemosit immün infiltrasyonunu 3.1x artırır",
-        "target_key": "MCT1",
-        "target_class": "MCT1",
-        "qsar_tox": 0.035,
-        "dri_fold": 21.09
-      },
-      {
-        "name": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "smiles": "CC(C)NC(=O)C1=CC=C(C=C1)CNC(=O)C2=NC=C(O2)C3=CC=CC=C3Cl",
-        "dose": "0.04 µM",
-        "dose_uM": 0.04,
-        "target": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
-        "role": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
-        "mechanism": "Kanser hücresinin CD47 kalkanını fagositoz aktivasyonu ile yıkar; hemosit kuşatmasını 2.8x patlatır",
-        "target_key": "CD47",
-        "target_class": "CD47",
-        "qsar_tox": 0.014,
-        "dri_fold": 14.1
-      },
-      {
-        "name": "DeNovo_Champion (F-NAc)",
-        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
-        "dose": "0.81 µM",
-        "dose_uM": 0.81,
-        "target": "Kenyon Hücresi nAChRα7 Agonisti",
-        "role": "Kenyon Hücresi nAChRα7 Agonisti",
-        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
-        "target_key": "nAChR",
-        "target_class": "nAChR",
-        "qsar_tox": 0.038,
-        "dri_fold": 14.34
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.19,
-    "chou_talalay_ci": 0.19,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.057,
-    "bliss_observed_kill": 0.955,
-    "bliss_expected_kill": 0.898,
-    "hsa_excess_score": 0.393,
-    "toxicity_reduction_pct": 35.0,
-    "toxicity_shield_pct": 0.35,
-    "potency_boost": 3.02,
-    "target_potency_multiplier": 3.02,
-    "dri_profile": {
-      "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)": {
-        "dose_uM": 0.016,
-        "single_effective_dx_uM": 0.3375,
-        "dri_fold": 21.09,
-        "sparing_pct": 95.3
-      },
-      "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)": {
-        "dose_uM": 0.04,
-        "single_effective_dx_uM": 0.5641,
-        "dri_fold": 14.1,
-        "sparing_pct": 92.9
-      },
-      "DeNovo_Champion (F-NAc)": {
-        "dose_uM": 0.81,
-        "single_effective_dx_uM": 11.6121,
-        "dri_fold": 14.34,
-        "sparing_pct": 93.0
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "agent_b": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "targets": "MCT1 ⟷ CD47",
-        "coupling_strength": 0.34
-      },
-      {
-        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "agent_b": "DeNovo_Champion (F-NAc)",
-        "targets": "MCT1 ⟷ nAChR",
-        "coupling_strength": 0.32
-      },
-      {
-        "agent_a": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "agent_b": "DeNovo_Champion (F-NAc)",
-        "targets": "CD47 ⟷ nAChR",
-        "coupling_strength": 0.36
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.047,
-      "component_ratio_y": 0.071,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.81
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %35.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %35.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_1b2d722a",
-    "name": "AI Sinerji: Olaparib + Ceralasertib + Resveratrol",
-    "is_ai_generated": true,
-    "objective_key": "synthetic_lethality_parp_atr",
-    "objective_title": "Sentetik Ölümcüllük (Synthetic Lethality) PARP & ATR DNA Çöküşü",
-    "primary_smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
-    "components": [
-      {
-        "name": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
-        "smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
-        "dose": "0.0263 µM",
-        "dose_uM": 0.0263,
-        "target": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
-        "role": "PARP1/2 DNA Tek Zincir Onarım Blokörü",
-        "mechanism": "PARP'ı hasarlı DNA üzerinde dondurur; replikasyon çatalı çöküşü ile sentetik öldürücülük tetikler",
-        "target_key": "PARP",
-        "target_class": "PARP",
-        "qsar_tox": 0.055,
-        "dri_fold": 15.32
-      },
-      {
-        "name": "Ceralasertib / AZD6738 (ATR Kinaz)",
-        "smiles": "C[S@@](=O)(C1(CC1)C2=NC(C3=C4C=CNC4=NC=C3)=NC(N5CCOC[C@H]5C)=C2)=N",
-        "dose": "0.021 µM",
-        "dose_uM": 0.021,
-        "target": "ATR Replikasyon Stres Blokörü",
-        "role": "ATR Replikasyon Stres Blokörü",
-        "mechanism": "Replikasyon stres kontrol noktasını (checkpoint) kırarak PARP dirençli tümör hücrelerini genomik kaosa sürükler",
-        "target_key": "ATR",
-        "target_class": "ATR",
-        "qsar_tox": 0.06,
-        "dri_fold": 17.01
-      },
-      {
-        "name": "Resveratrol (Stilbenoid)",
-        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
-        "dose": "7.5 µM",
-        "dose_uM": 7.5,
-        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
-        "target_key": "SIRT1",
-        "target_class": "SIRT1",
-        "qsar_tox": 0.012,
-        "dri_fold": 22.2
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.026,
-    "bliss_observed_kill": 0.901,
-    "bliss_expected_kill": 0.874,
-    "hsa_excess_score": 0.393,
-    "toxicity_reduction_pct": 82.0,
-    "toxicity_shield_pct": 0.82,
-    "potency_boost": 2.5,
-    "target_potency_multiplier": 2.5,
-    "dri_profile": {
-      "Olaparib (PARP1/2 Sentetik Ölümcüllük)": {
-        "dose_uM": 0.0263,
-        "single_effective_dx_uM": 0.4029,
-        "dri_fold": 15.32,
-        "sparing_pct": 93.5
-      },
-      "Ceralasertib / AZD6738 (ATR Kinaz)": {
-        "dose_uM": 0.021,
-        "single_effective_dx_uM": 0.3573,
-        "dri_fold": 17.01,
-        "sparing_pct": 94.1
-      },
-      "Resveratrol (Stilbenoid)": {
-        "dose_uM": 7.5,
-        "single_effective_dx_uM": 166.4984,
-        "dri_fold": 22.2,
-        "sparing_pct": 95.5
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "Olaparib (PARP1/2 Sentetik Ölümcüllük)",
-        "agent_b": "Ceralasertib / AZD6738 (ATR Kinaz)",
-        "targets": "PARP ⟷ ATR",
-        "coupling_strength": 0.38
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.065,
-      "component_ratio_y": 0.059,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.6%. Olaparib (PARP1/2 Sentetik Ölümcüllük) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Resveratrol (Stilbenoid) için 22.2x doz tasarrufu sağlanarak doku hasarı %82.0 oranında kalkanlanır ve tümör lizis hızı 2.5x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_b44c40d0",
-    "name": "AI Sinerji: MRTX1133 + RMC-4550 + Ponsegromab",
-    "is_ai_generated": true,
-    "objective_key": "kras_g12d_vertical_blockade",
-    "objective_title": "Pan-RAS / KRAS G12D & SHP2 Dikey Çift-Düğüm Blokajı",
-    "primary_smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-    "components": [
-      {
-        "name": "MRTX1133 (KRAS G12D Blokörü)",
-        "smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-        "dose": "2 nM",
-        "dose_uM": 0.0026,
-        "target": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "role": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "mechanism": "Switch-II cebine kilitlenerek Asp12 ile tuz köprüsü kurar; MAPK proliferasyonunu kökten durdurur",
-        "target_key": "KRAS_G12D",
-        "target_class": "KRAS_G12D",
-        "qsar_tox": 0.048,
-        "dri_fold": 22.87
-      },
-      {
-        "name": "RMC-4550 (Allosterik SHP2)",
-        "smiles": "CC1C(C2(CCN(CC2)C3=NC(=C(N=C3CO)C4=C(C(=CC=C4)Cl)Cl)C)CO1)N",
-        "dose": "2 nM",
-        "dose_uM": 0.0021,
-        "target": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "role": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "mechanism": "SHP2'yi oto-inhibe konformasyonda tutarak RTK feedback adaptif Ras direnç kaçışını tamamen kilitler",
-        "target_key": "SHP2",
-        "target_class": "SHP2",
-        "qsar_tox": 0.042,
-        "dri_fold": 25.37
-      },
-      {
-        "name": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "smiles": "CC(C)CC(=O)NC1=CC=C(C=C1)S(=O)(=O)NC2=NC=C(S2)C3=CC=CC=C3F",
-        "dose": "0.066 µM",
-        "dose_uM": 0.066,
-        "target": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "role": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "mechanism": "NEJM 2024 klinik bulgularıyla; tümör kaynaklı GDF15 ve Upd3 sitokinlerini nötralize ederek kas/yağ erimesini durdurur",
-        "target_key": "GDF15_Cachexia",
-        "target_class": "GDF15_Cachexia",
-        "qsar_tox": 0.012,
-        "dri_fold": 35.9
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.046,
-    "bliss_observed_kill": 0.927,
-    "bliss_expected_kill": 0.881,
-    "hsa_excess_score": 0.418,
-    "toxicity_reduction_pct": 88.0,
-    "toxicity_shield_pct": 0.88,
-    "potency_boost": 2.76,
-    "target_potency_multiplier": 2.76,
-    "dri_profile": {
-      "MRTX1133 (KRAS G12D Blokörü)": {
-        "dose_uM": 0.0026,
-        "single_effective_dx_uM": 0.0595,
-        "dri_fold": 22.87,
-        "sparing_pct": 95.6
-      },
-      "RMC-4550 (Allosterik SHP2)": {
-        "dose_uM": 0.0021,
-        "single_effective_dx_uM": 0.0533,
-        "dri_fold": 25.37,
-        "sparing_pct": 96.1
-      },
-      "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)": {
-        "dose_uM": 0.066,
-        "single_effective_dx_uM": 2.3695,
-        "dri_fold": 35.9,
-        "sparing_pct": 97.2
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "RMC-4550 (Allosterik SHP2)",
-        "targets": "KRAS_G12D ⟷ SHP2",
-        "coupling_strength": 0.38
-      },
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "targets": "KRAS_G12D ⟷ GDF15_Cachexia",
-        "coupling_strength": 0.32
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.044,
-      "component_ratio_y": 0.039,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_06d00f1d",
-    "name": "AI Sinerji: MRTX1133 + RMC-4550 + Ponsegromab",
-    "is_ai_generated": true,
-    "objective_key": "kras_g12d_vertical_blockade",
-    "objective_title": "Pan-RAS / KRAS G12D & SHP2 Dikey Çift-Düğüm Blokajı",
-    "primary_smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-    "components": [
-      {
-        "name": "MRTX1133 (KRAS G12D Blokörü)",
-        "smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
-        "dose": "2 nM",
-        "dose_uM": 0.0026,
-        "target": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "role": "Non-Kovalent Seçici KRAS G12D İnhibitörü",
-        "mechanism": "Switch-II cebine kilitlenerek Asp12 ile tuz köprüsü kurar; MAPK proliferasyonunu kökten durdurur",
-        "target_key": "KRAS_G12D",
-        "target_class": "KRAS_G12D",
-        "qsar_tox": 0.048,
-        "dri_fold": 22.87
-      },
-      {
-        "name": "RMC-4550 (Allosterik SHP2)",
-        "smiles": "CC1C(C2(CCN(CC2)C3=NC(=C(N=C3CO)C4=C(C(=CC=C4)Cl)Cl)C)CO1)N",
-        "dose": "2 nM",
-        "dose_uM": 0.0021,
-        "target": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "role": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "mechanism": "SHP2'yi oto-inhibe konformasyonda tutarak RTK feedback adaptif Ras direnç kaçışını tamamen kilitler",
-        "target_key": "SHP2",
-        "target_class": "SHP2",
-        "qsar_tox": 0.042,
-        "dri_fold": 25.37
-      },
-      {
-        "name": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "smiles": "CC(C)CC(=O)NC1=CC=C(C=C1)S(=O)(=O)NC2=NC=C(S2)C3=CC=CC=C3F",
-        "dose": "0.066 µM",
-        "dose_uM": 0.066,
-        "target": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "role": "GDF15/GFRAL & Upd3/IL-6 Kaşeksi Kalkanı",
-        "mechanism": "NEJM 2024 klinik bulgularıyla; tümör kaynaklı GDF15 ve Upd3 sitokinlerini nötralize ederek kas/yağ erimesini durdurur",
-        "target_key": "GDF15_Cachexia",
-        "target_class": "GDF15_Cachexia",
-        "qsar_tox": 0.012,
-        "dri_fold": 35.9
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.046,
-    "bliss_observed_kill": 0.927,
-    "bliss_expected_kill": 0.881,
-    "hsa_excess_score": 0.418,
-    "toxicity_reduction_pct": 48.0,
-    "toxicity_shield_pct": 0.48,
-    "potency_boost": 2.76,
-    "target_potency_multiplier": 2.76,
-    "dri_profile": {
-      "MRTX1133 (KRAS G12D Blokörü)": {
-        "dose_uM": 0.0026,
-        "single_effective_dx_uM": 0.0595,
-        "dri_fold": 22.87,
-        "sparing_pct": 95.6
-      },
-      "RMC-4550 (Allosterik SHP2)": {
-        "dose_uM": 0.0021,
-        "single_effective_dx_uM": 0.0533,
-        "dri_fold": 25.37,
-        "sparing_pct": 96.1
-      },
-      "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)": {
-        "dose_uM": 0.066,
-        "single_effective_dx_uM": 2.3695,
-        "dri_fold": 35.9,
-        "sparing_pct": 97.2
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "RMC-4550 (Allosterik SHP2)",
-        "targets": "KRAS_G12D ⟷ SHP2",
-        "coupling_strength": 0.38
-      },
-      {
-        "agent_a": "MRTX1133 (KRAS G12D Blokörü)",
-        "agent_b": "Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı)",
-        "targets": "KRAS_G12D ⟷ GDF15_Cachexia",
-        "coupling_strength": 0.32
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.044,
-      "component_ratio_y": 0.039,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %48.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +4.6%. MRTX1133 (KRAS G12D Blokörü) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ponsegromab Mimetic (NEJM 2024 GDF15/Upd3 Kalkanı) için 35.9x doz tasarrufu sağlanarak doku hasarı %48.0 oranında kalkanlanır ve tümör lizis hızı 2.76x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_cac582ab",
-    "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
-    "is_ai_generated": true,
-    "objective_key": "immune_mek_evasion",
-    "objective_title": "Nöro-İmmün & MEK-Bypass Çift Yönlü Darbe (Triple-Hit)",
-    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
-    "components": [
-      {
-        "name": "DeNovo_Champion (F-NAc)",
-        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
-        "dose": "0.81 µM",
-        "dose_uM": 0.81,
-        "target": "Kenyon Hücresi nAChRα7 Agonisti",
-        "role": "Kenyon Hücresi nAChRα7 Agonisti",
-        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
-        "target_key": "nAChR",
-        "target_class": "nAChR",
-        "qsar_tox": 0.038,
-        "dri_fold": 8.45
-      },
-      {
-        "name": "Trametinib",
-        "smiles": "CC1=C(C(=O)N(C(=O)N1C2=CC=C(C=C2)I)C)NC3=C(C=C(C=C3F)I)F",
-        "dose": "4 nM",
-        "dose_uM": 0.0047,
-        "target": "Allosterik MEK1/2 Kinaz İnhibitörü",
-        "role": "Allosterik MEK1/2 Kinaz İnhibitörü",
-        "mechanism": "KRAS/MAPK proliferasyon kaskadını bloke ederek mitozu durdurur, MEK bypass direncini kırar",
-        "target_key": "MEK",
-        "target_class": "MEK",
-        "qsar_tox": 0.085,
-        "dri_fold": 8.57
-      },
-      {
-        "name": "Curcumin (Zerdeçal Polifenolü)",
-        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
-        "dose": "4.18 µM",
-        "dose_uM": 4.18,
-        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
-        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
-        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
-        "target_key": "NF-kB",
-        "target_class": "NF-kB",
-        "qsar_tox": 0.015,
-        "dri_fold": 14.41
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.33,
-    "chou_talalay_ci": 0.33,
-    "synergy_label": "Süper Sinerji (CI < 0.40)",
-    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
-    "bliss_excess_score": 0.033,
-    "bliss_observed_kill": 0.922,
-    "bliss_expected_kill": 0.89,
-    "hsa_excess_score": 0.36,
-    "toxicity_reduction_pct": 72.0,
-    "toxicity_shield_pct": 0.72,
-    "potency_boost": 2.6,
-    "target_potency_multiplier": 2.6,
-    "dri_profile": {
-      "DeNovo_Champion (F-NAc)": {
-        "dose_uM": 0.81,
-        "single_effective_dx_uM": 6.8437,
-        "dri_fold": 8.45,
-        "sparing_pct": 88.2
-      },
-      "Trametinib": {
-        "dose_uM": 0.0047,
-        "single_effective_dx_uM": 0.0403,
-        "dri_fold": 8.57,
-        "sparing_pct": 88.3
-      },
-      "Curcumin (Zerdeçal Polifenolü)": {
-        "dose_uM": 4.18,
-        "single_effective_dx_uM": 60.2514,
-        "dri_fold": 14.41,
-        "sparing_pct": 93.1
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "DeNovo_Champion (F-NAc)",
-        "agent_b": "Trametinib",
-        "targets": "nAChR ⟷ MEK",
-        "coupling_strength": 0.32
-      },
-      {
-        "agent_a": "Trametinib",
-        "agent_b": "Curcumin (Zerdeçal Polifenolü)",
-        "targets": "MEK ⟷ NF-kB",
-        "coupling_strength": 0.22
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.118,
-      "component_ratio_y": 0.117,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.67
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.6x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.33 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +3.3%. DeNovo_Champion (F-NAc) ve Trametinib kooperasyonu, onkogenik kaçışı (Allosterik MEK1/2 Kinaz İnhibitörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.6x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_d2328a4c",
-    "name": "AI Sinerji: DMXBA + RMC-4550 + Curcumin",
-    "is_ai_generated": true,
-    "objective_key": "free_ai_discovery",
-    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
-    "primary_smiles": "COc1ccc(C=C2C(=O)c3ccccc3N2)cc1",
-    "components": [
-      {
-        "name": "DMXBA / GTS-21 (Alpha-7 Selektif)",
-        "smiles": "COc1ccc(C=C2C(=O)c3ccccc3N2)cc1",
-        "dose": "1.3 µM",
-        "dose_uM": 1.3,
-        "target": "Kan-Beyin Bariyerini Geçen Kolinerjik Sürücü",
-        "role": "Kan-Beyin Bariyerini Geçen Kolinerjik Sürücü",
-        "mechanism": "Santral kolinerjik anti-inflamatuar ekseni uyararak periferik hemosit göçünü koordine eder",
-        "target_key": "nAChR",
-        "target_class": "nAChR",
-        "qsar_tox": 0.03,
-        "dri_fold": 21.67
-      },
-      {
-        "name": "RMC-4550 (Allosterik SHP2)",
-        "smiles": "CC1C(C2(CCN(CC2)C3=NC(=C(N=C3CO)C4=C(C(=CC=C4)Cl)Cl)C)CO1)N",
-        "dose": "2 nM",
-        "dose_uM": 0.0021,
-        "target": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "role": "SHP2 / Corkscrew Allosterik Fosfataz Blokörü",
-        "mechanism": "SHP2'yi oto-inhibe konformasyonda tutarak RTK feedback adaptif Ras direnç kaçışını tamamen kilitler",
-        "target_key": "SHP2",
-        "target_class": "SHP2",
-        "qsar_tox": 0.042,
-        "dri_fold": 15.35
-      },
-      {
-        "name": "Curcumin (Zerdeçal Polifenolü)",
-        "smiles": "O=C(C=Cc1ccc(O)c(OC)c1)CC(=O)C=Cc2ccc(O)c(OC)c2",
-        "dose": "4.18 µM",
-        "dose_uM": 4.18,
-        "target": "NF-κB / STAT3 Kaşeksi Kalkanı",
-        "role": "NF-κB / STAT3 Kaşeksi Kalkanı",
-        "mechanism": "Upd3/IL-6 ve Eiger/TNFα pro-inflamatuar sitokin salınımını sönümler, kas ve yağ erimesini önler",
-        "target_key": "NF-kB",
-        "target_class": "NF-kB",
-        "qsar_tox": 0.015,
-        "dri_fold": 26.81
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.18,
-    "chou_talalay_ci": 0.18,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.0,
-    "bliss_observed_kill": 0.877,
-    "bliss_expected_kill": 0.877,
-    "hsa_excess_score": 0.36,
-    "toxicity_reduction_pct": 72.0,
-    "toxicity_shield_pct": 0.72,
-    "potency_boost": 1.8,
-    "target_potency_multiplier": 1.8,
-    "dri_profile": {
-      "DMXBA / GTS-21 (Alpha-7 Selektif)": {
-        "dose_uM": 1.3,
-        "single_effective_dx_uM": 28.1767,
-        "dri_fold": 21.67,
-        "sparing_pct": 95.4
-      },
-      "RMC-4550 (Allosterik SHP2)": {
-        "dose_uM": 0.0021,
-        "single_effective_dx_uM": 0.0322,
-        "dri_fold": 15.35,
-        "sparing_pct": 93.5
-      },
-      "Curcumin (Zerdeçal Polifenolü)": {
-        "dose_uM": 4.18,
-        "single_effective_dx_uM": 112.0777,
-        "dri_fold": 26.81,
-        "sparing_pct": 96.3
-      }
-    },
-    "crosstalk_interactions": [],
-    "isobologram": {
-      "component_ratio_x": 0.046,
-      "component_ratio_y": 0.065,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.82
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +0.0%. DMXBA / GTS-21 (Alpha-7 Selektif) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 26.81x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 1.8x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.18 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +0.0%. DMXBA / GTS-21 (Alpha-7 Selektif) ve RMC-4550 (Allosterik SHP2) kooperasyonu, onkogenik kaçışı (SHP2 / Corkscrew Allosterik Fosfataz Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 26.81x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 1.8x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_11cbcf3b",
-    "name": "AI Sinerji: 2-Deoxyglucose + Vorinostat + EGCG",
-    "is_ai_generated": true,
-    "objective_key": "metabolic_epigenetic",
-    "objective_title": "Warburg Metabolik Açlık & Epigenetik Şok Protokolü",
-    "primary_smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
-    "components": [
-      {
-        "name": "2-Deoxyglucose (2-DG)",
-        "smiles": "C(C1C(C(C(C(O1)O)O)O)O)O",
-        "dose": "1.8 µM",
-        "dose_uM": 1.8,
-        "target": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
-        "role": "Hekzokinaz-II / Warburg Glikoliz Blokörü",
-        "mechanism": "Aerobik glikolizi keserek tümör ATP havuzunu çökertir, mitotik bölünmeyi tamamen durdurur",
-        "target_key": "Warburg",
-        "target_class": "Warburg",
-        "qsar_tox": 0.05,
-        "dri_fold": 9.9
-      },
-      {
-        "name": "Vorinostat (SAHA)",
-        "smiles": "O=C(CCCCCCC(=O)Nc1ccccc1)NO",
-        "dose": "1.2 µM",
-        "dose_uM": 1.2,
-        "target": "HDAC Sınıf I/II Epigenetik Düzenleyici",
-        "role": "HDAC Sınıf I/II Epigenetik Düzenleyici",
-        "mechanism": "Kromatin yapısını gevşeterek tümör supresör genleri aktive eder, apoptoz direncini kırar",
-        "target_key": "HDAC",
-        "target_class": "HDAC",
-        "qsar_tox": 0.065,
-        "dri_fold": 8.3
-      },
-      {
-        "name": "EGCG (Yeşil Çay Kateşini)",
-        "smiles": "O=C(Oc1cc(O)cc(O)c1)C2Oc3cc(O)cc(O)c3C(O)C2c4cc(O)c(O)c(O)c4",
-        "dose": "5.5 µM",
-        "dose_uM": 5.5,
-        "target": "Mitokondriyal Membran Stabilizasyonu",
-        "role": "Mitokondriyal Membran Stabilizasyonu",
-        "mechanism": "Sitotoksik ajanların kardiyotoksisite ve nörotoksisite yaratmasını engeller",
-        "target_key": "Mitochondria",
-        "target_class": "Mitochondria",
-        "qsar_tox": 0.01,
-        "dri_fold": 9.73
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.35,
-    "chou_talalay_ci": 0.35,
-    "synergy_label": "Süper Sinerji (CI < 0.40)",
-    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
-    "bliss_excess_score": 0.02,
-    "bliss_observed_kill": 0.87,
-    "bliss_expected_kill": 0.85,
-    "hsa_excess_score": 0.395,
-    "toxicity_reduction_pct": 72.0,
-    "toxicity_shield_pct": 0.72,
-    "potency_boost": 2.1,
-    "target_potency_multiplier": 2.1,
-    "dri_profile": {
-      "2-Deoxyglucose (2-DG)": {
-        "dose_uM": 1.8,
-        "single_effective_dx_uM": 17.8273,
-        "dri_fold": 9.9,
-        "sparing_pct": 89.9
-      },
-      "Vorinostat (SAHA)": {
-        "dose_uM": 1.2,
-        "single_effective_dx_uM": 9.9631,
-        "dri_fold": 8.3,
-        "sparing_pct": 88.0
-      },
-      "EGCG (Yeşil Çay Kateşini)": {
-        "dose_uM": 5.5,
-        "single_effective_dx_uM": 53.5421,
-        "dri_fold": 9.73,
-        "sparing_pct": 89.7
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "2-Deoxyglucose (2-DG)",
-        "agent_b": "Vorinostat (SAHA)",
-        "targets": "Warburg ⟷ HDAC",
-        "coupling_strength": 0.24
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.101,
-      "component_ratio_y": 0.12,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.65
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.35 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.0%. 2-Deoxyglucose (2-DG) ve Vorinostat (SAHA) kooperasyonu, onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) çoklu düğümden durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.1x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.35 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.0%. 2-Deoxyglucose (2-DG) ve Vorinostat (SAHA) kooperasyonu, onkogenik kaçışı (HDAC Sınıf I/II Epigenetik Düzenleyici) çoklu düğümden durdurur. Kombinasyon sayesinde 2-Deoxyglucose (2-DG) için 9.9x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.1x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_fce6986a",
-    "name": "AI Sinerji: MCN + Metronomic + Resveratrol",
-    "is_ai_generated": true,
-    "objective_key": "metronomic_chemo_soft",
-    "objective_title": "Ultra-Düşük Toksisite Soft-Drug Kemo-İmmün Kurtarma",
-    "primary_smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
-    "components": [
-      {
-        "name": "MCN (Karbamat Soft-Drug)",
-        "smiles": "COC(=O)N1CCC[C@H]1c2cccnc2",
-        "dose": "1.12 µM",
-        "dose_uM": 1.12,
-        "target": "Esteraz-Duyarlı Kolinerjik Sürücü",
-        "role": "Esteraz-Duyarlı Kolinerjik Sürücü",
-        "mechanism": "Hızlı plazma esteraz klerensi ile sıfır doku birikimi ve hızlı immün tetikleme",
-        "target_key": "nAChR",
-        "target_class": "nAChR",
-        "qsar_tox": 0.025,
-        "dri_fold": 8.47
-      },
-      {
-        "name": "Metronomic Cisplatin",
-        "smiles": "N.N.Cl[Pt]Cl",
-        "dose": "0.35 µM",
-        "dose_uM": 0.35,
-        "target": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
-        "role": "Ultra Düşük Doz DNA Çapraz Bağlayıcı",
-        "mechanism": "Guanin N7 pozisyonlarına bağlanarak DNA çift sarmalında adduct oluşturur, dirençli klonları lize eder",
-        "target_key": "DNA",
-        "target_class": "DNA",
-        "qsar_tox": 0.24,
-        "dri_fold": 39.67
-      },
-      {
-        "name": "Resveratrol (Stilbenoid)",
-        "smiles": "Oc1ccc(cc1)C=Cc2cc(O)cc(O)c2",
-        "dose": "7.5 µM",
-        "dose_uM": 7.5,
-        "target": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "role": "SIRT1 ve Anti-Apoptoz Kalkanı",
-        "mechanism": "Sağlıklı nöron ve hemositleri serbest radikal hasarından korur, konakçı vitalitesini yükseltir",
-        "target_key": "SIRT1",
-        "target_class": "SIRT1",
-        "qsar_tox": 0.012,
-        "dri_fold": 10.08
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.26,
-    "chou_talalay_ci": 0.26,
-    "synergy_label": "Süper Sinerji (CI < 0.40)",
-    "synergy_description": "Çoklu Düğüm Eşzamanlı Kilitlenmesi",
-    "bliss_excess_score": 0.065,
-    "bliss_observed_kill": 0.846,
-    "bliss_expected_kill": 0.781,
-    "hsa_excess_score": 0.306,
-    "toxicity_reduction_pct": 72.0,
-    "toxicity_shield_pct": 0.72,
-    "potency_boost": 2.6,
-    "target_potency_multiplier": 2.6,
-    "dri_profile": {
-      "MCN (Karbamat Soft-Drug)": {
-        "dose_uM": 1.12,
-        "single_effective_dx_uM": 9.4895,
-        "dri_fold": 8.47,
-        "sparing_pct": 88.2
-      },
-      "Metronomic Cisplatin": {
-        "dose_uM": 0.35,
-        "single_effective_dx_uM": 13.8847,
-        "dri_fold": 39.67,
-        "sparing_pct": 97.5
-      },
-      "Resveratrol (Stilbenoid)": {
-        "dose_uM": 7.5,
-        "single_effective_dx_uM": 75.6034,
-        "dri_fold": 10.08,
-        "sparing_pct": 90.1
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "MCN (Karbamat Soft-Drug)",
-        "agent_b": "Metronomic Cisplatin",
-        "targets": "nAChR ⟷ DNA",
-        "coupling_strength": 0.28
-      },
-      {
-        "agent_a": "Metronomic Cisplatin",
-        "agent_b": "Resveratrol (Stilbenoid)",
-        "targets": "DNA ⟷ SIRT1",
-        "coupling_strength": 0.26
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.118,
-      "component_ratio_y": 0.025,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.74
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.26 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +6.5%. MCN (Karbamat Soft-Drug) ve Metronomic Cisplatin kooperasyonu, onkogenik kaçışı (Ultra Düşük Doz DNA Çapraz Bağlayıcı) çoklu düğümden durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 39.67x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.6x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.26 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +6.5%. MCN (Karbamat Soft-Drug) ve Metronomic Cisplatin kooperasyonu, onkogenik kaçışı (Ultra Düşük Doz DNA Çapraz Bağlayıcı) çoklu düğümden durdurur. Kombinasyon sayesinde Metronomic Cisplatin için 39.67x doz tasarrufu sağlanarak doku hasarı %72.0 oranında kalkanlanır ve tümör lizis hızı 2.6x katına çıkar."
   }
 ]

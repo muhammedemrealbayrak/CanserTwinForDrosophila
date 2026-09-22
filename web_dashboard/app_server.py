@@ -103,13 +103,25 @@ def serialize_cells(platform):
             "health": round(c.health, 1),
             "clone_type": getattr(c, "clone_type", "sensitive"),
             "resistance": round(getattr(c, "resistance_score", 0.0), 2),
-            "is_resistant": (getattr(c, "clone_type", "sensitive") != "sensitive" or getattr(c, "resistance_score", 0.0) > 0.4)
+            "is_resistant": (getattr(c, "clone_type", "sensitive") != "sensitive" or getattr(c, "resistance_score", 0.0) > 0.4),
+            "eiger_level": round(float(getattr(c, "eiger_level", 0.0)), 2),
+            "jnk_stress": round(float(getattr(c, "jnk_stress", 0.0)), 2),
+            "isc_stemness": round(float(getattr(c, "isc_stemness", 1.0)), 2),
+            "ras_hijack": bool(getattr(c, "ras_hijack_active", True)),
+            "caspase_lysis": bool(getattr(c, "caspase_lysis_active", False))
         }
         for c in platform.cancer_cells
         if c.state.value not in ["apoptotic", "lysed"]
     ]
     hemocyte_list = [
-        {"id": h.id, "subtype": h.subtype.value, "pos": [round(float(x), 1) for x in h.position]}
+        {
+            "id": h.id,
+            "subtype": h.subtype.value,
+            "pos": [round(float(x), 1) for x in h.position],
+            "cholinergic": round(float(getattr(h, "cholinergic_activation", 0.0)), 2),
+            "exhaustion": round(float(getattr(h, "exhaustion_index", 0.0)), 2),
+            "kills": int(getattr(h, "kills_count", 0))
+        }
         for h in platform.hemocyte_agents
     ]
     return cancer_list, hemocyte_list

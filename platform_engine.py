@@ -695,6 +695,19 @@ class DrosophilaInSilicoPlatform:
         dna_damaged = bool(
             is_chemo or is_synthetic_lethality or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat", "olaparib"])
         )
+        # Tracey (2002) & Aonuma (2020) Kolinerjik İmmünomodülasyon (nAChR Aksı)
+        is_cholinergic_active = bool(
+            is_immune_agonist or
+            any(k in comp_text for k in ["f-nac", "mcn", "karbamat", "nachr", "kolinerjik", "acetylcholine", "asetilkolin", "denovo_champion"])
+        )
+        # Shankar (2007) & Cordero (2012) Polifenol Wnt/Notch Kök Hücre Blokajı
+        is_polyphenol_active = bool(
+            any(k in comp_text for k in ["egcg", "curcumin", "kurkumin", "resveratrol", "quercetin", "polyphenol", "wnt", "notch"])
+        )
+        # Bishayee (2009) Resveratrol Sir2/SIRT1 Konakçı Sağkalım Kalkanı
+        is_sirtuin_active = bool(
+            any(k in comp_text for k in ["resveratrol", "sirt1", "sir2", "sirtuin"])
+        )
 
         # 3D İlaç Enjeksiyonu ve Fickian Difüzyon (Asidoz klerensi ile)
         self.spatial_tme.inject_drug(dose_rate=self.drug_dose_uM, dt=dt_seconds, logP=self.active_drug.logP)
@@ -761,7 +774,9 @@ class DrosophilaInSilicoPlatform:
                 shp2_inhibited=is_shp2_inhibited,
                 kras_inhibited=is_kras_inhibited,
                 dna_damaged=dna_damaged,
-                metabolic_starved=is_metabolic
+                metabolic_starved=is_metabolic,
+                polyphenol_active=is_polyphenol_active,
+                sirtuin_active=is_sirtuin_active
             )
 
             # Laktat birikimi
@@ -827,7 +842,8 @@ class DrosophilaInSilicoPlatform:
                         local_lactate_mM=local_lac,
                         fuel_efficiency=fuel_eff,
                         anti_cd47_active=is_anti_cd47,
-                        potency_multiplier=hemocyte_potency
+                        potency_multiplier=hemocyte_potency,
+                        cholinergic_active=is_cholinergic_active
                     )
 
         # Tükenen veya ölen hemositleri temizle
@@ -880,6 +896,10 @@ class DrosophilaInSilicoPlatform:
         if self.active_cocktail:
             tox_red = self.active_cocktail.get("toxicity_reduction_pct", 0.0) / 100.0
             raw_tox *= (1.0 - tox_red)
+
+        # Bishayee (2009): Resveratrol Sir2/SIRT1 aktivasyonu normal dokuları korur
+        if is_sirtuin_active:
+            raw_tox *= 0.82
 
         systemic_tox = float(np.clip(raw_tox, 0.0, 1.0))
 
@@ -954,7 +974,13 @@ class DrosophilaInSilicoPlatform:
             "clinical_status_text": clinical_status_text,
             "active_modality": self.active_modality,
             "modality_info": self.TREATMENT_MODALITIES.get(self.active_modality, {}),
-            "radiation_pulses_applied": self.radiation_pulses_applied
+            "radiation_pulses_applied": self.radiation_pulses_applied,
+            # Literatür Temelli Biyolojik Eksenler (Cordero, Biteau, Tracey, Bishayee)
+            "eiger_switch_mode": "CASPASE_CLEARANCE" if is_mek_inhibited else "ONCOGENIC_HIJACK",
+            "mean_isc_stemness": round(float(np.mean([getattr(c, 'isc_stemness', 1.0) for c in viable_cancer])) if viable_cancer else 0.0, 2),
+            "mean_eiger_level": round(float(np.mean([getattr(c, 'eiger_level', 0.0) for c in viable_cancer])) if viable_cancer else 0.0, 2),
+            "cholinergic_neuro_active": is_cholinergic_active,
+            "sirtuin_shield_active": is_sirtuin_active
         }
         self.history.append(snapshot)
         return snapshot
