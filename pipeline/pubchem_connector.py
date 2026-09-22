@@ -134,12 +134,19 @@ class PubChemConnector:
         kd = float(np.clip(0.05 / (optimal_affinity_score + 0.05), 0.01, 20.0))
 
         # Özel referans molekül kalibrasyonları
-        if name == "Nicotine" or "Nicotine" in smiles:
+        name_lower = name.lower()
+        if "nicotine" in name_lower or "nicotine" in smiles.lower():
             toxicity_risk = 0.52   # Nikotinik kardiyotoksik & sistemik nörotoksisite
             kd = 0.12
-        elif name == "Curcumin" or "Curcumin" in smiles:
+        elif "curcumin" in name_lower or "curcumin" in smiles.lower():
             toxicity_risk = 0.08   # Doğal polifenol, düşük toksisite
             kd = 1.45              # Zayıf / yavaş bağlanma
+        elif "trametinib" in name_lower or "trametinib" in smiles.lower():
+            toxicity_risk = 0.15   # Hedefe yönelik allosterik MEK1/2 inhibitörü
+            kd = 0.012             # Yüksek nanomolar MEK afinitesi
+        elif "cisplatin" in name_lower or "cisplatin" in smiles.lower() or "cl[pt]" in smiles.lower():
+            toxicity_risk = 0.36   # Yüksek sitotoksik kemoterapötik DNA alkilleyici
+            kd = 0.45
         elif "DeNovo_HighSpeed_Agonist" in smiles or "CC1=NC=C(C=C1)CCN(C)C(=O)CF" in smiles:
             toxicity_risk = 0.04   # Sentetik olarak temizlenmiş yan zincir
             kd = 0.045             # Yüksek hız ve pik afinite

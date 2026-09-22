@@ -12,7 +12,7 @@ Açıklama:
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 import numpy as np
 from pipeline.pubchem_connector import MolecularProfile
 
@@ -47,18 +47,21 @@ class MolecularFitnessEvaluator:
         hemocytes_produced: int,
         tumor_clearance_pct: float,
         toxicity_score: float,
-        host_alive: bool = True
+        host_alive: bool = True,
+        clinical_outcome: Optional[str] = None
     ) -> CandidateEvaluationResult:
         """
-        Çok amaçlı ödül fonksiyonunu hesaplar:
-        R = w_speed * (60.0 / time_to_trigger) + w_eff * (hemocytes / 50) + w_clear * (tumor_clear / 100) - w_tox * (tox * 10)
-        Eğer konakçı aşırı toksisiteden öldüyse (host_alive=False veya tox>=45%), skor sıfırlanır.
+        Çok amaçlı onkolojik ödül fonksiyonunu hesaplar:
+          1. Tümör Eradikasyonu ve Klonal Temizleme (Maks 40 Puan)
+          2. Nöro-İmmün Tetikleme Hızı ve Hemosit Üretimi (Maks 30 Puan)
+          3. Güvenlik, Düşük Toksisite ve Konakçı Canlılığı (Maks 30 Puan)
+        Nüks (Relaps), Tümör İstila veya Ölüm durumlarında orantılı cezalar uygulanır.
         """
         total_tox = max(profile.qsar_toxicity_risk, toxicity_score)
 
-        if not host_alive or total_tox >= 0.45:
+        if not host_alive or total_tox >= 0.40 or clinical_outcome == "HOST_LETHALITY_OVERDOSE":
             # Konakçıyı öldüren bileşiklere fatalite cezası
-            final_fitness = round(float(max(0.0, (1.0 - total_tox) * 15.0)), 1)
+            final_fitness = round(float(max(0.0, (1.0 - min(1.0, total_tox)) * 12.0)), 1)
             return CandidateEvaluationResult(
                 candidate_name=profile.name,
                 smiles=profile.smiles,
@@ -69,19 +72,29 @@ class MolecularFitnessEvaluator:
                 multiobjective_fitness_score=final_fitness
             )
 
-        # Hız Skoru (Maksimum 40 Puan): 15 saniyeden ne kadar hızlı tetiklerse o kadar yüksek
+        # 1. Hız ve İmmün Mobilizasyon Skoru (Maksimum 30 Puan)
         speed_ratio = max(0.0, (15.0 - min(15.0, time_to_trigger_s)) / 14.0)
-        speed_score = speed_ratio * 40.0
-
-        # Savunma Verimi Skoru (Maksimum 35 Puan): Hemosit üretimi ve tümör küçülmesi
         hemocyte_ratio = min(1.0, hemocytes_produced / 70.0)
-        efficacy_score = (hemocyte_ratio * 25.0) + (tumor_clearance_pct * 0.10)
+        speed_score = (speed_ratio * 18.0) + (hemocyte_ratio * 12.0)
 
-        # Güvenlik & Toksisite Skoru (Maksimum 25 Puan): Düşük toksisite yüksek puan
-        safety_score = max(0.0, (1.0 - total_tox) * 25.0)
+        # 2. Tümör Küçülme ve Klonal Temizleme Skoru (Maksimum 40 Puan)
+        clearance_ratio = float(np.clip(tumor_clearance_pct / 100.0, 0.0, 1.0))
+        clearance_score = clearance_ratio * 40.0
 
-        # Toplam Birleşik Skor (0 - 100)
-        final_fitness = round(float(np.clip(speed_score + efficacy_score + safety_score, 0.0, 100.0)), 1)
+        # 3. Güvenlik & Toksisite Skoru (Maksimum 30 Puan): <%8 toksisite tam puan alır
+        safety_score = max(0.0, (1.0 - (total_tox / 0.40)) * 30.0)
+
+        raw_fitness = speed_score + clearance_score + safety_score
+
+        # 4. Klinik Sonuç Cezaları
+        if clinical_outcome == "TUMOR_RELAPSE_RESISTANT":
+            raw_fitness = max(15.0, raw_fitness - 28.0)  # Nüks cezası
+        elif clinical_outcome == "TUMOR_PROGRESSION_ESCAPE":
+            raw_fitness = max(10.0, raw_fitness - 35.0)  # İstila cezası
+        elif clinical_outcome == "COMPLETE_REMISSION":
+            raw_fitness = min(100.0, raw_fitness + 5.0)  # Tam remisyon bonusu
+
+        final_fitness = round(float(np.clip(raw_fitness, 0.0, 100.0)), 1)
 
         return CandidateEvaluationResult(
             candidate_name=profile.name,

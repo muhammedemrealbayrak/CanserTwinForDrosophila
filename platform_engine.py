@@ -90,24 +90,24 @@ class DrosophilaInSilicoPlatform:
         tumor_radius = 65.0  # um
 
         # Kanser Hücrelerini Heterojen Klon Dağılımıyla Merkeze Yerleştir
-        # %74 Duyarlı (Sensitive), %14 MEK-Bypass Dirençli, %8 ABC-Efflux Dirençli, %4 İmmün-Kaçış
+        # %68 Duyarlı (Sensitive), %16 MEK-Bypass Dirençli (SHP2/RTK), %10 ABC-Efflux, %6 CD47 İmmün-Kaçış
         for _ in range(tumor_count):
             offset = np.random.normal(0.0, tumor_radius / 2.5, size=3)
             pos = np.clip(center + offset, 15.0, self.domain_size - 15.0)
 
             roll = np.random.rand()
-            if roll < 0.74:
+            if roll < 0.68:
                 c_type = "sensitive"
-                c_res = float(np.random.uniform(0.02, 0.12))
-            elif roll < 0.88:
+                c_res = float(np.random.uniform(0.02, 0.10))
+            elif roll < 0.84:
                 c_type = "resistant_mek"
-                c_res = float(np.random.uniform(0.75, 0.90))
-            elif roll < 0.96:
+                c_res = float(np.random.uniform(0.78, 0.90))
+            elif roll < 0.94:
                 c_type = "resistant_efflux"
-                c_res = float(np.random.uniform(0.70, 0.88))
+                c_res = float(np.random.uniform(0.72, 0.88))
             else:
                 c_type = "immune_evasive"
-                c_res = float(np.random.uniform(0.40, 0.65))
+                c_res = float(np.random.uniform(0.45, 0.65))
 
             c = CancerCell3D(
                 id=self.next_agent_id,
@@ -117,7 +117,7 @@ class DrosophilaInSilicoPlatform:
                 resistance_score=c_res,
                 p53_mutated=True,
                 kras_mutated=True,
-                division_threshold_s=float(np.random.uniform(75.0, 130.0))
+                division_threshold_s=float(np.random.uniform(42.0, 56.0))
             )
             self.cancer_cells.append(c)
             self.next_agent_id += 1
@@ -186,7 +186,7 @@ class DrosophilaInSilicoPlatform:
         dose_factor = (self.drug_dose_uM / 2.5) ** 0.8
         direct_drug_tox = self.active_drug.qsar_toxicity_risk * dose_factor
         if self.active_modality == "cytotoxic_chemotherapy":
-            direct_drug_tox = max(direct_drug_tox, 0.28 * dose_factor)
+            direct_drug_tox = max(direct_drug_tox, 0.32 * dose_factor)
         elif self.active_modality == "metabolic_starvation":
             direct_drug_tox = max(direct_drug_tox, 0.10 * dose_factor)
 
@@ -209,10 +209,10 @@ class DrosophilaInSilicoPlatform:
             if viable_cancer_count == 0:
                 clinical_outcome = "COMPLETE_REMISSION"
                 clinical_status_text = "🟢 TAM REMİSYON"
-            elif viable_cancer_count >= int(self.initial_tumor_count * 1.70):
+            elif viable_cancer_count >= int(self.initial_tumor_count * 1.60):
                 clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
                 clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
-            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.75) and viable_cancer_count >= int(self.lowest_tumor_count * 1.30) and resistant_count > 0.40 * max(1, viable_cancer_count):
+            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.80) and viable_cancer_count >= int(self.lowest_tumor_count * 1.25) and resistant_count >= 0.35 * max(1, viable_cancer_count):
                 clinical_outcome = "TUMOR_RELAPSE_RESISTANT"
                 clinical_status_text = "🟠 DİRENÇLİ NÜKS / RELAPS"
             elif viable_cancer_count <= int(self.initial_tumor_count * 0.45):
@@ -619,9 +619,24 @@ class DrosophilaInSilicoPlatform:
         if marrow_drive >= 0.85 and self.time_to_first_trigger_s is None:
             self.time_to_first_trigger_s = self.elapsed_time_s
 
+        # Mekanistik İlaç ve Kokteyl Hedef Eşleştirmesi
+        modality = self.active_modality
+        drug_name_lower = (self.active_drug.name or "").lower()
+        drug_smiles_lower = (self.active_drug.smiles or "").lower()
+        comp_text = f"{drug_name_lower} {drug_smiles_lower} "
+        if self.active_cocktail and self.active_cocktail.get("components"):
+            comp_text += " ".join([
+                (c.get("name", "") + " " + c.get("target", "") + " " + c.get("mechanism", "") + " " + c.get("target_key", "")).lower()
+                for c in self.active_cocktail["components"]
+            ])
+
+        is_immune_agonist = bool(
+            any(k in comp_text for k in ["nachr", "agonist", "kcg", "f-nac", "mcn", "nicotine", "denovo"])
+        )
+
         # 3. Lenf Bezi (Kemik İliği) 4-Aşamalı Yakıt Tüketimi ve Savunma Hücresi Üretimi
         if self.host_alive:
-            drug_boost = min(1.5, self.drug_dose_uM * 0.15)
+            drug_boost = min(1.5, self.drug_dose_uM * 0.25) if is_immune_agonist else 0.0
             new_plasma, new_lamello = self.lymph_gland.step_hematopoiesis(
                 dt_seconds=dt_seconds,
                 elapsed_seconds=self.elapsed_time_s,
@@ -642,22 +657,13 @@ class DrosophilaInSilicoPlatform:
             self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.LAMELLOCYTE, position=pos, radius_um=12.0))
             self.next_agent_id += 1
 
-        # 4. 3D İlaç Enjeksiyonu ve Fickian Difüzyon
-        self.spatial_tme.inject_drug(dose_rate=self.drug_dose_uM, dt=dt_seconds, logP=self.active_drug.logP)
-        self.spatial_tme.diffuse_fields(dt=dt_seconds)
-
-        # 5. Kanser Hücre Güncellemeleri & Onkolojik Tedavi Modalitesi
-        modality = self.active_modality
-        comp_text = ""
-        if self.active_cocktail and self.active_cocktail.get("components"):
-            comp_text = " ".join([
-                (c.get("name", "") + " " + c.get("target", "") + " " + c.get("mechanism", "") + " " + c.get("target_key", "")).lower()
-                for c in self.active_cocktail["components"]
-            ])
-
+        is_mct1_acidosis_cleared = bool(
+            modality == "metronomic_rescue" or
+            any(k in comp_text for k in ["azd3965", "mct1", "laktat", "acidosis"])
+        )
         is_anti_cd47 = bool(
             modality in ("immunotherapy_cd47", "metronomic_rescue") or
-            any(k in comp_text for k in ["cd47", "checkpoint", "fagositoz", "evorpacept", "alx148"])
+            any(k in comp_text for k in ["cd47", "checkpoint", "fagositoz", "evorpacept", "alx148", "draper"])
         )
         is_metabolic = bool(
             modality == "metabolic_starvation" or
@@ -665,30 +671,44 @@ class DrosophilaInSilicoPlatform:
         )
         is_chemo = bool(
             modality in ("cytotoxic_chemotherapy", "metronomic_rescue") or
-            any(k in comp_text for k in ["cisplatin", "adduct", "alkilat"])
+            any(k in comp_text for k in ["cisplatin", "adduct", "alkilat", "paclitaxel", "kemoterapi"])
         )
         is_synthetic_lethality = bool(
             any(k in comp_text for k in ["olaparib", "parp"]) and any(k in comp_text for k in ["ceralasertib", "atr"])
         )
         is_kras_dual_lock = bool(
-            any(k in comp_text for k in ["mrtx1133", "kras_g12d", "kras"]) and any(k in comp_text for k in ["rmc-4550", "shp2"])
+            any(k in comp_text for k in ["mrtx1133", "kras_g12d", "pan-ras"]) and any(k in comp_text for k in ["rmc-4550", "shp2"])
         )
-        is_mct1_acidosis_cleared = bool(
-            any(k in comp_text for k in ["azd3965", "mct1", "laktat"])
+        is_shp2_inhibited = bool(
+            is_kras_dual_lock or any(k in comp_text for k in ["rmc-4550", "shp2", "ptpn11"])
+        )
+        is_kras_inhibited = bool(
+            any(k in comp_text for k in ["mrtx1133", "kras_g12d", "pan-ras"])
         )
         is_gdf15_shielded = bool(
-            any(k in comp_text for k in ["ponsegromab", "gdf15", "gdf15_cachexia"])
+            any(k in comp_text for k in ["ponsegromab", "gdf15", "curcumin", "kurkumin", "resveratrol"])
         )
-
-        is_denovo_champion = bool(self.active_drug.kd_micromolar < 0.08 and self.active_drug.qsar_toxicity_risk < 0.12)
-        mek_inhibited = bool(
-            is_denovo_champion or is_chemo or is_kras_dual_lock or
-            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase", "ras", "mrtx1133"])
+        is_mek_inhibited = bool(
+            is_kras_dual_lock or
+            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase"])
         )
         dna_damaged = bool(
             is_chemo or is_synthetic_lethality or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat", "olaparib"])
         )
 
+        # 3D İlaç Enjeksiyonu ve Fickian Difüzyon (Asidoz klerensi ile)
+        self.spatial_tme.inject_drug(dose_rate=self.drug_dose_uM, dt=dt_seconds, logP=self.active_drug.logP)
+        self.spatial_tme.diffuse_fields(dt=dt_seconds, mct1_inhibited=is_mct1_acidosis_cleared)
+        if is_mct1_acidosis_cleared:
+            self.spatial_tme.clear_lactate(clearance_boost=2.5, dt=dt_seconds)
+
+        # Farmakodinamik afiniteye bağlı EC50 penceresi (Düşük Kd = Yüksek Potens)
+        if self.active_cocktail:
+            eff_ec50 = 0.10
+        else:
+            eff_ec50 = float(np.clip(self.active_drug.kd_micromolar * 4.0, 0.10, 8.0))
+
+        # 5. Kanser Hücre Güncellemeleri & Onkolojik Tedavi Modalitesi
         newly_divided: List[CancerCell3D] = []
         step_cachectic_toxin = 0.0
 
@@ -698,27 +718,36 @@ class DrosophilaInSilicoPlatform:
 
             # Modaliteye Özgü Sitotoksisite ve Sentetik Ölümcüllük
             if is_chemo and modality == "cytotoxic_chemotherapy":
-                # Sitotoksik kemoterapi DNA adduct hasarı
                 c.health -= 0.65 * dt_seconds
 
             if is_synthetic_lethality:
-                # PARP + ATR Sentetik Ölümcüllük: Replikasyon çatalı çöküşü
-                c.health -= 0.85 * dt_seconds
+                c.health -= 1.6 * dt_seconds
 
             if is_metabolic:
-                # 2-DG glikoliz veya GLS1 glutaminaz blokajı
-                c.health -= 0.45 * dt_seconds
+                c.health -= 0.75 * dt_seconds
+
+            # Sinerjik kokteyllerin doğrudan çoklu-hedefli lizis gücü (Chou-Talalay kooperasyonu)
+            cocktail_potency = float(self.active_cocktail.get("potency_boost", 1.0)) if self.active_cocktail else 1.0
+            if self.active_cocktail and cocktail_potency >= 2.0:
+                c.health -= (0.90 * cocktail_potency) * dt_seconds
 
             local_drug = self.spatial_tme.sample_drug_at(c.position)
-            divided, toxin = c.step(
+            divided, toxin, lactate = c.step(
                 dt=dt_seconds,
                 local_drug_conc=local_drug,
-                mek_inhibited=mek_inhibited,
-                dna_damaged=dna_damaged
+                target_ec50=eff_ec50,
+                mek_inhibited=is_mek_inhibited,
+                shp2_inhibited=is_shp2_inhibited,
+                kras_inhibited=is_kras_inhibited,
+                dna_damaged=dna_damaged,
+                metabolic_starved=is_metabolic
             )
 
-            # Metabolik açlık terapisi ve dikey KRAS/SHP2 kilidi mitozu tamamen durdurur
-            if is_metabolic or is_kras_dual_lock:
+            # Laktat birikimi
+            self.spatial_tme.deposit_lactate(c.position, lactate)
+
+            # Metabolik açlık, sentetik ölümcüllük ve sinerjik çoklu-hedefli kokteyller mitozu tamamen kilitler
+            if is_metabolic or is_kras_dual_lock or is_synthetic_lethality or (self.active_cocktail and cocktail_potency >= 2.0):
                 divided = False
 
             step_cachectic_toxin += toxin
@@ -735,7 +764,7 @@ class DrosophilaInSilicoPlatform:
                 mutation_chance = 0.12 * float(np.clip(ci_factor, 0.20, 1.0))
                 if d_type == "sensitive" and np.random.rand() < mutation_chance:
                     d_type = str(np.random.choice(["resistant_mek", "resistant_efflux"]))
-                    d_res = float(np.random.uniform(0.70, 0.85))
+                    d_res = float(np.random.uniform(0.75, 0.90))
                 else:
                     d_res = float(min(0.98, d_res * np.random.uniform(0.98, 1.05)))
 
@@ -745,7 +774,7 @@ class DrosophilaInSilicoPlatform:
                     radius_um=c.radius_um,
                     clone_type=d_type,
                     resistance_score=d_res,
-                    division_threshold_s=c.division_threshold_s * float(np.random.uniform(0.92, 1.08))
+                    division_threshold_s=float(np.random.uniform(42.0, 56.0))
                 )
                 newly_divided.append(daughter)
                 self.next_agent_id += 1
@@ -765,17 +794,25 @@ class DrosophilaInSilicoPlatform:
         cocktail_potency = float(self.active_cocktail.get("potency_boost", 1.0)) if self.active_cocktail else 1.0
 
         for h in self.hemocyte_agents:
-            if h.exhaustion_index < 1.0 and h.cytotoxic_energy > 4.0:
+            if not h.is_apoptotic and h.exhaustion_index < 1.0 and h.cytotoxic_energy > 3.0:
                 active_hemocyte_count += 1
                 if self.host_alive:
+                    local_lac = self.spatial_tme.sample_lactate_at(h.position)
                     h.step_patrol_and_attack(
                         dt=dt_seconds,
                         cancer_cells=self.cancer_cells,
                         domain_bounds=self.spatial_tme.bounds,
+                        local_lactate_mM=local_lac,
                         fuel_efficiency=fuel_eff,
                         anti_cd47_active=is_anti_cd47,
                         potency_multiplier=cocktail_potency
                     )
+
+        # Tükenen veya ölen hemositleri temizle
+        self.hemocyte_agents = [
+            h for h in self.hemocyte_agents
+            if not h.is_apoptotic and h.exhaustion_index < 1.0 and h.cytotoxic_energy > 2.0
+        ]
 
         # Canlı kanser ve klon sayıları
         viable_cancer = [c for c in self.cancer_cells if c.state not in (CancerState.APOPTOTIC, CancerState.LYSED)]
@@ -810,7 +847,8 @@ class DrosophilaInSilicoPlatform:
         direct_drug_tox = self.active_drug.qsar_toxicity_risk * dose_factor
 
         if modality == "cytotoxic_chemotherapy":
-            direct_drug_tox = max(direct_drug_tox, 0.28 * dose_factor)
+            direct_drug_tox = max(direct_drug_tox, 0.32 * dose_factor)
+            self.cumulative_cachectic_toxin += 0.85 * dt_seconds  # Korunmasız kemoterapinin doku nekrozu yükü
         elif modality == "metabolic_starvation":
             direct_drug_tox = max(direct_drug_tox, 0.10 * dose_factor)
 
@@ -837,10 +875,10 @@ class DrosophilaInSilicoPlatform:
             if viable_cancer_count == 0:
                 clinical_outcome = "COMPLETE_REMISSION"
                 clinical_status_text = "🟢 TAM REMİSYON"
-            elif viable_cancer_count >= int(self.initial_tumor_count * 1.70):
+            elif viable_cancer_count >= int(self.initial_tumor_count * 1.60):
                 clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
                 clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
-            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.75) and viable_cancer_count >= int(self.lowest_tumor_count * 1.30) and resistant_count > 0.40 * max(1, viable_cancer_count):
+            elif self.lowest_tumor_count <= int(self.initial_tumor_count * 0.80) and viable_cancer_count >= int(self.lowest_tumor_count * 1.25) and resistant_count >= 0.35 * max(1, viable_cancer_count):
                 clinical_outcome = "TUMOR_RELAPSE_RESISTANT"
                 clinical_status_text = "🟠 DİRENÇLİ NÜKS / RELAPS"
             elif viable_cancer_count <= int(self.initial_tumor_count * 0.45):
@@ -927,5 +965,6 @@ class DrosophilaInSilicoPlatform:
             hemocytes_produced=self.lymph_gland.metrics.total_cells_egressed,
             tumor_clearance_pct=cleared_pct,
             toxicity_score=final_snap["toxicity_pct"] / 100.0,
-            host_alive=self.host_alive
+            host_alive=self.host_alive,
+            clinical_outcome=final_snap.get("clinical_outcome")
         )
