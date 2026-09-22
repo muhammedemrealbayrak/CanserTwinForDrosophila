@@ -17,6 +17,7 @@ import webbrowser
 import threading
 import io
 import csv
+import datetime
 from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Dict, List, Any, Optional
@@ -40,6 +41,7 @@ from denovo_ai.cocktail_generator import cocktail_synthesizer
 from pipeline.docking_engine import docking_engine
 from pipeline.clinical_trial_engine import clinical_trial_engine
 from pipeline.translational_engine import translational_engine
+from pipeline.pdf_report_generator import generate_pdf_report
 
 HOST = "127.0.0.1"
 PORT = 8060
@@ -340,6 +342,36 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(body)
             else:
                 self.send_error(404, "Dosya bulunamadı")
+
+        elif self.path.startswith("/api/export_pdf_report"):
+            # Preklinik İlaç ve Simülasyon Sonuçları PDF Raporu Dışa Aktarımı
+            parsed = urlparse(self.path)
+            qs = parse_qs(parsed.query)
+            rtype = qs.get("type", ["full"])[0].lower()
+
+            with SIM_LOCK:
+                active_snap = platform_instance.get_current_snapshot() if platform_instance else None
+                active_drug = platform_instance.active_drug if platform_instance else None
+
+            try:
+                pdf_bytes = generate_pdf_report(
+                    report_type=rtype,
+                    active_telemetry=active_snap,
+                    active_drug_profile=active_drug
+                )
+                now_ts = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+                filename = f"Drosophila_In_Silico_Oncology_Report_{now_ts}.pdf"
+
+                self.send_response(200)
+                self.send_header("Content-Type", "application/pdf")
+                self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+                self.send_header("Content-Length", str(len(pdf_bytes)))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(pdf_bytes)
+            except Exception as ex:
+                print(f"[ERROR] PDF raporu olusturulurken hata: {ex}")
+                self.send_error(500, f"PDF Olusturma Hatasi: {ex}")
 
         elif self.path.startswith("/api/export_dataset"):
             # Veri setini CSV veya JSON olarak dışa aktar

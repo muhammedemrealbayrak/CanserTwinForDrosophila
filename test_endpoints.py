@@ -111,8 +111,27 @@ def test():
     assert "dose_curve" in dose_data
     print(f"   [OK] Trametinib Optimal Dose: {dose_data['optimal_dose_uM']} uM (TI: {dose_data['therapeutic_index']}x, ED50: {dose_data['ed50_uM']} uM)")
 
+    # 9. GET /api/export_pdf_report (full)
+    print("\n9. Testing GET /api/export_pdf_report?type=full...")
+    res = urllib.request.urlopen(f"{BASE_URL}/api/export_pdf_report?type=full")
+    assert res.status == 200
+    assert "application/pdf" in res.headers.get("Content-Type", "")
+    pdf_bytes = res.read()
+    assert pdf_bytes.startswith(b"%PDF")
+    assert len(pdf_bytes) > 50000
+    print(f"   [OK] Full Preclinical Oncology Dossier PDF received ({len(pdf_bytes)} bytes)")
+
+    # 10. GET /api/export_pdf_report (active)
+    print("\n10. Testing GET /api/export_pdf_report?type=active...")
+    res = urllib.request.urlopen(f"{BASE_URL}/api/export_pdf_report?type=active")
+    assert res.status == 200
+    assert "application/pdf" in res.headers.get("Content-Type", "")
+    pdf_active_bytes = res.read()
+    assert pdf_active_bytes.startswith(b"%PDF")
+    print(f"   [OK] Active Run PDF received ({len(pdf_active_bytes)} bytes)")
+
     print("\n=======================================================")
-    print("ALL 8 ENDPOINTS & AI MULTI-DRUG DOSE ENGINE PASSED 100%!")
+    print("ALL 10 ENDPOINTS, AI MULTI-DRUG ENGINE & PDF EXPORT PASSED 100%!")
     print("=======================================================")
 
 if __name__ == "__main__":

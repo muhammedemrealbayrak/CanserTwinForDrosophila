@@ -1186,6 +1186,10 @@
         <span id="header-drug-name" style="color: var(--cyan); font-weight:700;">DeNovo_Champion</span>
         <span id="header-drug-dose" style="color: var(--amber);">2.5 µM</span>
       </div>
+      <button class="btn-pdf-export" onclick="downloadPdfReport('full')" title="Tüm İlaçlar, Doz Yanıt ve Benchmark Raporunu PDF Olarak İndir" style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(168, 85, 247, 0.35)); border: 1px solid var(--cyan); color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(0,240,255,0.3); transition: all 0.2s ease;">
+        <span>📄</span>
+        <span>PDF Raporu İndir</span>
+      </button>
     </div>
   </header>
 
@@ -1527,6 +1531,12 @@
               <button class="btn-action secondary" onclick="recordCurrentRunToLeaderboard()" style="width:100%; margin-top:8px; border-color:var(--amber); color:#ffd166; font-size:11px; padding:7px;">
                 <span>🏆 Bu Koşuyu Liderlik Tablosuna Ekle</span>
               </button>
+              <button class="btn-action secondary" onclick="downloadPdfReport('active')" style="width:100%; margin-top:6px; border-color:var(--cyan); color:var(--cyan); font-size:11px; padding:7px; background: rgba(0, 240, 255, 0.08);" title="Mevcut simülasyon koşusunun sonuçlarını PDF olarak indir">
+                <span>📄 Bu Koşunun Simülasyon PDF Çıktısı</span>
+              </button>
+              <button class="btn-action secondary" onclick="downloadPdfReport('full')" style="width:100%; margin-top:4px; border-color:rgba(168,85,247,0.5); color:#d8b4fe; font-size:11px; padding:7px; background: rgba(168,85,247,0.08);" title="Tüm ilaçların simülasyon ve preklinik sonuçlarını kapsayan tam PDF dossier indir">
+                <span>📚 Kapsamlı Preklinik Portföy PDF Raporu</span>
+              </button>
             </div>
           </div>
 
@@ -1612,9 +1622,14 @@
             <h2>🧪 In Silico Kombinasyonel Terapi & Sinerji Kokteylleri</h2>
             <p style="color: var(--text-muted); font-size: 12px;">De Novo analoğumuz (F-NAc) ile hedefe yönelik MEK inhibitörü, kemoterapötik ve sitoprotektif ajanların Chou-Talalay sinerji protokolleri</p>
           </div>
-          <div class="pill" id="cocktail-active-badge" style="border-color: var(--cyan);">
-            <span>AKTİF PROTOKOL:</span>
-            <strong id="lbl-active-cocktail-name" style="color: var(--cyan);">Tekli İlaç (Monoterapi)</strong>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="pill" id="cocktail-active-badge" style="border-color: var(--cyan);">
+              <span>AKTİF PROTOKOL:</span>
+              <strong id="lbl-active-cocktail-name" style="color: var(--cyan);">Tekli İlaç (Monoterapi)</strong>
+            </div>
+            <button onclick="downloadPdfReport('full')" class="btn-test" style="text-decoration:none; padding:8px 14px; white-space:nowrap; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(168, 85, 247, 0.3)); border: 1px solid var(--cyan); color:#fff; cursor:pointer;" title="Sinerji Kokteylleri ve Chou-Talalay Analizini PDF Olarak İndir">
+              <span>📄 Sinerji PDF Raporu</span>
+            </button>
           </div>
         </div>
 
@@ -1919,6 +1934,7 @@
           <div style="display:flex; align-items:center; gap:10px;">
             <a href="/api/export_dataset?format=csv" download class="btn-test" style="text-decoration:none; padding:8px 14px; white-space:nowrap; display:flex; align-items:center; gap:5px;">📥 CSV İndir</a>
             <a href="/api/export_dataset?format=json" download class="btn-test" style="text-decoration:none; padding:8px 14px; white-space:nowrap; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, #a855f7, #6366f1); color:#fff;">📥 JSON İndir</a>
+            <button onclick="downloadPdfReport('full')" class="btn-test" style="text-decoration:none; padding:8px 14px; white-space:nowrap; display:flex; align-items:center; gap:5px; background:linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(168, 85, 247, 0.3)); border: 1px solid var(--cyan); color:#fff; cursor:pointer;" title="Tüm İlaç Portföyü ve Moleküler Özellikleri PDF Raporu Olarak İndir">📄 İlaç Portföyü (PDF)</button>
           </div>
         </div>
 
@@ -2037,6 +2053,9 @@
             </button>
             <button class="btn-action secondary" onclick="runBenchmarkBatchAll()" id="btn-benchmark-all" style="padding:8px 16px; white-space:nowrap; background:linear-gradient(135deg, rgba(255,183,3,0.2), rgba(168,85,247,0.2)); border-color:var(--amber); color:#ffd166;">
               <span>🚀 Tüm İlaç Havuzunu Tara & Güncelle</span>
+            </button>
+            <button class="btn-action secondary" onclick="downloadPdfReport('full')" style="padding:8px 14px; white-space:nowrap; border-color:var(--cyan); color:var(--cyan); background:rgba(0,240,255,0.08);" title="Benchmark Liderlik Tablosu ve Tüm İlaç Sonuçlarını PDF Raporu Olarak İndir">
+              <span>📥 Liderlik Tablosu (PDF)</span>
             </button>
             <button class="btn-action secondary" onclick="loadLeaderboard()" style="padding:8px 12px;" title="Tabloyu Yenile">
               <span>🔄</span>
@@ -5356,6 +5375,34 @@
       } catch (err) {
         console.error('Snapshot yakalama hatası:', err);
         showToast('⚠️ Görüntü kaydedilirken hata oluştu: ' + err.message);
+      }
+    }
+
+    function downloadPdfReport(type = 'full') {
+      try {
+        const typeLabel = (type === 'active') ? 'Aktif Simülasyon' : 'Kapsamlı Portföy & Benchmark';
+        showToast(`📄 ${typeLabel} PDF raporu derleniyor ve hazırlanıyor...`);
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+        const fileName = (type === 'active')
+          ? `Drosophila_Simulasyon_Raporu_${timestamp}.pdf`
+          : `Drosophila_Preklinik_Onkoloji_Dossier_${timestamp}.pdf`;
+
+        const url = `/api/export_pdf_report?type=${encodeURIComponent(type)}`;
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => {
+          showToast(`✅ PDF raporu başarıyla indirildi: ${fileName}`);
+        }, 1200);
+      } catch (err) {
+        console.error('PDF indirme hatası:', err);
+        showToast('⚠️ PDF raporu indirilirken hata oluştu: ' + err.message);
       }
     }
 

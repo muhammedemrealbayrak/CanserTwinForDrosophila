@@ -1,5 +1,103 @@
 [
   {
+    "id": "ai_cocktail_e5f44a30",
+    "name": "AI Sinerji: DeNovo_Champion + Ceralasertib + Anti-CD47",
+    "is_ai_generated": true,
+    "objective_key": "free_ai_discovery",
+    "objective_title": "Otonom AI De Novo Sinerji Keşfi (Maksimum Tümör Temizliği)",
+    "primary_smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+    "components": [
+      {
+        "name": "DeNovo_Champion (F-NAc)",
+        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
+        "dose": "0.81 µM",
+        "dose_uM": 0.81,
+        "target": "Kenyon Hücresi nAChRα7 Agonisti",
+        "role": "Kenyon Hücresi nAChRα7 Agonisti",
+        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
+        "target_key": "nAChR",
+        "target_class": "nAChR",
+        "qsar_tox": 0.038,
+        "dri_fold": 14.34
+      },
+      {
+        "name": "Ceralasertib / AZD6738 (ATR Kinaz)",
+        "smiles": "C[S@@](=O)(C1(CC1)C2=NC(C3=C4C=CNC4=NC=C3)=NC(N5CCOC[C@H]5C)=C2)=N",
+        "dose": "0.021 µM",
+        "dose_uM": 0.021,
+        "target": "ATR Replikasyon Stres Blokörü",
+        "role": "ATR Replikasyon Stres Blokörü",
+        "mechanism": "Replikasyon stres kontrol noktasını (checkpoint) kırarak PARP dirençli tümör hücrelerini genomik kaosa sürükler",
+        "target_key": "ATR",
+        "target_class": "ATR",
+        "qsar_tox": 0.06,
+        "dri_fold": 17.01
+      },
+      {
+        "name": "Anti-CD47 Mimetic Peptide",
+        "smiles": "CC(C)CC(C(=O)NC(C)C(=O)NC(CC1=CC=CC=C1)C(=O)O)NC(=O)C",
+        "dose": "0.935 µM",
+        "dose_uM": 0.935,
+        "target": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "role": "Don't-Eat-Me İmmün Kontrol Blokajı",
+        "mechanism": "Kanser hücresinin CD47 kalkanını yıkarak hemosit SIRPα/Draper fagositozunu 2.4x hızlandırır",
+        "target_key": "CD47",
+        "target_class": "CD47",
+        "qsar_tox": 0.02,
+        "dri_fold": 16.24
+      }
+    ],
+    "component_count": 3,
+    "synergy_index_ci": 0.2,
+    "chou_talalay_ci": 0.2,
+    "synergy_label": "Ultra Sinerji (CI < 0.25)",
+    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
+    "bliss_excess_score": 0.021,
+    "bliss_observed_kill": 0.915,
+    "bliss_expected_kill": 0.894,
+    "hsa_excess_score": 0.353,
+    "toxicity_reduction_pct": 78.0,
+    "toxicity_shield_pct": 0.78,
+    "potency_boost": 2.49,
+    "target_potency_multiplier": 2.49,
+    "dri_profile": {
+      "DeNovo_Champion (F-NAc)": {
+        "dose_uM": 0.81,
+        "single_effective_dx_uM": 11.6121,
+        "dri_fold": 14.34,
+        "sparing_pct": 93.0
+      },
+      "Ceralasertib / AZD6738 (ATR Kinaz)": {
+        "dose_uM": 0.021,
+        "single_effective_dx_uM": 0.3573,
+        "dri_fold": 17.01,
+        "sparing_pct": 94.1
+      },
+      "Anti-CD47 Mimetic Peptide": {
+        "dose_uM": 0.935,
+        "single_effective_dx_uM": 15.185,
+        "dri_fold": 16.24,
+        "sparing_pct": 93.8
+      }
+    },
+    "crosstalk_interactions": [
+      {
+        "agent_a": "DeNovo_Champion (F-NAc)",
+        "agent_b": "Anti-CD47 Mimetic Peptide",
+        "targets": "nAChR ⟷ CD47",
+        "coupling_strength": 0.36
+      }
+    ],
+    "isobologram": {
+      "component_ratio_x": 0.07,
+      "component_ratio_y": 0.059,
+      "additive_line_threshold": 1.0,
+      "synergistic_distance": 0.8
+    },
+    "clinical_rationale": "Chou-Talalay CI = 0.2 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.1%. DeNovo_Champion (F-NAc) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ceralasertib / AZD6738 (ATR Kinaz) için 17.01x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 2.49x katına çıkar.",
+    "description": "Chou-Talalay CI = 0.2 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +2.1%. DeNovo_Champion (F-NAc) ve Ceralasertib / AZD6738 (ATR Kinaz) kooperasyonu, onkogenik kaçışı (ATR Replikasyon Stres Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Ceralasertib / AZD6738 (ATR Kinaz) için 17.01x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 2.49x katına çıkar."
+  },
+  {
     "id": "ai_cocktail_0b317342",
     "name": "AI Sinerji: DeNovo_Champion + Trametinib + Curcumin",
     "is_ai_generated": true,
@@ -4958,115 +5056,5 @@
     },
     "clinical_rationale": "Chou-Talalay CI = 0.25 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.4%. 2-Deoxyglucose (2-DG) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 1.79x katına çıkar.",
     "description": "Chou-Talalay CI = 0.25 (Süper Sinerji (CI < 0.40)), Bliss Sinerji Fazlalığı = +2.4%. 2-Deoxyglucose (2-DG) ve Telaglenastat / CB-839 (GLS1 İnhibitörü) kooperasyonu, onkogenik kaçışı (GLS1 Glutaminoliz & Metabolik Yakıt Blokörü) çoklu düğümden durdurur. Kombinasyon sayesinde Curcumin (Zerdeçal Polifenolü) için 14.41x doz tasarrufu sağlanarak doku hasarı %88.0 oranında kalkanlanır ve tümör lizis hızı 1.79x katına çıkar."
-  },
-  {
-    "id": "ai_cocktail_807cbcbd",
-    "name": "AI Sinerji: AZD3965 + Evorpacept + DeNovo_Champion",
-    "is_ai_generated": true,
-    "objective_key": "lactate_acidosis_cd47_immune",
-    "objective_title": "TME Asidoz Kırıcı & CD47 İmmün Kuşatma Kokteyli",
-    "primary_smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
-    "components": [
-      {
-        "name": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "smiles": "CC(C)N1C2=C(C(C(N3C[C@](C)(O)CO3)=O)=C(CC4=C(C)NN=C4C(F)(F)F)S2)C(N1C)=O",
-        "dose": "0.016 µM",
-        "dose_uM": 0.016,
-        "target": "MCT1 Monokarboksilat Asidoz Blokörü",
-        "role": "MCT1 Monokarboksilat Asidoz Blokörü",
-        "mechanism": "Tümör içi laktat atılımını keser, TME mikromimarisindeki asidozu nötrleyerek hemosit immün infiltrasyonunu 3.1x artırır",
-        "target_key": "MCT1",
-        "target_class": "MCT1",
-        "qsar_tox": 0.035,
-        "dri_fold": 21.09
-      },
-      {
-        "name": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "smiles": "CC(C)NC(=O)C1=CC=C(C=C1)CNC(=O)C2=NC=C(O2)C3=CC=CC=C3Cl",
-        "dose": "0.04 µM",
-        "dose_uM": 0.04,
-        "target": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
-        "role": "İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı",
-        "mechanism": "Kanser hücresinin CD47 kalkanını fagositoz aktivasyonu ile yıkar; hemosit kuşatmasını 2.8x patlatır",
-        "target_key": "CD47",
-        "target_class": "CD47",
-        "qsar_tox": 0.014,
-        "dri_fold": 14.1
-      },
-      {
-        "name": "DeNovo_Champion (F-NAc)",
-        "smiles": "CC1=NC=C(C=C1)CCN(C)C(=O)CF",
-        "dose": "0.81 µM",
-        "dose_uM": 0.81,
-        "target": "Kenyon Hücresi nAChRα7 Agonisti",
-        "role": "Kenyon Hücresi nAChRα7 Agonisti",
-        "mechanism": "185 ms milisaniyelik refleksle lenf bezine 45 Hz efferent ateşleme ve hemosit salınımı",
-        "target_key": "nAChR",
-        "target_class": "nAChR",
-        "qsar_tox": 0.038,
-        "dri_fold": 14.34
-      }
-    ],
-    "component_count": 3,
-    "synergy_index_ci": 0.19,
-    "chou_talalay_ci": 0.19,
-    "synergy_label": "Ultra Sinerji (CI < 0.25)",
-    "synergy_description": "Kanser Genomik ve Metabolik Çöküşü",
-    "bliss_excess_score": 0.057,
-    "bliss_observed_kill": 0.955,
-    "bliss_expected_kill": 0.898,
-    "hsa_excess_score": 0.393,
-    "toxicity_reduction_pct": 78.0,
-    "toxicity_shield_pct": 0.78,
-    "potency_boost": 3.02,
-    "target_potency_multiplier": 3.02,
-    "dri_profile": {
-      "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)": {
-        "dose_uM": 0.016,
-        "single_effective_dx_uM": 0.3375,
-        "dri_fold": 21.09,
-        "sparing_pct": 95.3
-      },
-      "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)": {
-        "dose_uM": 0.04,
-        "single_effective_dx_uM": 0.5641,
-        "dri_fold": 14.1,
-        "sparing_pct": 92.9
-      },
-      "DeNovo_Champion (F-NAc)": {
-        "dose_uM": 0.81,
-        "single_effective_dx_uM": 11.6121,
-        "dri_fold": 14.34,
-        "sparing_pct": 93.0
-      }
-    },
-    "crosstalk_interactions": [
-      {
-        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "agent_b": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "targets": "MCT1 ⟷ CD47",
-        "coupling_strength": 0.34
-      },
-      {
-        "agent_a": "AZD3965 (MCT1 Laktat Eflüks İnhibitörü)",
-        "agent_b": "DeNovo_Champion (F-NAc)",
-        "targets": "MCT1 ⟷ nAChR",
-        "coupling_strength": 0.32
-      },
-      {
-        "agent_a": "Evorpacept / ALX148 Mimetic (CD47 Dekoyu)",
-        "agent_b": "DeNovo_Champion (F-NAc)",
-        "targets": "CD47 ⟷ nAChR",
-        "coupling_strength": 0.36
-      }
-    ],
-    "isobologram": {
-      "component_ratio_x": 0.047,
-      "component_ratio_y": 0.071,
-      "additive_line_threshold": 1.0,
-      "synergistic_distance": 0.81
-    },
-    "clinical_rationale": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar.",
-    "description": "Chou-Talalay CI = 0.19 (Ultra Sinerji (CI < 0.25)), Bliss Sinerji Fazlalığı = +5.7%. AZD3965 (MCT1 Laktat Eflüks İnhibitörü) ve Evorpacept / ALX148 Mimetic (CD47 Dekoyu) kooperasyonu, onkogenik kaçışı (İnaktif-Fc CD47 SIRPα/Draper Kaçış Kırıcı) çoklu düğümden durdurur. Kombinasyon sayesinde AZD3965 (MCT1 Laktat Eflüks İnhibitörü) için 21.09x doz tasarrufu sağlanarak doku hasarı %78.0 oranında kalkanlanır ve tümör lizis hızı 3.02x katına çıkar."
   }
 ]
