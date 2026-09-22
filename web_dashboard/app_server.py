@@ -663,15 +663,44 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"status": "error", "message": str(ex)}, status=500)
 
         elif self.path == "/api/translational/predict":
-            # Drosophila -> İnsan Translasyonel İlaç Aktarılabilirlik Analizi
+            # Drosophila -> İnsan Translasyonel İlaç & Kokteyl Aktarılabilirlik Analizi
+            is_cocktail = payload.get("is_cocktail", False)
+            cohort = payload.get("tcga_cohort") or payload.get("tcga_cohort_id") or "TCGA-PAAD"
+            cocktail_id = payload.get("cocktail_id")
+            cocktail_data = payload.get("cocktail_data")
             mol = payload.get("molecule") or payload.get("molecule_name") or "DeNovo_Champion_Mol1"
-            cohort = payload.get("tcga_cohort") or payload.get("tcga_cohort_id") or "TCGA-GBM"
-            target_gene = payload.get("target_gene")
+
+            if is_cocktail or cocktail_id or cocktail_data or (mol and str(mol).startswith("cocktail_")) or (mol in platform_instance.COCKTAIL_REGIMENS):
+                target_c = cocktail_data or cocktail_id or mol
+                try:
+                    result = translational_engine.translate_cocktail(
+                        cocktail_data_or_id=target_c,
+                        target_tcga_cohort=cohort
+                    )
+                    self._send_json(result)
+                except Exception as ex:
+                    self._send_json({"status": "error", "message": str(ex)}, status=500)
+            else:
+                target_gene = payload.get("target_gene")
+                try:
+                    result = translational_engine.translate_molecule(
+                        molecule_name_or_smiles=mol,
+                        target_tcga_cohort=cohort,
+                        target_gene=target_gene
+                    )
+                    self._send_json(result)
+                except Exception as ex:
+                    self._send_json({"status": "error", "message": str(ex)}, status=500)
+
+        elif self.path == "/api/translational/predict_cocktail":
+            # Sinerjik Kokteyller İçin Özel Çok Hedefli Translasyonel Köprü
+            cohort = payload.get("tcga_cohort") or payload.get("tcga_cohort_id") or "TCGA-PAAD"
+            cocktail_id = payload.get("cocktail_id", "kras_g12d_vertical_blockade")
+            cocktail_data = payload.get("cocktail_data")
             try:
-                result = translational_engine.translate_molecule(
-                    molecule_name_or_smiles=mol,
-                    target_tcga_cohort=cohort,
-                    target_gene=target_gene
+                result = translational_engine.translate_cocktail(
+                    cocktail_data_or_id=cocktail_data or cocktail_id,
+                    target_tcga_cohort=cohort
                 )
                 self._send_json(result)
             except Exception as ex:
