@@ -658,16 +658,28 @@ class AICocktailSynthesizer:
         for c in components:
             t_class = c.get("target_class", "")
             if t_class in ("GDF15_Cachexia", "NF-kB"):
-                shield_strength += 0.48
+                shield_strength += 0.88
             elif t_class in ("SIRT1", "Mitochondria"):
-                shield_strength += 0.40
+                shield_strength += 0.82
             elif t_class == "CD47":
-                shield_strength += 0.25
+                shield_strength += 0.78
 
-        shield_pct = float(np.clip(shield_strength * 100.0, 72.0, 95.0))
+        if shield_strength > 0.0:
+            shield_pct = float(np.clip(shield_strength * 100.0, 20.0, 95.0))
+        else:
+            shield_pct = 0.0
         toxicity_reduction_pct = round(shield_pct, 1)
 
-        potency_boost = round(float(np.clip(1.6 + (crosstalk_bonus * 1.9), 1.8, 3.4)), 1)
+        if ci_val < 0.25:
+            potency_boost = round(float(np.clip(2.2 + (crosstalk_bonus * 0.8), 2.0, 3.2)), 2)
+        elif ci_val < 0.45:
+            potency_boost = round(float(np.clip(1.8 + (crosstalk_bonus * 0.6), 1.8, 2.4)), 2)
+        elif ci_val < 0.70:
+            potency_boost = round(float(np.clip(1.3 + (crosstalk_bonus * 0.4), 1.2, 1.7)), 2)
+        elif ci_val <= 1.00:
+            potency_boost = round(float(np.clip(1.0 + (crosstalk_bonus * 0.2), 0.95, 1.15)), 2)
+        else:
+            potency_boost = round(float(np.clip(0.95 / ci_val, 0.60, 0.90)), 2)
 
         if ci_val < 0.25:
             synergy_label = "Ultra Sinerji (CI < 0.25)"

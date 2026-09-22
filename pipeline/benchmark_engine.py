@@ -189,7 +189,10 @@ class InSilicoBenchmarkEngine:
             ("Paclitaxel", 26.0, 56, 84.0, 37.0, 63.8),
             ("Cisplatin", 28.0, 55, 82.0, 42.0, 62.1),
             ("Irinotecan", 29.0, 54, 80.0, 39.0, 61.5),
-            ("Methotrexate", 32.0, 50, 76.0, 35.0, 59.8)
+            ("Methotrexate", 32.0, 50, 76.0, 35.0, 59.8),
+            ("MRTX1133 (KRAS G12D)", 1.5, 65, 99.0, 5.0, 96.5),
+            ("RMC-4550 (SHP2 Allosteric)", 1.7, 63, 97.0, 5.5, 94.2),
+            ("Ponsegromab (GDF15 Kalkanı)", 2.0, 60, 92.0, 3.5, 92.0)
         ]
         
         for name, trig, hem, clr, tox, fit in predefined_benchmarks:

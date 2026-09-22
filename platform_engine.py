@@ -702,9 +702,11 @@ class DrosophilaInSilicoPlatform:
         if is_mct1_acidosis_cleared:
             self.spatial_tme.clear_lactate(clearance_boost=2.5, dt=dt_seconds)
 
-        # Farmakodinamik afiniteye bağlı EC50 penceresi (Düşük Kd = Yüksek Potens)
+        # Farmakodinamik afiniteye bağlı EC50 penceresi (Düşük Kd & Düşük CI = Yüksek Potens)
         if self.active_cocktail:
-            eff_ec50 = 0.10
+            ci = float(self.active_cocktail.get("chou_talalay_ci", 0.50))
+            base_kd = self.active_drug.kd_micromolar
+            eff_ec50 = float(np.clip(base_kd * (ci * 2.5), 0.12, 4.0))
         else:
             eff_ec50 = float(np.clip(self.active_drug.kd_micromolar * 4.0, 0.10, 8.0))
 
@@ -721,17 +723,36 @@ class DrosophilaInSilicoPlatform:
                 c.health -= 0.65 * dt_seconds
 
             if is_synthetic_lethality:
-                c.health -= 1.6 * dt_seconds
+                c.health -= 1.4 * dt_seconds
 
-            if is_metabolic:
+            if is_kras_dual_lock:
+                # KRAS G12D + SHP2 dikey blokajı onkogen bağımlısı hücrelerde kaskat apoptoz tetikler
+                c.health -= 1.35 * dt_seconds
+
+            if is_metabolic and modality == "metabolic_starvation":
                 c.health -= 0.75 * dt_seconds
 
-            # Sinerjik kokteyllerin doğrudan çoklu-hedefli lizis gücü (Chou-Talalay kooperasyonu)
-            cocktail_potency = float(self.active_cocktail.get("potency_boost", 1.0)) if self.active_cocktail else 1.0
-            if self.active_cocktail and cocktail_potency >= 2.0:
-                c.health -= (0.90 * cocktail_potency) * dt_seconds
-
+            # Biyolojik Klonal Hedef Eşleşmesi ve Sinerji Kooperasyonu
             local_drug = self.spatial_tme.sample_drug_at(c.position)
+            
+            # Hücrenin kokteyl bileşenlerinin mekanizmasına duyarlılık kontrolü
+            is_target_matched = False
+            if c.clone_type == "sensitive":
+                is_target_matched = bool(is_mek_inhibited or is_kras_inhibited or is_chemo or is_synthetic_lethality or is_metabolic)
+            elif c.clone_type == "resistant_mek":
+                is_target_matched = bool(is_kras_dual_lock or (is_shp2_inhibited and (is_mek_inhibited or is_kras_inhibited)) or is_synthetic_lethality)
+            elif c.clone_type == "resistant_efflux":
+                is_target_matched = bool(is_metabolic or is_synthetic_lethality or (is_chemo and self.drug_dose_uM >= 1.5))
+            elif c.clone_type == "immune_evasive":
+                is_target_matched = bool(is_kras_dual_lock or is_synthetic_lethality or is_anti_cd47)
+
+            # Sinerjik kokteyl (CI < 0.45) yalnızca hedefi tutan ve ilacın ulaştığı klonlarda apoptozu hızlandırır
+            if self.active_cocktail and is_target_matched and local_drug > 0.02:
+                ci_val = float(self.active_cocktail.get("chou_talalay_ci", 0.50))
+                if ci_val < 0.45:
+                    synergy_kill = float(np.clip(0.35 / ci_val, 0.40, 1.35)) * dt_seconds
+                    c.health -= synergy_kill
+
             divided, toxin, lactate = c.step(
                 dt=dt_seconds,
                 local_drug_conc=local_drug,
@@ -746,8 +767,8 @@ class DrosophilaInSilicoPlatform:
             # Laktat birikimi
             self.spatial_tme.deposit_lactate(c.position, lactate)
 
-            # Metabolik açlık, sentetik ölümcüllük ve sinerjik çoklu-hedefli kokteyller mitozu tamamen kilitler
-            if is_metabolic or is_kras_dual_lock or is_synthetic_lethality or (self.active_cocktail and cocktail_potency >= 2.0):
+            # Yalnızca dikey onkogenik kilit, sentetik ölümcüllük veya metabolik açlık mitozu tamamen durdurur
+            if is_metabolic or is_kras_dual_lock or is_synthetic_lethality:
                 divided = False
 
             step_cachectic_toxin += toxin
@@ -791,7 +812,8 @@ class DrosophilaInSilicoPlatform:
         if is_mct1_acidosis_cleared:
             fuel_eff = min(1.4, fuel_eff * 1.35)
 
-        cocktail_potency = float(self.active_cocktail.get("potency_boost", 1.0)) if self.active_cocktail else 1.0
+        # Hemosit fagositer gücü: Yalnızca nöro-immün agonist varlığında nöral sürüşle artar
+        hemocyte_potency = 1.30 if is_immune_agonist else 1.0
 
         for h in self.hemocyte_agents:
             if not h.is_apoptotic and h.exhaustion_index < 1.0 and h.cytotoxic_energy > 3.0:
@@ -805,7 +827,7 @@ class DrosophilaInSilicoPlatform:
                         local_lactate_mM=local_lac,
                         fuel_efficiency=fuel_eff,
                         anti_cd47_active=is_anti_cd47,
-                        potency_multiplier=cocktail_potency
+                        potency_multiplier=hemocyte_potency
                     )
 
         # Tükenen veya ölen hemositleri temizle
