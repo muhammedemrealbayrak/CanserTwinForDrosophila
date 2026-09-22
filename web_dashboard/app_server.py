@@ -141,19 +141,27 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_error(500, f"HTML read error: {e}")
 
-        elif self.path == "/api/compounds":
-            # Veritabanından tüm 22 bileşiği çek
-            compounds = data_manager.get_all_compounds()
+        elif self.path == "/api/compounds" or self.path.startswith("/api/compounds?"):
+            # Veritabanından tüm bileşikleri ve uygulanan filtreleri çek
+            parsed = urlparse(self.path)
+            qs = parse_qs(parsed.query)
+            filters = {}
+            if "category" in qs and qs["category"][0]:
+                filters["category"] = qs["category"][0]
+            if "potency" in qs and qs["potency"][0]:
+                filters["potency"] = qs["potency"][0]
+            if "safety" in qs and qs["safety"][0]:
+                filters["safety"] = qs["safety"][0]
+            if "stage" in qs and qs["stage"][0]:
+                filters["stage"] = qs["stage"][0]
+            if "search" in qs and qs["search"][0]:
+                filters["search"] = qs["search"][0]
+            compounds = data_manager.get_all_compounds(filters=filters if filters else None)
             self._send_json(compounds)
 
         elif self.path == "/api/ml_analytics":
-            # ML Model metrikleri ve analitiği
-            json_path = os.path.join(data_manager.RESULTS_DIR, "classification_summary.json")
-            if os.path.exists(json_path):
-                with open(json_path, "r", encoding="utf-8") as f:
-                    summary = json.load(f)
-            else:
-                summary = data_manager.ml_summary
+            # ML Model metrikleri, öznitelik önemleri ve çapraz doğrulama
+            summary = data_manager.get_ml_analytics()
             self._send_json(summary)
 
         elif self.path == "/api/benchmarks":

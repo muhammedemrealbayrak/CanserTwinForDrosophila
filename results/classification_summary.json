@@ -1,31 +1,54 @@
 {
-  "total_compounds": 55,
+  "total_compounds": 64,
+  "cv_accuracy_mean": 0.671,
+  "cv_accuracy_std": 0.044,
+  "feature_importances": {
+    "LogP": 0.1623,
+    "Molecular_Weight": 0.158,
+    "TPSA": 0.129,
+    "Fraction_CSP3": 0.1197,
+    "QED_Drug_Likeness": 0.1133,
+    "HBA": 0.1013,
+    "HBD": 0.0821,
+    "Rotatable_Bonds": 0.0798,
+    "Aromatic_Rings": 0.0544
+  },
   "categories_distribution": {
-    "Hedefe Yönelik İnhibitör": 30,
-    "Geleneksel Kemoterapötik": 12,
+    "Kinaz & Sinyal İnhibitörü": 21,
+    "Geleneksel Kemoterapötik": 13,
+    "Sentetik Ölümcüllük & Epigenetik": 9,
     "Doğal / Fitokimyasal Ajan": 9,
-    "De Novo Sentetik AI": 4
+    "Metabolik Açlık & Kemoprotektif": 5,
+    "De Novo Sentetik AI": 4,
+    "İmmüno-Onkoloji & Nöro-İmmün": 3
   },
   "potency_distribution": {
-    "Orta Potans (5-25 uM)": 24,
-    "Yüksek Potans (Sub-mikromolar / <1-5 uM)": 24,
-    "Düşük Potans / Diyet Düzeyi (>25 uM)": 7
+    "Ultra Yüksek Potans (<50 nM)": 40,
+    "Yüksek Potans (50 nM - 1 µM)": 21,
+    "Orta Potans (1 - 25 µM)": 3
   },
-  "feature_importances": {
-    "Fraction_CSP3": 0.1703,
-    "TPSA": 0.1392,
-    "QED_Drug_Likeness": 0.1327,
-    "Molecular_Weight": 0.1303,
-    "HBD": 0.1155,
-    "LogP": 0.1096,
-    "HBA": 0.086,
-    "Rotatable_Bonds": 0.0718,
-    "Aromatic_Rings": 0.0447
+  "safety_distribution": {
+    "Kabul Edilebilir Güvenlik (%5-20 Toksisite)": 34,
+    "Geniş Güvenlik Aralığı (<%5 Toksisite)": 18,
+    "Dar Terapötik İndeks (>%20 Toksisite)": 12
+  },
+  "development_stage_distribution": {
+    "FDA Onaylı İlaç": 34,
+    "Klinik Öncesi / Araştırma Fazı": 10,
+    "Doğal Biyoaktif Fitokimyasal": 8,
+    "Klinik Faz I/II Adayı": 8,
+    "De Novo Yapay Zeka Tasarımı": 4
+  },
+  "lipinski_distribution": {
+    "0 İhlal (Tam Uyumlu)": 45,
+    "1 İhlal (Kabul Edilebilir)": 6,
+    "2+ İhlal": 13
   },
   "average_descriptors": {
-    "avg_mw": 417.6,
+    "avg_mw": 419.8,
     "avg_logP": 2.92,
-    "avg_tpsa": 100.0,
-    "avg_qed": 0.47
+    "avg_tpsa": 98.5,
+    "avg_qed": 0.48,
+    "avg_f_csp3": 0.33
   }
 }
