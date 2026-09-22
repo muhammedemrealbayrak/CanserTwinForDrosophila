@@ -364,6 +364,69 @@ class DrosophilaInSilicoPlatform:
             ],
             "clinical_rationale": "Chou-Talalay CI = 0.38. HDAC baskılaması tümörün epigenetik savunmasını kırar, EGCG mitokondri membranını korur ve hemositler nodülü hızla temizler.",
             "description": "HDAC baskılaması tümörün epigenetik savunmasını kırar, EGCG mitokondri membranını korur ve hemositler nodülü hızla temizler."
+        },
+        "kras_g12d_vertical_blockade": {
+            "id": "kras_g12d_vertical_blockade",
+            "name": "Pan-RAS / KRAS G12D & SHP2 Dikey Blokaj (MRTX1133 + RMC-4550 + Ponsegromab)",
+            "primary_smiles": "OC1=CC(C2=C(F)C3=NC(OC[C@@]45CCCN4C[C@H](F)C5)=NC(N6CC(N7)CCC7C6)=C3C=N2)=C8C(C#C)=C(F)C=CC8=C1",
+            "components": [
+                {"name": "MRTX1133 (KRAS G12D)", "dose": "2.5 nM", "dose_uM": 0.0025, "target": "KRAS G12D Switch-II", "role": "KRAS G12D Switch-II", "mechanism": "Asp12 Tuz Köprüsü & MAPK Kilitlenmesi", "dri_fold": 9.2},
+                {"name": "RMC-4550 (SHP2)", "dose": "2.0 nM", "dose_uM": 0.002, "target": "SHP2 / PTPN11", "role": "SHP2 / PTPN11", "mechanism": "Allosterik Adaptif RTK Direnç Kırıcı", "dri_fold": 8.5},
+                {"name": "Ponsegromab Mimetic", "dose": "0.08 µM", "dose_uM": 0.08, "target": "GDF15/GFRAL & Upd3", "role": "GDF15/GFRAL & Upd3", "mechanism": "NEJM 2024 Kaşeksi Kalkanı", "dri_fold": 12.0}
+            ],
+            "synergy_index_ci": 0.18,
+            "chou_talalay_ci": 0.18,
+            "synergy_label": "Ultra Sinerji (CI < 0.25)",
+            "synergy_description": "Pan-RAS Dikey Yolak Çöküşü & Sıfır Kaşeksi",
+            "bliss_excess_score": 0.046,
+            "bliss_observed_kill": 0.992,
+            "bliss_expected_kill": 0.946,
+            "toxicity_reduction_pct": 92.0,
+            "toxicity_shield_pct": 0.92,
+            "potency_boost": 3.0,
+            "target_potency_multiplier": 3.0,
+            "dri_profile": {
+                "MRTX1133": {"dose_uM": 0.0025, "dri_fold": 9.2, "sparing_pct": 89.1},
+                "RMC-4550": {"dose_uM": 0.002, "dri_fold": 8.5, "sparing_pct": 88.2},
+                "Ponsegromab": {"dose_uM": 0.08, "dri_fold": 12.0, "sparing_pct": 91.7}
+            },
+            "crosstalk_interactions": [
+                {"agent_a": "MRTX1133", "agent_b": "RMC-4550", "targets": "KRAS_G12D ⟷ SHP2", "coupling_strength": 0.38},
+                {"agent_a": "MRTX1133", "agent_b": "Ponsegromab", "targets": "KRAS_G12D ⟷ GDF15_Cachexia", "coupling_strength": 0.32}
+            ],
+            "clinical_rationale": "Chou-Talalay CI = 0.18 (Ultra Sinerji). MRTX1133 ile KRAS G12D kilitlenirken, allosterik SHP2 inhibitörü (RMC-4550) adaptif RTK direncini sıfırlar; NEJM 2024 GDF15 kalkanı kaşeksiyi %92 önler.",
+            "description": "MRTX1133 ile KRAS G12D kilitlenirken, allosterik SHP2 inhibitörü (RMC-4550) adaptif RTK direncini sıfırlar; NEJM 2024 GDF15 kalkanı kaşeksiyi %92 önler."
+        },
+        "synthetic_lethality_parp_atr": {
+            "id": "synthetic_lethality_parp_atr",
+            "name": "Sentetik Ölümcüllük PARP & ATR (Olaparib + Ceralasertib + Resveratrol)",
+            "primary_smiles": "O=C(N1CCN(CC1)C(=O)c1cc(ccc1F)Cc1nnc(c2c1cccc2)O)C1CC1",
+            "components": [
+                {"name": "Olaparib", "dose": "25 nM", "dose_uM": 0.025, "target": "PARP1/2", "role": "PARP1/2", "mechanism": "DNA Tek Zincir Onarım Tuzaklaması", "dri_fold": 7.8},
+                {"name": "Ceralasertib", "dose": "20 nM", "dose_uM": 0.020, "target": "ATR Kinaz", "role": "ATR Kinaz", "mechanism": "Replikasyon Çatalı Çöküşü & Sentetik Ölüm", "dri_fold": 8.2},
+                {"name": "Resveratrol", "dose": "7.5 µM", "dose_uM": 7.5, "target": "SIRT1 Kalkanı", "role": "SIRT1 Kalkanı", "mechanism": "Sağlıklı Nöron ve Hemosit Sitoproteksiyonu", "dri_fold": 9.5}
+            ],
+            "synergy_index_ci": 0.18,
+            "chou_talalay_ci": 0.18,
+            "synergy_label": "Ultra Sinerji (CI < 0.25)",
+            "synergy_description": "DNA Hasar Yanıtı Katastrofisi (Synthetic Lethality)",
+            "bliss_excess_score": 0.026,
+            "bliss_observed_kill": 0.988,
+            "bliss_expected_kill": 0.962,
+            "toxicity_reduction_pct": 86.0,
+            "toxicity_shield_pct": 0.86,
+            "potency_boost": 2.8,
+            "target_potency_multiplier": 2.8,
+            "dri_profile": {
+                "Olaparib": {"dose_uM": 0.025, "dri_fold": 7.8, "sparing_pct": 87.2},
+                "Ceralasertib": {"dose_uM": 0.020, "dri_fold": 8.2, "sparing_pct": 87.8},
+                "Resveratrol": {"dose_uM": 7.5, "dri_fold": 9.5, "sparing_pct": 89.5}
+            },
+            "crosstalk_interactions": [
+                {"agent_a": "Olaparib", "agent_b": "Ceralasertib", "targets": "PARP ⟷ ATR", "coupling_strength": 0.38}
+            ],
+            "clinical_rationale": "Chou-Talalay CI = 0.18. Olaparib tek zincir onarımını dondururken Ceralasertib replikasyon kontrol noktasını patlatır; kanser hücreleri sentetik ölümcüllükle erir.",
+            "description": "Olaparib tek zincir onarımını dondururken Ceralasertib replikasyon kontrol noktasını patlatır; kanser hücreleri sentetik ölümcüllükle erir."
         }
     }
 
@@ -594,24 +657,36 @@ class DrosophilaInSilicoPlatform:
 
         is_anti_cd47 = bool(
             modality in ("immunotherapy_cd47", "metronomic_rescue") or
-            ("cd47" in comp_text or "checkpoint" in comp_text or "fagositoz" in comp_text)
+            any(k in comp_text for k in ["cd47", "checkpoint", "fagositoz", "evorpacept", "alx148"])
         )
         is_metabolic = bool(
             modality == "metabolic_starvation" or
-            ("2-deoxyglucose" in comp_text or "2-dg" in comp_text or "glikoliz" in comp_text or "warburg" in comp_text)
+            any(k in comp_text for k in ["2-deoxyglucose", "2-dg", "glikoliz", "warburg", "telaglenastat", "gls1", "cb-839"])
         )
         is_chemo = bool(
             modality in ("cytotoxic_chemotherapy", "metronomic_rescue") or
-            ("cisplatin" in comp_text or "adduct" in comp_text)
+            any(k in comp_text for k in ["cisplatin", "adduct", "alkilat"])
+        )
+        is_synthetic_lethality = bool(
+            any(k in comp_text for k in ["olaparib", "parp"]) and any(k in comp_text for k in ["ceralasertib", "atr"])
+        )
+        is_kras_dual_lock = bool(
+            any(k in comp_text for k in ["mrtx1133", "kras_g12d", "kras"]) and any(k in comp_text for k in ["rmc-4550", "shp2"])
+        )
+        is_mct1_acidosis_cleared = bool(
+            any(k in comp_text for k in ["azd3965", "mct1", "laktat"])
+        )
+        is_gdf15_shielded = bool(
+            any(k in comp_text for k in ["ponsegromab", "gdf15", "gdf15_cachexia"])
         )
 
         is_denovo_champion = bool(self.active_drug.kd_micromolar < 0.08 and self.active_drug.qsar_toxicity_risk < 0.12)
         mek_inhibited = bool(
-            is_denovo_champion or is_chemo or
-            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase", "ras"])
+            is_denovo_champion or is_chemo or is_kras_dual_lock or
+            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase", "ras", "mrtx1133"])
         )
         dna_damaged = bool(
-            is_chemo or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat"])
+            is_chemo or is_synthetic_lethality or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat", "olaparib"])
         )
 
         newly_divided: List[CancerCell3D] = []
@@ -621,14 +696,18 @@ class DrosophilaInSilicoPlatform:
             if c.state in (CancerState.APOPTOTIC, CancerState.LYSED):
                 continue
 
-            # Modaliteye Özgü Sitotoksisite ve Metabolik Baskı
+            # Modaliteye Özgü Sitotoksisite ve Sentetik Ölümcüllük
             if is_chemo and modality == "cytotoxic_chemotherapy":
                 # Sitotoksik kemoterapi DNA adduct hasarı
                 c.health -= 0.65 * dt_seconds
 
+            if is_synthetic_lethality:
+                # PARP + ATR Sentetik Ölümcüllük: Replikasyon çatalı çöküşü
+                c.health -= 0.85 * dt_seconds
+
             if is_metabolic:
-                # 2-DG glikoliz blokajı: Hücre ATP'siz kalır ve yavaşça erir
-                c.health -= 0.40 * dt_seconds
+                # 2-DG glikoliz veya GLS1 glutaminaz blokajı
+                c.health -= 0.45 * dt_seconds
 
             local_drug = self.spatial_tme.sample_drug_at(c.position)
             divided, toxin = c.step(
@@ -638,8 +717,8 @@ class DrosophilaInSilicoPlatform:
                 dna_damaged=dna_damaged
             )
 
-            # Metabolik açlık terapisi mitozu tamamen kilitler
-            if is_metabolic:
+            # Metabolik açlık terapisi ve dikey KRAS/SHP2 kilidi mitozu tamamen durdurur
+            if is_metabolic or is_kras_dual_lock:
                 divided = False
 
             step_cachectic_toxin += toxin
@@ -679,6 +758,10 @@ class DrosophilaInSilicoPlatform:
         if hasattr(self, "fuel_engine") and self.fuel_engine.pool.atp_mM < 1.0:
             fuel_eff = 0.35
 
+        # MCT1 inhibisyonu ile laktat asidozu nötrlendiğinde hemositler çevikleşir
+        if is_mct1_acidosis_cleared:
+            fuel_eff = min(1.4, fuel_eff * 1.35)
+
         cocktail_potency = float(self.active_cocktail.get("potency_boost", 1.0)) if self.active_cocktail else 1.0
 
         for h in self.hemocyte_agents:
@@ -715,10 +798,12 @@ class DrosophilaInSilicoPlatform:
                 c._visual_reported = True
 
         # Toksisite Hesaplaması (Doz faktörü + Kademeli Kaşeksi birikimi + Modalite yükü)
-        # Sitoprotektif kalkan (Curcumin / Resveratrol / SIRT1) kaşektik sitokin hasarını söndürür:
+        # Sitoprotektif kalkan (Curcumin / Resveratrol / SIRT1 / Ponsegromab GDF15) kaşektik sitokin hasarını söndürür:
         if self.active_cocktail:
             shield_red = float(self.active_cocktail.get("toxicity_reduction_pct", 0.0)) / 100.0
-            step_cachectic_toxin *= (1.0 - (shield_red * 0.85))
+            if is_gdf15_shielded:
+                shield_red = max(shield_red, 0.94)
+            step_cachectic_toxin *= (1.0 - (shield_red * 0.90))
 
         self.cumulative_cachectic_toxin += step_cachectic_toxin
         dose_factor = (self.drug_dose_uM / 2.5) ** 0.8
