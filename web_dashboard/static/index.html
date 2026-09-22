@@ -1394,6 +1394,14 @@
                 <span>Konakçı Vitalitesi:</span>
                 <span class="val" id="cell-hud-vitality" style="color: var(--emerald); font-weight: 700;">%100.0</span>
               </div>
+              <div class="hud-meta-row">
+                <span>İmmün Rezerv (Lenf Bezi):</span>
+                <span class="val" id="cell-hud-stem-reserve" style="color: var(--emerald); font-weight: 700;">%100.0</span>
+              </div>
+              <div class="hud-meta-row">
+                <span>Myelosüpresyon Riski:</span>
+                <span class="val" id="cell-hud-myelo-risk" style="padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.70rem; background: rgba(0, 255, 157, 0.15); color: #00ff9d;">🛡️ GÜVENLİ (KORUNDU)</span>
+              </div>
               <div style="display: flex; gap: 8px; font-size: 0.70rem; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap;">
                 <span style="display: inline-flex; align-items: center; gap: 3px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #f43f5e; display: inline-block;"></span> Hassas Malign Kanser</span>
                 <span style="display: inline-flex; align-items: center; gap: 3px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #d946ef; display: inline-block;"></span> MEK-Bypass Klonu</span>
@@ -4281,12 +4289,41 @@
           hudVitality.style.color = (tel.host_vitality_pct < 30) ? '#ff2a6d' : ((tel.host_vitality_pct < 60) ? '#ffb703' : '#00ff9d');
         }
       }
+
+      const hudStemReserve = document.getElementById('cell-hud-stem-reserve');
+      if (hudStemReserve) {
+        const sRes = tel.hematopoietic_reserve_pct !== undefined ? tel.hematopoietic_reserve_pct : 100.0;
+        hudStemReserve.innerText = '%' + sRes.toFixed(1);
+        hudStemReserve.style.color = sRes < 25.0 ? '#ff2a6d' : (sRes < 65.0 ? '#ffb703' : '#00ff9d');
+      }
+
+      const hudMyeloRisk = document.getElementById('cell-hud-myelo-risk');
+      if (hudMyeloRisk) {
+        const sRes = tel.hematopoietic_reserve_pct !== undefined ? tel.hematopoietic_reserve_pct : 100.0;
+        if (sRes < 25.0) {
+          hudMyeloRisk.innerText = '⚠️ AĞIR MYELOSÜPRESYON (İMMÜN ÇÖKÜŞ)';
+          hudMyeloRisk.style.color = '#ff2a6d';
+          hudMyeloRisk.style.background = 'rgba(255, 42, 109, 0.3)';
+        } else if (sRes < 65.0) {
+          hudMyeloRisk.innerText = '⚡ ORTA RİSK (REZERV AZALIYOR)';
+          hudMyeloRisk.style.color = '#ffb703';
+          hudMyeloRisk.style.background = 'rgba(255, 183, 3, 0.2)';
+        } else {
+          hudMyeloRisk.innerText = '🛡️ GÜVENLİ (KÖK HÜCRE KORUNDU)';
+          hudMyeloRisk.style.color = '#00ff9d';
+          hudMyeloRisk.style.background = 'rgba(0, 255, 157, 0.15)';
+        }
+      }
+
       const hudOutcome = document.getElementById('cell-hud-outcome');
       if (hudOutcome && tel.clinical_status_text) {
         hudOutcome.innerText = tel.clinical_status_text;
         if (tel.clinical_outcome === 'HOST_LETHALITY_OVERDOSE') {
           hudOutcome.style.background = 'rgba(255, 42, 109, 0.35)';
           hudOutcome.style.color = '#ff2a6d';
+        } else if (tel.clinical_outcome === 'REMISSION_WITH_IMMUNE_COLLAPSE') {
+          hudOutcome.style.background = 'rgba(255, 42, 109, 0.35)';
+          hudOutcome.style.color = '#f43f5e';
         } else if (tel.clinical_outcome === 'COMPLETE_REMISSION') {
           hudOutcome.style.background = 'rgba(0, 255, 157, 0.3)';
           hudOutcome.style.color = '#00ff9d';
@@ -4716,8 +4753,22 @@
           hemoGroup.userData.cholinergic = h.cholinergic || 0.0;
           hemoGroup.userData.exhaustion = h.exhaustion || 0.0;
           hemoGroup.userData.kills = h.kills || 0;
+          hemoGroup.userData.shielded = !!h.shielded;
           if (hemoGroup.userData.auraMesh) {
-            hemoGroup.userData.auraMesh.visible = (h.cholinergic && h.cholinergic > 0.2);
+            const isShielded = !!h.shielded;
+            const isExhausted = (h.exhaustion && h.exhaustion > 0.6);
+            const isCholinergic = (h.cholinergic && h.cholinergic > 0.2);
+            hemoGroup.userData.auraMesh.visible = (isShielded || isCholinergic || isExhausted);
+            if (isShielded) {
+              hemoGroup.userData.auraMesh.material.color.setHex(0x00f0ff);
+              hemoGroup.userData.auraMesh.material.opacity = 0.85;
+            } else if (isExhausted) {
+              hemoGroup.userData.auraMesh.material.color.setHex(0xff2a6d);
+              hemoGroup.userData.auraMesh.material.opacity = 0.60;
+            } else {
+              hemoGroup.userData.auraMesh.material.color.setHex(0x10b981);
+              hemoGroup.userData.auraMesh.material.opacity = 0.60;
+            }
           }
         }
         hemoGroup.position.set(h.pos[0], h.pos[1], h.pos[2]);

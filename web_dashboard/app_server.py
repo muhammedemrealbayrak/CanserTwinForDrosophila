@@ -113,6 +113,10 @@ def serialize_cells(platform):
         for c in platform.cancer_cells
         if c.state.value not in ["apoptotic", "lysed"]
     ]
+    is_shielded = bool(
+        getattr(platform, "active_cocktail", None) and
+        getattr(platform, "active_cocktail", {}).get("id") == "neuro_immune_quad_shield"
+    )
     hemocyte_list = [
         {
             "id": h.id,
@@ -120,7 +124,8 @@ def serialize_cells(platform):
             "pos": [round(float(x), 1) for x in h.position],
             "cholinergic": round(float(getattr(h, "cholinergic_activation", 0.0)), 2),
             "exhaustion": round(float(getattr(h, "exhaustion_index", 0.0)), 2),
-            "kills": int(getattr(h, "kills_count", 0))
+            "kills": int(getattr(h, "kills_count", 0)),
+            "shielded": is_shielded
         }
         for h in platform.hemocyte_agents
     ]

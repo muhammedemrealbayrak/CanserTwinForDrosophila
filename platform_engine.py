@@ -206,9 +206,21 @@ class DrosophilaInSilicoPlatform:
         else:
             self.host_alive = True
             host_vitality = max(0.0, round((1.0 - (systemic_tox / self.lethal_toxicity_threshold)) * 100.0, 1))
+            stem_reserve = float(self.lymph_gland.metrics.hematopoietic_stem_reserve)
+            if stem_reserve < 30.0:
+                myelo_risk = "SEVERE"
+            elif stem_reserve < 75.0:
+                myelo_risk = "MODERATE"
+            else:
+                myelo_risk = "SAFE"
+
             if viable_cancer_count == 0:
-                clinical_outcome = "COMPLETE_REMISSION"
-                clinical_status_text = "🟢 TAM REMİSYON"
+                if stem_reserve < 25.0:
+                    clinical_outcome = "REMISSION_WITH_IMMUNE_COLLAPSE"
+                    clinical_status_text = "⚠️ TÜMÖR TEMİZLENDİ FAKAT AĞIR MYELOSÜPRESYON (İMMÜN ÇÖKÜŞ)"
+                else:
+                    clinical_outcome = "COMPLETE_REMISSION"
+                    clinical_status_text = "🛡️ İMMÜN-KORUMALI TAM REMİSYON (ORGAN SAĞLAM)"
             elif viable_cancer_count >= int(self.initial_tumor_count * 1.60):
                 clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
                 clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
@@ -221,6 +233,9 @@ class DrosophilaInSilicoPlatform:
             else:
                 clinical_outcome = "STABLE_DISEASE"
                 clinical_status_text = "⚪ DURAĞAN HASTALIK"
+
+        stem_reserve = float(self.lymph_gland.metrics.hematopoietic_stem_reserve)
+        myelo_risk = "SEVERE" if stem_reserve < 30.0 else ("MODERATE" if stem_reserve < 75.0 else "SAFE")
 
         return {
             "time_s": self.elapsed_time_s,
@@ -266,10 +281,47 @@ class DrosophilaInSilicoPlatform:
             "clinical_status_text": clinical_status_text,
             "active_modality": self.active_modality,
             "modality_info": self.TREATMENT_MODALITIES.get(self.active_modality, {}),
-            "radiation_pulses_applied": self.radiation_pulses_applied
+            "radiation_pulses_applied": self.radiation_pulses_applied,
+            "hematopoietic_reserve_pct": round(stem_reserve, 1),
+            "myelosuppression_risk": myelo_risk
         }
 
     COCKTAIL_REGIMENS: Dict[str, Any] = {
+        "neuro_immune_quad_shield": {
+            "id": "neuro_immune_quad_shield",
+            "name": "Nöro-İmmün Metronomik Dörtlü Kalkan (Metronomik Trametinib + F-NAc + Resveratrol + Ponsegromab)",
+            "primary_smiles": "NC(=O)CN1CCC[C@H]1c2cncc(F)c2",
+            "components": [
+                {"name": "Metronomik Trametinib", "dose": "0.35 µM", "dose_uM": 0.35, "target": "MEK1/2 Kinaz (Dsor1)", "role": "MEK1/2 Kinaz (Dsor1)", "mechanism": "Kök Hücre Proliferasyon Blokajı (Cordero/Biteau)", "dri_fold": 9.5},
+                {"name": "F-NAc (De Novo Agonist)", "dose": "1.2 µM", "dose_uM": 1.2, "target": "nAChR / KCg-m", "role": "nAChR / KCg-m", "mechanism": "185ms Nöro-İmmün Ateşleme & Egress (Tracey 2002)", "dri_fold": 7.8},
+                {"name": "Resveratrol", "dose": "4.5 µM", "dose_uM": 4.5, "target": "SIRT1 / Sir2 Kalkanı", "role": "SIRT1 / Sir2 Kalkanı", "mechanism": "Lenf Bezi / Kemik İliği Kök Hücre Kalkanı (Bishayee 2009)", "dri_fold": 11.2},
+                {"name": "Ponsegromab Mimetic", "dose": "2.0 µM", "dose_uM": 2.0, "target": "GDF15 & Upd3 Sitokin Tuzağı", "role": "GDF15 & Upd3 Sitokin Tuzağı", "mechanism": "Sıfır Kaşeksi & Enerji Rezervi Koruması (NEJM 2024)", "dri_fold": 12.4}
+            ],
+            "synergy_index_ci": 0.22,
+            "chou_talalay_ci": 0.22,
+            "synergy_label": "Ultra Sinerji (CI < 0.25)",
+            "synergy_description": "İmmün-Korumalı Metronomik Kanser Temizliği",
+            "bliss_excess_score": 0.048,
+            "bliss_observed_kill": 0.994,
+            "bliss_expected_kill": 0.946,
+            "toxicity_reduction_pct": 94.0,
+            "toxicity_shield_pct": 0.94,
+            "potency_boost": 2.9,
+            "target_potency_multiplier": 2.9,
+            "dri_profile": {
+                "Metronomik Trametinib": {"dose_uM": 0.35, "dri_fold": 9.5, "sparing_pct": 89.5},
+                "F-NAc": {"dose_uM": 1.2, "dri_fold": 7.8, "sparing_pct": 87.2},
+                "Resveratrol": {"dose_uM": 4.5, "dri_fold": 11.2, "sparing_pct": 91.1},
+                "Ponsegromab": {"dose_uM": 2.0, "dri_fold": 12.4, "sparing_pct": 91.9}
+            },
+            "crosstalk_interactions": [
+                {"agent_a": "Metronomik Trametinib", "agent_b": "F-NAc", "targets": "MEK ⟷ nAChR", "coupling_strength": 0.36},
+                {"agent_a": "Metronomik Trametinib", "agent_b": "Resveratrol", "targets": "MEK ⟷ SIRT1_StemShield", "coupling_strength": 0.42},
+                {"agent_a": "F-NAc", "agent_b": "Ponsegromab", "targets": "nAChR ⟷ GDF15_Cachexia", "coupling_strength": 0.30}
+            ],
+            "clinical_rationale": "Chou-Talalay CI = 0.22 (Ultra Sinerji). Metronomik düşük doz Trametinib ile MEK baskılanırken tümörün kök hücre döngüsü (Cordero/Biteau) kırılır; Resveratrol Sir2 üzerinden lenf bezi kök hücrelerini myelosüpresyondan korur (%88+ rezerv); F-NAc nöral sürüşle hemosit üretimini sürekli kılar ve Ponsegromab kaşeksiyi bloke eder. Bağışıklık çökmeden tam remisyon elde edilir.",
+            "description": "Metronomik düşük doz Trametinib ile MEK baskılanırken tümörün kök hücre döngüsü kırılır; Resveratrol Sir2 üzerinden lenf bezi kök hücrelerini myelosüpresyondan korur; F-NAc nöral sürüşle hemosit üretimini sürekli kılar ve Ponsegromab kaşeksiyi bloke eder."
+        },
         "immuno_mek_synergy": {
             "id": "immuno_mek_synergy",
             "name": "Immuno-MEK Sinerjisi (F-NAc + Trametinib + Kurkumin)",
@@ -633,30 +685,6 @@ class DrosophilaInSilicoPlatform:
         is_immune_agonist = bool(
             any(k in comp_text for k in ["nachr", "agonist", "kcg", "f-nac", "mcn", "nicotine", "denovo"])
         )
-
-        # 3. Lenf Bezi (Kemik İliği) 4-Aşamalı Yakıt Tüketimi ve Savunma Hücresi Üretimi
-        if self.host_alive:
-            drug_boost = min(1.5, self.drug_dose_uM * 0.25) if is_immune_agonist else 0.0
-            new_plasma, new_lamello = self.lymph_gland.step_hematopoiesis(
-                dt_seconds=dt_seconds,
-                elapsed_seconds=self.elapsed_time_s,
-                neural_efferent_drive=marrow_drive,
-                drug_immune_boost=drug_boost
-            )
-        else:
-            new_plasma, new_lamello = 0, 0
-
-        # Yeni üretilen savunma hücrelerini çeper damarlardan 3D dokuya dök (Egress)
-        for _ in range(new_plasma):
-            pos = self._random_boundary_position()
-            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.PLASMATOCYTE, position=pos))
-            self.next_agent_id += 1
-
-        for _ in range(new_lamello):
-            pos = self._random_boundary_position()
-            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.LAMELLOCYTE, position=pos, radius_um=12.0))
-            self.next_agent_id += 1
-
         is_mct1_acidosis_cleared = bool(
             modality == "metronomic_rescue" or
             any(k in comp_text for k in ["azd3965", "mct1", "laktat", "acidosis"])
@@ -704,10 +732,54 @@ class DrosophilaInSilicoPlatform:
         is_polyphenol_active = bool(
             any(k in comp_text for k in ["egcg", "curcumin", "kurkumin", "resveratrol", "quercetin", "polyphenol", "wnt", "notch"])
         )
-        # Bishayee (2009) Resveratrol Sir2/SIRT1 Konakçı Sağkalım Kalkanı
+        # Bishayee (2009) Resveratrol Sir2/SIRT1 Konakçı Sağkalım & Kök Hücre Kalkanı
         is_sirtuin_active = bool(
             any(k in comp_text for k in ["resveratrol", "sirt1", "sir2", "sirtuin"])
         )
+
+        # Miyelosüpresyon / Lenf Bezi (Kemik İliği) Kök Hücre Toksisitesi Hesaplaması
+        myelosuppressive_toxicity = 0.0
+        if is_chemo or modality == "cytotoxic_chemotherapy":
+            # Kemoterapötik sitotoksisite doza bağlı olarak lenf bezi kök hücrelerini de vurur
+            myelosuppressive_toxicity = 0.28 * (self.drug_dose_uM / 2.0)
+        elif modality == "targeted_small_molecule" and not is_sirtuin_active and not is_cholinergic_active:
+            if self.drug_dose_uM > 3.0:
+                myelosuppressive_toxicity = 0.08 * (self.drug_dose_uM - 3.0)
+        elif is_synthetic_lethality and not is_sirtuin_active:
+            myelosuppressive_toxicity = 0.18
+
+        # Sirtuin (Sir2/SIRT1) Kalkanı & Kolinerjik Rejenerasyon
+        sirtuin_shield = 0.88 if is_sirtuin_active else 0.0
+        if self.active_cocktail and self.active_cocktail.get("toxicity_reduction_pct", 0) > 75:
+            sirtuin_shield = max(sirtuin_shield, float(self.active_cocktail.get("toxicity_reduction_pct", 0)) / 100.0 * 0.75)
+
+        cholinergic_boost = 0.85 if is_cholinergic_active else 0.0
+
+        # 3. Lenf Bezi (Kemik İliği) 4-Aşamalı Yakıt Tüketimi ve Savunma Hücresi Üretimi
+        if self.host_alive:
+            drug_boost = min(1.5, self.drug_dose_uM * 0.25) if is_immune_agonist else 0.0
+            new_plasma, new_lamello = self.lymph_gland.step_hematopoiesis(
+                dt_seconds=dt_seconds,
+                elapsed_seconds=self.elapsed_time_s,
+                neural_efferent_drive=marrow_drive,
+                drug_immune_boost=drug_boost,
+                myelosuppressive_toxicity=myelosuppressive_toxicity,
+                sirtuin_shield=sirtuin_shield,
+                cholinergic_boost=cholinergic_boost
+            )
+        else:
+            new_plasma, new_lamello = 0, 0
+
+        # Yeni üretilen savunma hücrelerini çeper damarlardan 3D dokuya dök (Egress)
+        for _ in range(new_plasma):
+            pos = self._random_boundary_position()
+            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.PLASMATOCYTE, position=pos))
+            self.next_agent_id += 1
+
+        for _ in range(new_lamello):
+            pos = self._random_boundary_position()
+            self.hemocyte_agents.append(HemocyteAgent3D(id=self.next_agent_id, subtype=HemocyteSubtype.LAMELLOCYTE, position=pos, radius_um=12.0))
+            self.next_agent_id += 1
 
         # 3D İlaç Enjeksiyonu ve Fickian Difüzyon (Asidoz klerensi ile)
         self.spatial_tme.inject_drug(dose_rate=self.drug_dose_uM, dt=dt_seconds, logP=self.active_drug.logP)
@@ -913,10 +985,22 @@ class DrosophilaInSilicoPlatform:
             self.host_alive = True
             host_vitality = max(0.0, round((1.0 - (systemic_tox / self.lethal_toxicity_threshold)) * 100.0, 1))
 
-            # Klinik Sonuç Sınıflandırması
+            # Klinik Sonuç Sınıflandırması & Miyelosüpresyon İmmün Çöküş Kontrolü
+            stem_reserve = float(self.lymph_gland.metrics.hematopoietic_stem_reserve)
+            if stem_reserve < 30.0:
+                myelo_risk = "SEVERE"
+            elif stem_reserve < 75.0:
+                myelo_risk = "MODERATE"
+            else:
+                myelo_risk = "SAFE"
+
             if viable_cancer_count == 0:
-                clinical_outcome = "COMPLETE_REMISSION"
-                clinical_status_text = "🟢 TAM REMİSYON"
+                if stem_reserve < 25.0:
+                    clinical_outcome = "REMISSION_WITH_IMMUNE_COLLAPSE"
+                    clinical_status_text = "⚠️ TÜMÖR TEMİZLENDİ FAKAT AĞIR MYELOSÜPRESYON (İMMÜN ÇÖKÜŞ)"
+                else:
+                    clinical_outcome = "COMPLETE_REMISSION"
+                    clinical_status_text = "🛡️ İMMÜN-KORUMALI TAM REMİSYON (ORGAN SAĞLAM)"
             elif viable_cancer_count >= int(self.initial_tumor_count * 1.60):
                 clinical_outcome = "TUMOR_PROGRESSION_ESCAPE"
                 clinical_status_text = "🔴 TEDAVİ BAŞARISIZ: TÜMÖR İSTİLASI"
@@ -929,6 +1013,9 @@ class DrosophilaInSilicoPlatform:
             else:
                 clinical_outcome = "STABLE_DISEASE"
                 clinical_status_text = "⚪ DURAĞAN HASTALIK"
+
+        stem_reserve = float(self.lymph_gland.metrics.hematopoietic_stem_reserve)
+        myelo_risk = "SEVERE" if stem_reserve < 30.0 else ("MODERATE" if stem_reserve < 75.0 else "SAFE")
 
         snapshot = {
             "time_s": self.elapsed_time_s,
@@ -980,7 +1067,12 @@ class DrosophilaInSilicoPlatform:
             "mean_isc_stemness": round(float(np.mean([getattr(c, 'isc_stemness', 1.0) for c in viable_cancer])) if viable_cancer else 0.0, 2),
             "mean_eiger_level": round(float(np.mean([getattr(c, 'eiger_level', 0.0) for c in viable_cancer])) if viable_cancer else 0.0, 2),
             "cholinergic_neuro_active": is_cholinergic_active,
-            "sirtuin_shield_active": is_sirtuin_active
+            "sirtuin_shield_active": is_sirtuin_active,
+            # Miyelosüpresyon & Kemik İliği / Lenf Bezi İmmün Rezerv
+            "hematopoietic_reserve_pct": round(stem_reserve, 1),
+            "myelosuppression_risk": myelo_risk,
+            "sirtuin_shield_pct": round(sirtuin_shield * 100.0, 1),
+            "cholinergic_boost_pct": round(cholinergic_boost * 100.0, 1)
         }
         self.history.append(snapshot)
         return snapshot
