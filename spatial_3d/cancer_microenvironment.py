@@ -176,8 +176,9 @@ class CancerCell3D:
         mitotic_speed = (1.45 if self.kras_mutated else 1.0) * drug_arrest
         self.division_timer_s += dt * mitotic_speed
 
-        if self.division_timer_s >= self.division_threshold_s and self.health > 45.0:
+        if self.division_timer_s >= self.division_threshold_s and self.health > 18.0:
             self.division_timer_s = 0.0
+            self.health = max(25.0, self.health * 0.72)
             return True, cachectic_toxin, lactate_shed
 
         return False, cachectic_toxin, lactate_shed

@@ -3865,6 +3865,10 @@
       light.position.set(300, 500, 400);
       cellularScene.add(light);
 
+      const rimLight = new THREE.DirectionalLight(0x818cf8, 0.9);
+      rimLight.position.set(-300, -200, -300);
+      cellularScene.add(rimLight);
+
       const pointLight1 = new THREE.PointLight(0x00f0ff, 2.0, 600);
       pointLight1.position.set(100, 300, 250);
       cellularScene.add(pointLight1);
@@ -3879,11 +3883,14 @@
         requestAnimationFrame(animateCellular);
         if (cellularControls && cellularControls.update) cellularControls.update();
         updateLysisBursts();
-        for (const [id, mesh] of cancerMeshMap.entries()) {
-          mesh.rotation.y += 0.006;
+        for (const [id, cellGroup] of cancerMeshMap.entries()) {
+          const ud = cellGroup.userData || {};
+          cellGroup.rotation.x += ud.rotSpeedX || 0.003;
+          cellGroup.rotation.y += ud.rotSpeedY || 0.005;
         }
-        for (const [id, mesh] of hemocyteMeshMap.entries()) {
-          mesh.rotation.z += 0.01;
+        for (const [id, hemoGroup] of hemocyteMeshMap.entries()) {
+          const ud = hemoGroup.userData || {};
+          hemoGroup.rotation.z += ud.rotSpeedZ || 0.008;
         }
         cellularRenderer.render(cellularScene, cellularCamera);
       }
@@ -4153,41 +4160,245 @@
       }
     }
 
+    // ============================================================
+    // GERÇEKÇİ 3D BİYOLOJİK HÜCRE MODELLEYİCİLERİ (Organik Membran,
+    // Deforme Pleomorfik Kanser, İstilacı İnvadopodya & Hemosit Psödopodyası)
+    // ============================================================
+
+    function createRealisticCancerCellModel(c) {
+      const group = new THREE.Group();
+      const cloneType = c.clone_type || (c.is_resistant ? 'resistant_mek' : 'sensitive');
+      const seed = (c.id * 73.13) % 100;
+      const baseRadius = 8.5;
+
+      // A) Organik Deforme Neoplastik Membran
+      const somaGeo = new THREE.DodecahedronGeometry(baseRadius, 2);
+      const pos = somaGeo.attributes.position;
+      const v = new THREE.Vector3();
+      for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
+        const norm = v.clone().normalize();
+        const harm1 = Math.sin(norm.x * 4.2 + seed) * Math.cos(norm.y * 3.8);
+        const harm2 = Math.sin(norm.z * 5.1 + seed * 1.4) * Math.cos(norm.x * 3.2);
+        const harm3 = Math.cos(norm.y * 6.0 + norm.z * 4.5) * 0.5;
+        const disp = 1.0 + 0.18 * harm1 + 0.12 * harm2 + 0.08 * harm3;
+        v.copy(norm).multiplyScalar(baseRadius * disp);
+        pos.setXYZ(i, v.x, v.y, v.z);
+      }
+      somaGeo.computeVertexNormals();
+
+      let colHex = 0xe11d48, emissHex = 0x881337, rough = 0.42, metal = 0.12, emissInt = 0.45;
+      if (cloneType === 'resistant_mek') {
+        colHex = 0xa855f7; emissHex = 0x581c87; rough = 0.35; metal = 0.28; emissInt = 0.65;
+      } else if (cloneType === 'resistant_efflux') {
+        colHex = 0xf59e0b; emissHex = 0x78350f; rough = 0.45; metal = 0.38; emissInt = 0.55;
+      } else if (cloneType === 'immune_evasive') {
+        colHex = 0x06b6d4; emissHex = 0x0e7490; rough = 0.25; metal = 0.18; emissInt = 0.70;
+      }
+
+      const somaMat = new THREE.MeshStandardMaterial({
+        color: colHex,
+        roughness: rough,
+        metalness: metal,
+        emissive: emissHex,
+        emissiveIntensity: emissInt,
+        transparent: true,
+        opacity: 0.88
+      });
+      const somaMesh = new THREE.Mesh(somaGeo, somaMat);
+      group.add(somaMesh);
+
+      // B) İç Yoğun Kromatin Çekirdeği (Neoplastic Nucleus)
+      const nucGeo = new THREE.DodecahedronGeometry(3.6, 1);
+      const nucMat = new THREE.MeshStandardMaterial({
+        color: 0x1e1b4b,
+        emissive: 0x0f172a,
+        emissiveIntensity: 0.35,
+        roughness: 0.7
+      });
+      const nucMesh = new THREE.Mesh(nucGeo, nucMat);
+      nucMesh.position.set(0.9, -0.6, 0.5);
+      group.add(nucMesh);
+
+      // C) İstilacı İnvadopodya Dikenleri & Aktomiyozin Blebleri
+      const spikeCount = (cloneType === 'resistant_mek') ? 8 : 6;
+      for (let s = 0; s < spikeCount; s++) {
+        const phi = Math.acos(1 - 2 * (s + 0.5) / spikeCount);
+        const theta = Math.PI * (1 + Math.sqrt(5)) * s + seed;
+        const dir = new THREE.Vector3(
+          Math.sin(phi) * Math.cos(theta),
+          Math.sin(phi) * Math.sin(theta),
+          Math.cos(phi)
+        );
+
+        if (cloneType === 'resistant_mek') {
+          const spikeGeo = new THREE.ConeGeometry(0.85, 4.5, 5);
+          spikeGeo.translate(0, 2.25, 0);
+          const spikeMesh = new THREE.Mesh(spikeGeo, somaMat);
+          spikeMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+          spikeMesh.position.copy(dir.clone().multiplyScalar(baseRadius * 0.9));
+          group.add(spikeMesh);
+        } else {
+          const blebGeo = new THREE.DodecahedronGeometry(1.8 + (s % 3) * 0.4, 1);
+          const blebMesh = new THREE.Mesh(blebGeo, somaMat);
+          blebMesh.position.copy(dir.clone().multiplyScalar(baseRadius * 0.95));
+          group.add(blebMesh);
+        }
+      }
+
+      group.userData = {
+        cloneType: cloneType,
+        somaMesh: somaMesh,
+        nucMesh: nucMesh,
+        rotSpeedX: 0.003 + (seed % 5) * 0.001,
+        rotSpeedY: 0.005 + (seed % 4) * 0.001
+      };
+      return group;
+    }
+
+    function createRealisticPlasmatocyteModel(h) {
+      const group = new THREE.Group();
+      const seed = (h.id * 43.17) % 50;
+
+      // A) Amipsi Yassı Gövde (Deforme Silindir)
+      const somaGeo = new THREE.CylinderGeometry(5.2, 6.4, 3.2, 10);
+      const pos = somaGeo.attributes.position;
+      const v = new THREE.Vector3();
+      for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
+        const n = Math.sin(v.x * 0.8 + seed) * Math.cos(v.z * 0.8);
+        v.x += n * 0.8;
+        v.z += n * 0.8;
+        pos.setXYZ(i, v.x, v.y, v.z);
+      }
+      somaGeo.computeVertexNormals();
+
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x10b981,
+        emissive: 0x047857,
+        emissiveIntensity: 0.65,
+        roughness: 0.32,
+        metalness: 0.15,
+        transparent: true,
+        opacity: 0.92
+      });
+      const somaMesh = new THREE.Mesh(somaGeo, mat);
+      group.add(somaMesh);
+
+      // B) 4 Adet Uzanan Psödopodya (Sürünme Kolları)
+      const armAngles = [0, 1.4, 2.8, 4.3];
+      for (const ang of armAngles) {
+        const armGeo = new THREE.ConeGeometry(1.2, 6.0, 5);
+        armGeo.translate(0, 3.0, 0);
+        const armMesh = new THREE.Mesh(armGeo, mat);
+        const dir = new THREE.Vector3(Math.cos(ang + seed * 0.1), (Math.random() - 0.5) * 0.3, Math.sin(ang + seed * 0.1)).normalize();
+        armMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+        armMesh.position.copy(dir.clone().multiplyScalar(4.0));
+        group.add(armMesh);
+      }
+
+      // C) Parlayan Sindirim Lizozomu
+      const vacGeo = new THREE.SphereGeometry(1.4, 6, 6);
+      const vacMat = new THREE.MeshBasicMaterial({ color: 0x34d399 });
+      const vacMesh = new THREE.Mesh(vacGeo, vacMat);
+      vacMesh.position.set(1.2, 1.6, -0.8);
+      group.add(vacMesh);
+
+      group.userData = {
+        subtype: 'plasmatocyte',
+        somaMesh: somaMesh,
+        rotSpeedZ: 0.008 + (seed % 3) * 0.002
+      };
+      return group;
+    }
+
+    function createRealisticLamellocyteModel(h) {
+      const group = new THREE.Group();
+      const seed = (h.id * 61.23) % 70;
+
+      // A) Geniş Yassı Kapsülasyon Diski (Genişlik 28um, Kalınlık 1.8um)
+      const sheetGeo = new THREE.CylinderGeometry(13.5, 14.5, 1.8, 20);
+      const pos = sheetGeo.attributes.position;
+      const v = new THREE.Vector3();
+      for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
+        const wave = Math.sin(v.x * 0.4 + seed) * Math.cos(v.z * 0.4) * 0.7;
+        v.y += wave;
+        pos.setXYZ(i, v.x, v.y, v.z);
+      }
+      sheetGeo.computeVertexNormals();
+
+      const sheetMat = new THREE.MeshStandardMaterial({
+        color: 0x8b5cf6,
+        emissive: 0x4c1d95,
+        emissiveIntensity: 0.55,
+        roughness: 0.28,
+        metalness: 0.22,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide
+      });
+      const sheetMesh = new THREE.Mesh(sheetGeo, sheetMat);
+      group.add(sheetMesh);
+
+      // B) Dış İnce Hücresel Tül (Lamellipodial Veil)
+      const veilGeo = new THREE.RingGeometry(13.8, 17.0, 20);
+      veilGeo.rotateX(-Math.PI / 2);
+      const veilMat = new THREE.MeshBasicMaterial({
+        color: 0xa78bfa,
+        transparent: true,
+        opacity: 0.35,
+        side: THREE.DoubleSide
+      });
+      const veilMesh = new THREE.Mesh(veilGeo, veilMat);
+      group.add(veilMesh);
+
+      // C) Melanizasyon Granülleri
+      const granGeo = new THREE.DodecahedronGeometry(1.2, 1);
+      const granMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.8 });
+      for (let g = 0; g < 4; g++) {
+        const granMesh = new THREE.Mesh(granGeo, granMat);
+        const gAng = (g * Math.PI) / 2 + seed * 0.2;
+        const gRad = 5.0 + g * 1.8;
+        granMesh.position.set(Math.cos(gAng) * gRad, 1.0, Math.sin(gAng) * gRad);
+        group.add(granMesh);
+      }
+
+      group.userData = {
+        subtype: 'lamellocyte',
+        sheetMesh: sheetMesh,
+        rotSpeedZ: 0.005
+      };
+      return group;
+    }
+
     function sync3DCellularMesh(cancerList, hemocyteList) {
       if (!cellularScene) return;
 
       const currentCancerIds = new Set();
       for (const c of cancerList) {
         currentCancerIds.add(c.id);
-        const isResistant = !!(c.is_resistant || (c.clone_type && c.clone_type !== 'sensitive') || (c.resistance > 0.35));
-        let mesh = cancerMeshMap.get(c.id);
-        if (!mesh) {
-          const geo = isResistant ? new THREE.IcosahedronGeometry(9.5, 1) : new THREE.SphereGeometry(9.0, 16, 16);
-          const mat = new THREE.MeshStandardMaterial({
-            color: isResistant ? 0xd946ef : 0xff2a6d,
-            roughness: isResistant ? 0.25 : 0.3,
-            metalness: isResistant ? 0.45 : 0.2,
-            emissive: isResistant ? 0x701a75 : 0x4a0410,
-            emissiveIntensity: isResistant ? 0.5 : 0.2
-          });
-          mesh = new THREE.Mesh(geo, mat);
-          mesh.userData = { isResistant: isResistant };
-          cellularScene.add(mesh);
-          cancerMeshMap.set(c.id, mesh);
-        } else if (mesh.userData && mesh.userData.isResistant !== isResistant) {
-          // Klon duyarlıdan dirençliye dönüştüyse 3D rengini ve materyalini mor kristale çevir
-          mesh.material.color.setHex(isResistant ? 0xd946ef : 0xff2a6d);
-          mesh.material.emissive.setHex(isResistant ? 0x701a75 : 0x4a0410);
-          mesh.material.emissiveIntensity = isResistant ? 0.5 : 0.2;
-          mesh.userData.isResistant = isResistant;
+        const cloneType = c.clone_type || (c.is_resistant ? 'resistant_mek' : 'sensitive');
+        let cellGroup = cancerMeshMap.get(c.id);
+        if (!cellGroup) {
+          cellGroup = createRealisticCancerCellModel(c);
+          cellularScene.add(cellGroup);
+          cancerMeshMap.set(c.id, cellGroup);
+        } else if (cellGroup.userData && cellGroup.userData.cloneType !== cloneType) {
+          cellularScene.remove(cellGroup);
+          cellGroup = createRealisticCancerCellModel(c);
+          cellularScene.add(cellGroup);
+          cancerMeshMap.set(c.id, cellGroup);
         }
-        mesh.position.set(c.pos[0], c.pos[1], c.pos[2]);
-        mesh.scale.setScalar(Math.max(0.2, c.health / 100.0));
+
+        cellGroup.position.set(c.pos[0], c.pos[1], c.pos[2]);
+        const healthScale = Math.max(0.25, Math.min(1.2, c.health / 80.0));
+        cellGroup.scale.setScalar(healthScale);
       }
 
-      for (const [id, mesh] of cancerMeshMap.entries()) {
+      for (const [id, cellGroup] of cancerMeshMap.entries()) {
         if (!currentCancerIds.has(id)) {
-          cellularScene.remove(mesh);
+          cellularScene.remove(cellGroup);
           cancerMeshMap.delete(id);
         }
       }
@@ -4195,25 +4406,22 @@
       const currentHemocyteIds = new Set();
       for (const h of hemocyteList) {
         currentHemocyteIds.add(h.id);
-        let mesh = hemocyteMeshMap.get(h.id);
-        if (!mesh) {
-          const isLamello = (h.subtype === 'lamellocyte');
-          const geo = isLamello ? new THREE.DodecahedronGeometry(11.0) : new THREE.SphereGeometry(7.5, 14, 14);
-          const mat = new THREE.MeshStandardMaterial({
-            color: isLamello ? 0xa855f7 : 0x00ff9d,
-            emissive: isLamello ? 0x6b21a8 : 0x00a86b,
-            emissiveIntensity: 0.4
-          });
-          mesh = new THREE.Mesh(geo, mat);
-          cellularScene.add(mesh);
-          hemocyteMeshMap.set(h.id, mesh);
+        let hemoGroup = hemocyteMeshMap.get(h.id);
+        if (!hemoGroup) {
+          if (h.subtype === 'lamellocyte') {
+            hemoGroup = createRealisticLamellocyteModel(h);
+          } else {
+            hemoGroup = createRealisticPlasmatocyteModel(h);
+          }
+          cellularScene.add(hemoGroup);
+          hemocyteMeshMap.set(h.id, hemoGroup);
         }
-        mesh.position.set(h.pos[0], h.pos[1], h.pos[2]);
+        hemoGroup.position.set(h.pos[0], h.pos[1], h.pos[2]);
       }
 
-      for (const [id, mesh] of hemocyteMeshMap.entries()) {
+      for (const [id, hemoGroup] of hemocyteMeshMap.entries()) {
         if (!currentHemocyteIds.has(id)) {
-          cellularScene.remove(mesh);
+          cellularScene.remove(hemoGroup);
           hemocyteMeshMap.delete(id);
         }
       }

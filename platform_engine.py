@@ -690,7 +690,7 @@ class DrosophilaInSilicoPlatform:
         )
         is_mek_inhibited = bool(
             is_kras_dual_lock or
-            any(k in comp_text for k in ["trametinib", "cobimetinib", "mek", "kinase"])
+            any(k in comp_text for k in ["trametinib", "cobimetinib", "selumetinib", "binimetinib", "mek1", "mek2", "mek_inhibitor", "allosterik mek", "mek1/2"])
         )
         dna_damaged = bool(
             is_chemo or is_synthetic_lethality or any(k in comp_text for k in ["cisplatin", "dna", "adduct", "alkilat", "olaparib"])

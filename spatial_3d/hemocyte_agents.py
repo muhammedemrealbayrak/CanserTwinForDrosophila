@@ -42,7 +42,9 @@ class HemocyteAgent3D:
     kills_count: int = 0
     chemotaxis_drive: float = 0.88   # Kemotaktik gradyan takip hassasiyeti
     refractory_timer_s: float = 0.0  # Fagositoz / saldırı sonrası bekleme süresi
-    is_apoptotic: bool = False       # Tükenmişlik sonucu hücresel ölüm
+    age_s: float = 0.0               # Hemosit operasyonel yaşı
+    max_lifespan_s: float = 65.0     # Doğal hücre yaşam döngüsü / apoptoz
+    is_apoptotic: bool = False       # Tükenmişlik veya yaşlanma sonucu hücresel ölüm
 
     def step_patrol_and_attack(
         self,
@@ -62,7 +64,8 @@ class HemocyteAgent3D:
         Returns:
             Etkisiz hale getirilen (öldürülen) kanser hücresi ID'si veya None.
         """
-        if self.is_apoptotic or self.exhaustion_index >= 1.0 or self.cytotoxic_energy <= 3.0:
+        self.age_s += dt
+        if self.is_apoptotic or self.age_s >= self.max_lifespan_s or self.exhaustion_index >= 1.0 or self.cytotoxic_energy <= 3.0:
             self.is_apoptotic = True
             return None
 
@@ -114,26 +117,26 @@ class HemocyteAgent3D:
 
             # 3. Tükenmişlik ve Potens Çarpanı
             exhaustion_pen = max(0.12, 1.0 - 0.88 * self.exhaustion_index)
-            cd47_boost = 2.4 if anti_cd47_active else 1.0
+            cd47_boost = 1.35 if anti_cd47_active else 1.0
             potency = max(0.5, float(potency_multiplier))
 
-            # 4. Biyolojik Olarak Kalibre Edilmiş Saldırı Hasarı (Aşırı güçlü 22 HP/s yerine dengeli oran)
+            # 4. Biyolojik Olarak Kalibre Edilmiş Saldırı Hasarı (Dengeli oran)
             if self.subtype == HemocyteSubtype.LAMELLOCYTE:
                 # Lamellosit Kapsülasyonu: Bölünmeyi dondurur, melanizasyon hasarı verir
                 target_cell.state = CancerState.ENCAPSULATED
-                base_strike = 5.2
+                base_strike = 3.6
                 strike = base_strike * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
-                self.cytotoxic_energy -= 5.0 * dt
+                self.cytotoxic_energy -= 4.5 * dt
                 self.exhaustion_index = min(1.0, self.exhaustion_index + (0.045 * exhaustion_multiplier * dt))
                 # Kapsülasyon sonrası 2.5 saniye refrakter bekleme
                 self.refractory_timer_s = 2.5
             else:
                 # Plazmatosit Fagositozu / Sitotoksisite
-                base_strike = 6.8
+                base_strike = 4.5
                 strike = base_strike * exhaustion_pen * evasion_mod * resistance_shield * cd47_boost * potency * dt
                 target_cell.health -= strike
-                self.cytotoxic_energy -= 6.5 * dt
+                self.cytotoxic_energy -= 5.5 * dt
                 self.exhaustion_index = min(1.0, self.exhaustion_index + (0.055 * exhaustion_multiplier * dt))
                 # Fagositer lizis döngüsü için 3.5 saniye refrakter bekleme
                 self.refractory_timer_s = 3.5
